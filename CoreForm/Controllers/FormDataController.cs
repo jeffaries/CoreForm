@@ -17,8 +17,21 @@ namespace CoreForm.Controllers
         [HttpPost]
         public IActionResult Submission([FromBody] Object data)
         {
-            dynamic d = Newtonsoft.Json.JsonConvert.DeserializeObject(data.ToString());
-            return StatusCode(400, "ça marche pas lààààà!") ;
+            JObject d = JObject.Parse(data.ToString());
+            
+            Dictionary<String,JToken> values = d.SelectToken("$.data").ToObject<Dictionary<String, JToken>>();
+
+            int? select = values["select"].Value<int>();
+
+
+            var files = values["upload"].Values<JToken>();
+            var node = files.First();
+            String base64 = node["url"].Value<String>().Split(',').LastOrDefault();
+            
+            byte[] tempBytes = Convert.FromBase64String(base64);
+            System.IO.File.WriteAllBytes(@"C:\temp\" + node["originalName"].Value<String>(), tempBytes);
+
+            return StatusCode(200, "ça marche lààààà!") ;
         }
 
     }

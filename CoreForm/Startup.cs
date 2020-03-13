@@ -63,6 +63,11 @@ namespace CoreForm
                     pattern: "FormData/{Id}/{action=Definition}",
                     defaults: new { controller = "FormData"}
                     );
+                endpoints.MapControllerRoute(
+                    name: "datasource",
+                    pattern: "DataSource/{Id}",
+                    defaults: new { action = "Get", controller = "DataSource" }
+                    );
             });
         }
     }

@@ -151,16 +151,12 @@
                 {
                     "label": "Select",
                     "widget": "choicesjs",
-                    "tableView": true,
-                    "dataSrc": "url",
-                    "data": {
-                        "headers": [
-                            {
-                                "key": "",
-                                "value": ""
-                            }
-                        ]
-                    },
+                    "tableView": false,
+                    "dataSrc": "url","valueProperty":"value","validate": {
+                "required": true
+            },
+           "dataType": "string",
+            "data": {"url": "/DataSource/12345" },
                     "selectThreshold": 0.3,
                     "calculateServer": false,
                     "key": "select",
@@ -184,7 +180,7 @@
                 {
             "label": "Upload",
             "tableView": false,
-            "storage": "indexeddb",
+            "storage": "base64",
             "webcam": true,
             "fileTypes": [
                 {
