@@ -17,23 +17,19 @@ namespace CoreForm.Controllers
         {
             _logger = logger;
         }
-
+        [Route("")]
         public IActionResult Index()
         {
-            return View();
+            return View(new IndexViewModel() { FormModels = BusinessLogic.FormModel.GetFormModels() });
         }
 
+        [Route("Privacy")]
         public IActionResult Privacy()
         {
             return View();
         }
 
-        public IActionResult Form(String Id)
-        {
-            return View(new FormViewModel() { FormId = Id });
-        }
-
-
+        [Route("Error")]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

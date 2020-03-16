@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace CoreForm.Models
 {
-    public class FormViewModel
+    public class IndexViewModel
     {
-        public string FormId { get; set; }
-        public string Name { get; set; }
+        public List<Data.FormModelVersionEntity> FormModels { get; set; }
     }
 }

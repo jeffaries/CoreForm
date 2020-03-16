@@ -7,13 +7,16 @@ using Newtonsoft.Json.Linq;
 
 namespace CoreForm.Controllers
 {
+    [Route("FormData")]
     public class FormDataController : Controller
     {
+        [Route("{Id}")]
         [HttpGet]
         public IActionResult Definition(String Id)
         {
             return Content(Properties.Resources.formData, "application/json");
         }
+        [Route("submission")]
         [HttpPost]
         public IActionResult Submission([FromBody] Object data)
         {

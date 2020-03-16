@@ -1,19 +1,24 @@
 ﻿
 @{
     ViewData["Title"] = "Form";
+
 }
 
 <h1>FormRenderer <h1>@Model.FormId</h1></h1>
 <div class="flex-center flex-column">
     <div class="w-75 p-3" id='formio'></div>
 </div>
+<a href="@Url.Content("~/Form/" + Model.FormId + "/build")">Edit</a>
+
 
 @section Scripts{
 
     <script type='text/javascript'>
         window.onload = function () {
-            Formio.createForm(document.getElementById('formio'), 'https://localhost:5001/FormData/@Model.FormId');
-        };
+            /**/
+            Formio.createForm(document.getElementById('formio'), window.location.origin + '@Url.Content("~/FormData/" + Model.FormId)');
+        /**/
+    };
     </script>
 
 }

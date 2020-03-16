@@ -24,6 +24,7 @@ namespace CoreForm
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+       
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,28 +47,10 @@ namespace CoreForm
 
             app.UseAuthorization();
 
+
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "form",
-                    pattern: "Form/{Id}/{action=Render}",
-                    defaults: new { controller = "Form"}
-                    );
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{action=Index}/{Id?}",
-                    defaults: new { controller = "Home" }
-                    );
-                endpoints.MapControllerRoute(
-                    name: "formdata",
-                    pattern: "FormData/{Id}/{action=Definition}",
-                    defaults: new { controller = "FormData"}
-                    );
-                endpoints.MapControllerRoute(
-                    name: "datasource",
-                    pattern: "DataSource/{Id}",
-                    defaults: new { action = "Get", controller = "DataSource" }
-                    );
+                endpoints.MapControllers();
             });
         }
     }

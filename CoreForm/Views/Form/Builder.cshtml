@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewData["Title"] = "Form";
+
+}
+
+<h1>FormBuilder<h1>@Model.Name</h1></h1>
+<div class="flex-center flex-column">
+    <div class="w-100 p-3" id='formio'></div>
+</div>
+
+@section Scripts{
+
+    <script type='text/javascript'>
+        window.onload = function () {
+            Formio.builder(document.getElementById('formio'), window.location.origin + '@Url.Content("~/FormData/" + Model.FormId)', {})
+                .then(function (builder) {
+                    builder.on('saveComponent', function () {
+
+                        $.ajax('@Url.Content("~/Form/" + Model.FormId + "/save")', {
+                            data: JSON.stringify(builder.schema),
+                            contentType: 'application/json',
+                            type: 'POST'
+                        });
+
+                    });
+                });
+        }
+    </script>
+
+}
