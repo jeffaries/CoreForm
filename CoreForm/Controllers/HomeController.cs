@@ -20,7 +20,8 @@ namespace CoreForm.Controllers
         [Route("")]
         public IActionResult Index()
         {
-            return View(new IndexViewModel() { FormModels = BusinessLogic.FormModel.GetFormModels() });
+            var l = BusinessLogic.FormModel.GetFormModels();
+            return View(new IndexViewModel() { FormModels = l });
         }
 
         [Route("Privacy")]
