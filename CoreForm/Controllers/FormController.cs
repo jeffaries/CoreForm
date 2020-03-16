@@ -22,13 +22,7 @@ namespace CoreForm.Controllers
         public IActionResult Render(Guid formVersionId)
         {
             var form = BusinessLogic.FormModel.GetFormModelVersion(formVersionId);
-            var model = new Models.FormViewModel() { FormId = form.Id, Name = form.Name };
-            if (!String.IsNullOrEmpty(form.Content))
-            {
-                model.Model = JObject.Parse(form.Content);
-            } else
-                model.Model = new JObject();
-            return View("Render", model);
+            return View("Render", form);
         }
 
         [Route("NewModel")]
@@ -45,20 +39,7 @@ namespace CoreForm.Controllers
         public IActionResult Build(Guid formModelId)
         {
             var form = BusinessLogic.FormModel.GetCurrentFormModelVersion(formModelId);
-            var model = new Models.FormViewModel() { FormId = formModelId };
-            if (form != null)
-            {
-                model.Name = form.Name;
-                if (!String.IsNullOrEmpty(form.Content))
-                    model.Model = JObject.Parse(form.Content);
-                else
-                    model.Model = new JObject();
-            }else
-            {
-                model.Name = "New model";
-                model.Model = new JObject();
-            }
-            return View("Builder", model);
+            return View("Builder", form);
         }
 
         [Route("{formModelId}/Save")]

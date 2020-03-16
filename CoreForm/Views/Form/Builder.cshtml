@@ -13,12 +13,12 @@
 
     <script type='text/javascript'>
         window.onload = function () {
-            //Formio.builder(document.getElementById('formio'), window.location.origin + '@Url.Content("~/FormData/" + Model.FormId)', {})
-            Formio.builder(document.getElementById('formio'), @Model.Model, {})
+            //Formio.builder(document.getElementById('formio'), window.location.origin + '@Url.Content("~/FormData/" + Model.Id)', {})
+            Formio.builder(document.getElementById('formio'), @Html.Raw(Model.Content), {})
                 .then(function (builder) {
                     builder.on('saveComponent', function () {
 
-                        $.ajax('@Url.Content("~/Form/" + Model.FormId + "/save")', {
+                        $.ajax('@Url.Content("~/Form/" + Model.FormModelId + "/save")', {
                             data: JSON.stringify(builder.schema),
                             contentType: 'application/json',
                             type: 'POST'

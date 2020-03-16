@@ -42,13 +42,13 @@ namespace CoreForm.BusinessLogic
             {
                 // Get a collection (or create, if doesn't exist)
                 var forms = db.GetCollection<Data.FormModelEntity>("formmodels");
-                return forms.FindById(formModelId)?.CurrentVersion;
+                return forms.Include(x=>x.CurrentVersion).FindById(formModelId)?.CurrentVersion;
             }
         }
 
         public static FormModelEntity CreateModel(String Name)
         {
-            return CreateModel(Name, String.Empty);
+            return CreateModel(Name, "{}");
         }
 
         public static FormModelEntity CreateModel(String Name, String Model)
