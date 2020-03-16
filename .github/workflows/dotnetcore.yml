@@ -1,0 +1,33 @@
+name: CoreForm
+
+on: 
+  push:
+    paths:
+    - 'CoreForm/**'
+    - '.github/workflows/coreform.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.100
+    - name: Build with dotnet
+      working-directory: ./ApiGateway
+      run: dotnet build
+    - name: Docker Publish
+      uses: elgohr/Publish-Docker-Github-Action@2.12
+      with:
+        # Name of the Docker image
+        name: jeffaries/coreform
+        # Username for Docker registry
+        username: jeffaries
+        # Password for Docker registry
+        password: Jeff280374
+        # Registry URL
+        registry: docker.io
+        dockerfile: ./CoreForm/Dockerfile
+        tags: "latest"
