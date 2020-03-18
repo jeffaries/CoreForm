@@ -1,0 +1,35 @@
+body {
+	font-family: Helvetica Neue, Helvetica, Arial;
+}
+
+[v-cloak] {
+  visibility: hidden;
+}
+
+.nested-sortable {
+		border:1px dotted silver;
+		min-height:25px;
+		min-width:25px;
+}
+
+.list-group{
+	padding:5px
+}
+
+.list-group-item:hover {
+	z-index: 0;
+}
+
+.nested-sortable {
+	margin-top: 5px;
+}
+
+.blue-background-class {
+	background-color: #f0f0f4;
+	border:1px solid #d0d0d4;
+}
+
+.yellow-background-class {
+	background-color: #f0f0f4;
+}
+
