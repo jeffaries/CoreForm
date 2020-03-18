@@ -7,6 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\Builder\app.js" />
+    <None Include="wwwroot\Builder\components\component.js" />
+    <None Include="wwwroot\Builder\components\select.js" />
+    <None Include="wwwroot\Builder\components\table.js" />
+    <None Include="wwwroot\Builder\components\textbox.js" />
+    <None Include="wwwroot\Builder\index.htm" />
+    <None Include="wwwroot\Builder\lib\css\theme.css" />
+    <None Include="wwwroot\Builder\lib\js\Sortable.min.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="LiteDB" Version="5.0.4" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.10" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />

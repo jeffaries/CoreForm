@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 
 namespace CoreForm
@@ -24,7 +25,7 @@ namespace CoreForm
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-       
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,17 +42,30 @@ namespace CoreForm
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
 
             app.UseRouting();
-
             app.UseAuthorization();
-
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+
+            var fileProvider = new PhysicalFileProvider(System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "wwwroot/Builder"));
+            DefaultFilesOptions defoptions = new DefaultFilesOptions();
+            defoptions.DefaultFileNames.Clear();
+            defoptions.FileProvider = fileProvider;
+            defoptions.DefaultFileNames.Add("index.htm");
+            app.UseDefaultFiles(defoptions);
+            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = fileProvider,
+                RequestPath = "/builder"
+            });
+
+
+
+           
         }
     }
 }
