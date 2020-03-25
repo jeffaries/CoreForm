@@ -7,14 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\Builder\app.js" />
-    <None Include="wwwroot\Builder\components\component.js" />
-    <None Include="wwwroot\Builder\components\select.js" />
-    <None Include="wwwroot\Builder\components\table.js" />
-    <None Include="wwwroot\Builder\components\textbox.js" />
-    <None Include="wwwroot\Builder\index.htm" />
-    <None Include="wwwroot\Builder\lib\css\theme.css" />
-    <None Include="wwwroot\Builder\lib\js\Sortable.min.js" />
+    <None Include="wwwroot\Builder.old\app.js" />
+    <None Include="wwwroot\Builder.old\components\component.js" />
+    <None Include="wwwroot\Builder.old\components\select.js" />
+    <None Include="wwwroot\Builder.old\components\table.js" />
+    <None Include="wwwroot\Builder.old\components\textbox.js" />
+    <None Include="wwwroot\Builder.old\index.htm" />
+    <None Include="wwwroot\Builder.old\lib\css\theme.css" />
+    <None Include="wwwroot\Builder.old\lib\js\Sortable.min.js" />
   </ItemGroup>
 
   <ItemGroup>
