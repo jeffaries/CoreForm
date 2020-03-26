@@ -27,9 +27,40 @@ $(document).ready(function () {
 
     configureNestedTables();
 
-    $('select').formSelect();
+
     M.updateTextFields();
     M.AutoInit();
+
+    $(".select2").select2();
+    $(".select2-ajax").select2({
+        ajax: {
+            url: function (params) {
+                if (params.term === undefined) {
+                    return 'https://restcountries.eu/rest/v2/all?fields=name;flag;alpha3Code'
+                } else {
+                    return 'https://restcountries.eu/rest/v2/name/' + params.term + '?fields=name;flag;alpha3Code'
+                }
+            },
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data, params) {
+                params.page = params.page || 1;
+                for (var i = 0; i < data.length; i++) {
+                    data[i].id = data[i].alpha3Code;
+                    data[i].text = data[i].name;
+                }
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        },
+        minimumInputLength: 0,
+    });
+
+    $('select').not(".select2").not(".select2-ajax").formSelect();
+
+
 });
 
 

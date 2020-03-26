@@ -57,7 +57,8 @@ var formSchema = {
                         {
                             'id': 'ctrl_11',
                             'label': 'Bof...',
-                            'type': 'textField'
+                            'type': 'textField',
+                            'width': '12'
                         },
                         {
                             'id': 'ctrl_6',
@@ -67,7 +68,8 @@ var formSchema = {
                                 { value: 1, label: "Gg" },
                                 { value: 2, label: "Hh" },
                                 { value: 3, label: "Ii" }
-                            ]
+                            ],
+                            'width':'12'
                         }]
                 },
                 {
@@ -81,8 +83,7 @@ var formSchema = {
                                 { value: 1, label: "Dd" },
                                 { value: 2, label: "Ee" },
                                 { value: 3, label: "Ff" }
-                            ],
-                            'width':'12'
+                            ]
                         }]
                 }]
         }

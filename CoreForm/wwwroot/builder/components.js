@@ -1,4 +1,3 @@
-
 Vue.component('x-form', { 
 	template: `<div class="row"><div id="formContainer" v-cloak class="col nested-sortable">
   <component  v-for="field in schema.fields"
@@ -7,7 +6,8 @@ Vue.component('x-form', {
 			 v-bind="field"
 			 v-model="values[field.id]">
   </component></div></div>`,
-  data() {
+    data() {
+        if (this.width === undefined) this.width = 12;
     return {}
   },
   computed:{
@@ -26,7 +26,8 @@ Vue.component('grid', {
 				 v-model="$root.data[field.id]"
 				 v-bind="field"></component>
 			</div></div></div>`,
-  data() {
+    data() {
+        if (this.width === undefined) this.width = 12;
     return {}
   },
   computed:{
@@ -37,7 +38,8 @@ Vue.component('grid', {
 
 var textField = Vue.component('textField', {
   template:`<div :class="'input-field col s' + width"><label :for="id">{{ label }}</label><input type="text" :id="id" :value="value" @input="updateInput"></div>`,
-  data() {
+    data() {
+        if (this.width === undefined) this.width = 12;
     return {
     }
   },
@@ -55,13 +57,13 @@ var textField = Vue.component('textField', {
 Vue.component('selectField', {
   template:
 	`<div :class="'input-field col s' + width">
-	<select @change="changeValue" v-model="value" :name="id">
+	<select @change="changeValue" class="select2 no-autoinit" v-model="value" :name="id">
 	  <option v-for="answer in answers" :key="answer.value" :value="answer.value">{{ answer.label }}</option>
-	</select><label :for="id">{{ label }}</label>
+	</select><label :for="id" class="active">{{ label }}</label>
 	</div>`,
-  data() {
-    return {
-    }
+    data() {
+        if (this.width === undefined) this.width = 12;
+    return {}
   },  methods: {
           changeValue: function(evt) {
               this.$emit('input', evt.srcElement.value)
