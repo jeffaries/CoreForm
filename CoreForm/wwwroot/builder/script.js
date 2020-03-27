@@ -11,16 +11,23 @@ $(document).ready(function () {
             }
         },
         methods: {
-            add() {
+            addTxt() {
                 id++;
                 this.schema.fields.splice(1, 0, {
                     'id': 'ctrl_' + id,
                     'label': 'Name',
-                    'type': 'textField'
+                    'type': 'textField',
+                    'width': 12
                 });
             },
-            show() {
-                alert(JSON.stringify(this.data));
+            addSel() {
+                id++;
+                this.schema.fields.splice(1, 0, {
+                    'id': 'ctrl_' + id,
+                    'label': 'Country',
+                    'type': 'selectField',
+                    'source': 'country123'
+                });
             }
         }
     });

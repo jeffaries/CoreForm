@@ -1,5 +1,5 @@
 Vue.component('x-form', {
-    template: `<div class="row"><div id="formContainer" v-cloak class="col nested-sortable">
+    template: `<div class="row x-form"><div id="formContainer" v-cloak class="col nested-sortable s12">
   <component  v-for="field in schema.fields"
              :key="field.id"
              :is="field.type"
@@ -18,8 +18,8 @@ Vue.component('x-form', {
 
 
 Vue.component('grid', {
-    template: `<div class="col s12"><div class="row">
-			<div :class="'col nested-sortable s' + column.width" :data-column="index" :data-grid="id" v-for="(column,index) in columns">  
+    template: `<div class="col s12"><div class="row gridrow">
+			<div :class="'col nested-sortable s12 m' + column.width" :data-column="index" :data-grid="id" v-for="(column,index) in columns">  
 				<component v-for="field in column.fields" 
 				 :key="field.id"
 				 :is="field.type"
@@ -37,7 +37,7 @@ Vue.component('grid', {
 
 
 var textField = Vue.component('textField', {
-    template: `<div :class="'input-field col s' + width"><label :for="id">{{ label }}</label><input type="text" :id="id" :value="value" @input="updateInput"></div>`,
+    template: `<div :class="'input-field col s12 m' + width"><label :for="id">{{ label }}</label><input type="text" :id="id" :value="value" @input="updateInput"></div>`,
     data() {
         if (this.width === undefined) this.width = 12;
         return {
@@ -56,7 +56,7 @@ var textField = Vue.component('textField', {
 
 Vue.component('selectField', {
     template:
-        `<div :class="'input-field col s' + (width ? width : '12')">
+        `<div :class="'input-field col s12 m' + (width ? width : '12')">
 	<select @change="changeValue" class="select2 no-autoinit" v-model="id" :id="id" :name="id">
 	</select><label :for="id" class="active">{{ label }}</label>
 	</div>`,
