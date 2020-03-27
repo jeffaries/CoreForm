@@ -31,8 +31,8 @@ $(document).ready(function () {
     M.updateTextFields();
     M.AutoInit();
 
-    $(".select2").select2();
-    $(".select2-ajax").select2({
+    //$(".select2").select2();
+    /*$(".select2-ajax").select2({
         ajax: {
             url: function (params) {
                 if (params.term === undefined) {
@@ -56,7 +56,7 @@ $(document).ready(function () {
             cache: true
         },
         minimumInputLength: 0,
-    });
+    });*/
 
     $('select').not(".select2").not(".select2-ajax").formSelect();
 

@@ -28,10 +28,10 @@ var formSchema = {
             'id': 'ctrl_3',
             'label': 'Movies',
             'type': 'selectField',
-            'answers': [
-                { value: 1, label: "Aa" },
-                { value: 2, label: "Bb" },
-                { value: 3, label: "Cc" }
+            'options': [
+                { id: "1", text: "Aa" },
+                { id: "2", text: "Bb" },
+                { id: "3", text: "Cc" }
             ],
 			'width': 6
         },
@@ -39,10 +39,10 @@ var formSchema = {
             'id': 'ctrl_4',
             'label': 'Food',
             'type': 'selectField',
-            'answers': [
-                { value: 1, label: "Aa" },
-                { value: 2, label: "Bb" },
-                { value: 3, label: "Cc" }
+            'options': [
+                { id: 1, text: "Aa" },
+                { id: 2, text: "Bb" },
+                { id: 3, text: "Cc" }
             ],
             'width': 6
         },
@@ -64,10 +64,10 @@ var formSchema = {
                             'id': 'ctrl_6',
                             'label': 'Movies',
                             'type': 'selectField',
-                            'answers': [
-                                { value: 1, label: "Gg" },
-                                { value: 2, label: "Hh" },
-                                { value: 3, label: "Ii" }
+                            'options': [
+                                { id: 1, text: "Gg" },
+                                { id: 2, text: "Hh" },
+                                { id: 3, text: "Ii" }
                             ],
                             'width':'12'
                         }]
@@ -77,13 +77,13 @@ var formSchema = {
                     'fields': [
                         {
                             'id': 'ctrl_7',
-                            'label': 'Food',
+                            'label': 'Country',
                             'type': 'selectField',
-                            'answers': [
-                                { value: 1, label: "Dd" },
-                                { value: 2, label: "Ee" },
-                                { value: 3, label: "Ff" }
-                            ]
+                            'source': {
+                                'id': 'Country123',
+                                'minimumInputLength': 2
+                            }
+                            
                         }]
                 }]
         }
