@@ -85,6 +85,8 @@ function configureNestedTable(table) {
         group: {
             name: 'share'
         },
+        draggale: '.sortable-item',
+        handle: '.moveHandle',
         removeOnSpill: true,
         animation: 150,
         fallbackOnBody: true,

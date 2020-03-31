@@ -17,7 +17,7 @@
         }
 
 		.blue-background-class {
-			background-color: ActiveCaption
+			/*background-color: ActiveCaption*/
 		}
 
 		.yellow-background-class {
@@ -35,8 +35,23 @@
         }
 
         .gridrow > .col:last-child {
-
             padding-right: 0px
+        }
+
+        .moveHandle{
+			position:absolute;
+			top:-10px;
+			left:0px;
+			width:15px;
+			height:15px;
+        }
+
+        .sortable-item > .moveHandle {
+            display: none;
+        }
+
+        .sortable-item:hover > .moveHandle {
+            display: inline-block;
         }
 
 	</style>

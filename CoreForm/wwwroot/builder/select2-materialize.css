@@ -174,7 +174,7 @@
 
 .select2-results__options li{
     color: #26a69a !important;
-    font-size: larger;
+    /*font-size: larger;*/
 }
 
 .select2-container--default .select2-selection--single .select2-selection__rendered {
@@ -192,13 +192,16 @@
     color: #999
 }
 
+.select2-results__message{
+    font-size:small
+}
+
 .select2-container--default .select2-selection--single .select2-selection__arrow {
     height: 26px;
     position: absolute;
     top: 1px;
     right: 1px;
     width: 20px;
-
 }
 
 .select2-container--default .select2-selection--single .select2-selection__arrow b {
