@@ -101,7 +101,8 @@ Vue.component('selectField', {
                     },
                     cache: true
                 },
-                minimumInputLength: this.source.minimumInputLength
+                minimumInputLength: this.source.minimumInputLength,
+                multiple:'multiple'
             };
         }
 
@@ -112,7 +113,7 @@ Vue.component('selectField', {
             .trigger("change")
             // emit event on change.
             .on("change", function () {
-                vm.$emit("input", this.value);
+                vm.$emit("input", $(this).val());
             });
     },
     watch: {
