@@ -67,7 +67,15 @@ $(document).ready(function () {
 
     $('select').not(".select2").not(".select2-ajax").formSelect();
 
-
+    $(".sortable-item").mousemove(function (event) {
+        event.stopPropagation();
+        $(".toolbar").hide();
+        $(this).find("> .toolbar").show();
+    });
+    $(".sortable-item").mouseleave(function () {
+        event.stopPropagation();
+        $(this).find("> .toolbar").hide();
+    });
 });
 
 
@@ -83,16 +91,16 @@ function configureNestedTables() {
 function configureNestedTable(table) {
     new Sortable(table, {
         group: {
-            name: 'share'
+            name: 'share',
         },
         draggale: '.sortable-item',
         handle: '.moveHandle',
-        removeOnSpill: true,
+        //removeOnSpill: true,
         animation: 150,
         fallbackOnBody: true,
         swapThreshold: 0.25,
-        ghostClass: 'blue-background-class',
-        dragClass: 'yellow-background-class',
+        ghostClass: 'sortable-ghost',
+        dragClass: 'sortable-dragitem',
         onAdd: function (evt) {
             var elName;
             if (evt.pullMode == "clone") {

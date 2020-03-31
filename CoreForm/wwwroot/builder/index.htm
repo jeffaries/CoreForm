@@ -16,13 +16,19 @@
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
         }
 
-		.blue-background-class {
-			/*background-color: ActiveCaption*/
-		}
 
-		.yellow-background-class {
-			border: 1px dashed gray
-		}
+        .input-field > label:not(.label-icon).active {
+            z-index: 998;
+        }
+
+        .sortable-ghost {
+            border: 1px dashed gray;
+			padding-top:20px
+        }
+
+        .sortable-dragitem {
+            border: 1px dashed gray
+        }
 
         .gridrow {
             border: 1px dotted silver;
@@ -38,21 +44,39 @@
             padding-right: 0px
         }
 
-        .moveHandle{
-			position:absolute;
-			top:-10px;
-			left:0px;
-			width:15px;
-			height:15px;
+        .deleteHandle {
+            
+            width: 15px;
+			color:red;
+            background-color: red;
+     		fill:red
         }
 
-        .sortable-item > .moveHandle {
+        .moveHandle {
+            width: 15px;
+            
+            background-color: rgba(193, 193, 193, 0.54);
+            cursor: grab
+        }
+
+		.moveHandle:active{
+			cursor:grabbing
+		}
+
+        .toolbar {
+            z-index: 999;
+            position: absolute;
+            right: 20px;
+            top: 0px;
             display: none;
         }
 
-        .sortable-item:hover > .moveHandle {
-            display: inline-block;
-        }
+            .toolbar * {
+                box-shadow: 0px 0px 9px 0px rgba(240,140,17,0.6);
+                height: 15px;
+                margin-right: 3px
+            }
+
 
 	</style>
 </head>

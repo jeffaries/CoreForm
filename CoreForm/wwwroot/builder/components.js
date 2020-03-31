@@ -16,16 +16,23 @@ Vue.component('x-form', {
 }
 );
 
+Vue.component('cf_field', {
+    template: `<div :class="'sortable-item input-field col s12'"><div class="toolbar"><img src="./move.svg" class="moveHandle"/><img src="./trash.svg" class="deleteHandle"/></div><slot></slot></div>`,
+    data() {
+        return {}
+    }
+}
+);
 
 Vue.component('grid', {
-    template: `<div class="sortable-item col s12"><div class="row gridrow">
+    template: `<cf_field><div class="row gridrow">
 			    <div :class="'col nested-sortable s12 m' + column.width" :data-column="index" :data-grid="id" v-for="(column,index) in columns">  
 				<component v-for="field in column.fields" 
 				 :key="field.id"
 				 :is="field.type"
 				 v-model="$root.data[field.id]"
 				 v-bind="field"></component>
-			</div></div></div>`,
+			</div></div></cf_field>`,
     data() {
         if (this.width === undefined) this.width = 12;
         return {}
@@ -37,7 +44,7 @@ Vue.component('grid', {
 
 
 var textField = Vue.component('textField', {
-    template: `<div :class="'sortable-item input-field col s12'"><img src="./move.svg" class="moveHandle"/><label :for="id">{{ label }}</label><input type="text" :id="id" :value="value" @input="updateInput"></div>`,
+    template: `<cf_field><label :for="id">{{ label }}</label><input type="text" :id="id" :value="value" @input="updateInput"></cf_field>`,
     data() {
         if (this.width === undefined) this.width = 12;
         return {
@@ -56,10 +63,10 @@ var textField = Vue.component('textField', {
 
 Vue.component('selectField', {
     template:
-        `<div :class="'sortable-item input-field col s12'">
+        `<cf_field><label :for="id" class="active">{{ label }}</label>
 	<select @change="changeValue" class="select2 no-autoinit" v-model="id" :id="id" :name="id">
-	</select><label :for="id" class="active">{{ label }}</label>
-	</div>`,
+	</select>
+	</cf_field>`,
     data() {
         if (this.width === undefined) this.width = 12;
         return {}
