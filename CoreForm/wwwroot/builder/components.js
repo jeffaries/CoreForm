@@ -1,5 +1,5 @@
 Vue.component('x-form', {
-    template: `<div class="row x-form"><div id="formContainer" v-cloak class="col nested-sortable s12">
+    template: `<div class="row x-form"><div id="formContainer" data-ref="root" v-cloak class="col nested-sortable s12">
   <component  v-for="field in schema.fields"
              :key="field.id"
              :is="field.type"
@@ -16,19 +16,31 @@ Vue.component('x-form', {
 }
 );
 
-Vue.component('cf_field', {
-    template: `<div :class="'sortable-item input-field col s12'"><div class="toolbar"><img src="./move.svg" class="moveHandle"/><img src="./trash.svg" class="deleteHandle"/></div><slot></slot></div>`,
+
+Vue.component('cf_toolbutton', {
+    template: `<div :class="'toolbar-button ' + cssclass"><img :src="'./'+ icon +'.svg'"/></div>`,
     data() {
         return {}
-    }
+    },
+    props: ["onclick", "cssclass", "icon"]
+}
+);
+
+Vue.component('cf_field', {
+    template: `<div :data-ref="id" :class="'sortable-item input-field col s12'"><div class="toolbar"><cf_toolbutton icon="move" cssclass="moveHandle"/><cf_toolbutton icon="settings"/><cf_toolbutton icon="trash" cssclass="deleteHandle"/></div><slot></slot></div>`,
+    data() {
+        return {}
+    },
+    props: ["id"]
 }
 );
 
 Vue.component('grid', {
-    template: `<cf_field><div class="row gridrow">
-			    <div :class="'col nested-sortable s12 m' + column.width" :data-column="index" :data-grid="id" v-for="(column,index) in columns">  
+    template: `<cf_field :id="id"><div class="row gridrow">
+			    <div :class="'col nested-sortable s12 m' + column.width" :id="column.id" :data-column="index" :data-grid="id" v-for="(column,index) in columns">  
 				<component v-for="field in column.fields" 
 				 :key="field.id"
+                 
 				 :is="field.type"
 				 v-model="$root.data[field.id]"
 				 v-bind="field"></component>
@@ -44,7 +56,7 @@ Vue.component('grid', {
 
 
 var textField = Vue.component('textField', {
-    template: `<cf_field><label :for="id">{{ label }}</label><input type="text" :id="id" :value="value" @input="updateInput"></cf_field>`,
+    template: `<cf_field :id="id"><label :for="id" class="active">{{ label }}</label><input type="text" :id="id" :value="value" @input="updateInput"></cf_field>`,
     data() {
         if (this.width === undefined) this.width = 12;
         return {
@@ -63,7 +75,7 @@ var textField = Vue.component('textField', {
 
 Vue.component('selectField', {
     template:
-        `<cf_field><label :for="id" class="active">{{ label }}</label>
+        `<cf_field :id="id"><label :for="id" class="active">{{ label }}</label>
 	<select @change="changeValue" class="select2 no-autoinit" v-model="id" :id="id" :name="id">
 	</select>
 	</cf_field>`,
@@ -138,8 +150,8 @@ Vue.component('selectField', {
         }
     },
     destroyed: function () {
-        $(this.$el)
+        /*$(this.$el)
             .off()
-            .select2("destroy");
+            .select2("destroy");*/
     }
 });

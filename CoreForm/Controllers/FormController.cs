@@ -29,7 +29,7 @@ namespace CoreForm.Controllers
         [HttpPost]
         public IActionResult NewModel([FromBody] Object data)
         {
-            var name = JObject.Parse(data.ToString()).GetValue("Name").ToString();
+            var name = JObject.Parse(data.ToString()).GetValue("name").ToString();
             var form = BusinessLogic.FormModel.CreateModel(name);
             return Ok(form.Id);
         }

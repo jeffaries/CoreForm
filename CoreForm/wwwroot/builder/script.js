@@ -1,19 +1,25 @@
 var id = 100;
-
+var app;
 $(document).ready(function () {
 
-    const app = new Vue({
+    app = new Vue({
         el: '#app',
         data() {
             return {
-                data: formData,
-                schema: formSchema
+                data: {},
+                schema: { 'name': 'FirstSchema', fields: [] }
             }
+        },
+        updated: function () {
+            this.$nextTick(function () {
+                // Update events to ensure that toolbar will appear for newly added items
+                applyToolbarEvents();
+            })
         },
         methods: {
             addTxt() {
                 id++;
-                this.schema.fields.splice(1, 0, {
+                this.schema.fields.push({
                     'id': 'ctrl_' + id,
                     'label': 'Name',
                     'type': 'textField',
@@ -22,51 +28,41 @@ $(document).ready(function () {
             },
             addSel() {
                 id++;
-                this.schema.fields.splice(1, 0, {
+                this.schema.fields.push({
                     'id': 'ctrl_' + id,
                     'label': 'Country',
                     'type': 'selectField',
                     'source': 'country123'
                 });
+            },
+            saveSchema() {
+                $.ajax({
+                    url: "/Form/NewModel",
+                    type: "POST",
+                    data: JSON.stringify(this.schema),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        alert("Data Loaded: " + data);
+                    }
+                });
+                
+
+                
             }
         }
     });
 
     configureNestedTables();
 
-
     M.updateTextFields();
     M.AutoInit();
 
-    //$(".select2").select2();
-    /*$(".select2-ajax").select2({
-        ajax: {
-            url: function (params) {
-                if (params.term === undefined) {
-                    return 'https://restcountries.eu/rest/v2/all?fields=name;flag;alpha3Code'
-                } else {
-                    return 'https://restcountries.eu/rest/v2/name/' + params.term + '?fields=name;flag;alpha3Code'
-                }
-            },
-            dataType: 'json',
-            delay: 250,
-            processResults: function (data, params) {
-                params.page = params.page || 1;
-                for (var i = 0; i < data.length; i++) {
-                    data[i].id = data[i].alpha3Code;
-                    data[i].text = data[i].name;
-                }
-                return {
-                    results: data
-                };
-            },
-            cache: true
-        },
-        minimumInputLength: 0,
-    });*/
-
     $('select').not(".select2").not(".select2-ajax").formSelect();
+});
 
+
+function applyToolbarEvents() {
     $(".sortable-item").mousemove(function (event) {
         event.stopPropagation();
         $(".toolbar").hide();
@@ -76,7 +72,7 @@ $(document).ready(function () {
         event.stopPropagation();
         $(this).find("> .toolbar").hide();
     });
-});
+}
 
 
 function configureNestedTables() {
@@ -162,8 +158,81 @@ function configureNestedTable(table) {
             evt.newDraggableIndex; // element's new index within new parent, only counting draggable elements
             evt.clone // the clone element
             evt.pullMode;  // when item is in another sortable: `"clone"` if cloning, `true` if moving
+
+            var item = findDataObjectById($(evt.clone).data("ref"));
+            var collFrom = findDataCollectionByElement($(evt.from));
+            var collTo = findDataCollectionByElement($(evt.to));
+
+            if (typeof (item) !== 'undefined' && typeof (collFrom) !== 'undefined' && typeof (collTo) !== 'undefined') {
+                var newIndex = evt.newDraggableIndex;
+                var oldIndex = evt.oldDraggableIndex;
+                if (collFrom === collTo) {
+                    if (newIndex > oldIndex) {
+                        newIndex++;
+                    } else {
+                        oldIndex++;
+                    }
+                }
+                collTo.splice(newIndex, 0, item);
+                collFrom.splice(oldIndex, 1);
+            }
         }
     });
+
+
+
+    function findDataObjectById(id) {
+        if (id === "formContainer") return app.schema;
+        return findDataObjectByDataNode(app.schema, id)
+    }
+
+    function findDataObjectByDataNode(node, id) {
+        var subColl = null;
+        if (typeof (node.columns) !== "undefined") subColl = node.columns;
+        if (typeof (node.fields) !== "undefined") subColl = node.fields;
+
+        if (id === node.id) {
+            return node;
+        } else {
+            if (subColl != null) {
+                for (var i = 0; i < subColl.length; i++) {
+                    var res = findDataObjectByDataNode(subColl[i], id);
+                    if (res != null) return res;
+                }
+            }
+        }
+        return null;
+    }
+
+
+    function findDataCollectionByElement(element) {
+        var id = null;
+        if ($(element).attr("id")) id = $(element).attr("id");
+        else if ($(element).data("ref")) id = $(element).data("ref");
+
+        if (id === "formContainer") return app.schema.fields;
+        return findDataCollectionInDataNode(app.schema, id)
+    }
+
+    function findDataCollectionInDataNode(node, id) {
+        var subColl = null;
+        if (typeof (node.columns) !== "undefined") subColl = node.columns;
+        if (typeof (node.fields) !== "undefined") subColl = node.fields;
+
+        if (subColl == null) return null;
+
+        if (id === node.id) {
+            return subColl;
+        } else {
+            for (var i = 0; i < subColl.length; i++) {
+                var res = findDataCollectionInDataNode(subColl[i], id);
+                if (res != null) return res;
+            }
+        }
+        return null;
+    }
+
+
 }
 
 

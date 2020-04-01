@@ -9,6 +9,7 @@ var formData = {
 
 
 var formSchema = {
+    'name' : 'FirstSchema',
     fields: [
 
 
@@ -51,7 +52,8 @@ var formSchema = {
             'type': 'grid',
             'columns': [
                 {
-                    'width':'4',
+                    'id': 'ctrl_51',
+                    'width': '4',
                     'fields': [
 
                         {
@@ -73,6 +75,7 @@ var formSchema = {
                         }]
                 },
                 {
+                    'id': 'ctrl_52',
                     'width':'8',
                     'fields': [
                         {
