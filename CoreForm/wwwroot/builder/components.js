@@ -18,16 +18,21 @@ Vue.component('x-form', {
 
 
 Vue.component('cf_toolbutton', {
-    template: `<div :class="'toolbar-button ' + cssclass"><img :src="'./'+ icon +'.svg'"/></div>`,
+    template: `<div v-on:click="click()" :class="'toolbar-button ' + cssclass"><img :src="'./'+ icon +'.svg'"/></div>`,
     data() {
         return {}
     },
-    props: ["onclick", "cssclass", "icon"]
+    props: ["onclick", "cssclass", "icon"],
+    methods: {
+        click(evt) {
+            eval(this.onclick);
+        }
+    }
 }
 );
 
 Vue.component('cf_field', {
-    template: `<div :data-ref="id" :class="'sortable-item input-field col s12'"><div class="toolbar"><cf_toolbutton icon="move" cssclass="moveHandle"/><cf_toolbutton icon="settings"/><cf_toolbutton icon="trash" cssclass="deleteHandle"/></div><slot></slot></div>`,
+    template: `<div :data-ref="id" :class="'sortable-item input-field col s12'"><div class="toolbar"><cf_toolbutton icon="move" cssclass="moveHandle"/><cf_toolbutton icon="settings" :onclick="'openSettings(&quot;'+ id +'&quot;)'"/><cf_toolbutton icon="trash" cssclass="deleteHandle"/></div><slot></slot></div>`,
     data() {
         return {}
     },

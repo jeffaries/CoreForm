@@ -1,5 +1,8 @@
 var id = 100;
-var app;
+var app, modalElement;
+
+var registeredFields = new Map();
+
 $(document).ready(function () {
 
     app = new Vue({
@@ -59,8 +62,24 @@ $(document).ready(function () {
     M.AutoInit();
 
     $('select').not(".select2").not(".select2-ajax").formSelect();
+
+    modalElement = document.getElementById("editForm");
+
+    $('.modal').modal();
 });
 
+export function RegisterField(fieldDefinition) {
+    registeredFields.set(fieldDefinition.name, fieldDefinition);
+}
+
+
+function openSettings(id) {
+    var instance = M.Modal.getInstance(modalElement);
+    instance.open();
+    var obj = findDataObjectById(id);
+    var comp = app.$options.components[obj.type];
+
+}
 
 function applyToolbarEvents() {
     $(".sortable-item").mousemove(function (event) {
@@ -102,8 +121,6 @@ function configureNestedTable(table) {
             if (evt.pullMode == "clone") {
 
                 var item = $(evt.item);
-                var component = componentObjects[item.data("type")];
-
 
                 var callback = function (config) {
                     var newHtml = component.GetEditFieldTemplate(config);
@@ -180,6 +197,7 @@ function configureNestedTable(table) {
     });
 
 
+}
 
     function findDataObjectById(id) {
         if (id === "formContainer") return app.schema;
@@ -233,7 +251,6 @@ function configureNestedTable(table) {
     }
 
 
-}
 
 
 
