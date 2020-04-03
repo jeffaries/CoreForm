@@ -5,19 +5,21 @@ var registeredFields = new Map();
 
 $(document).ready(function () {
 
+
     app = new Vue({
         el: '#app',
-        data() {
+        data : function() {
             return {
                 data: {},
-                schema: { 'name': 'FirstSchema', fields: [] }
+                schema: {
+                    'schemaVersion': 1,
+                    'formVersion' : 0,
+                    'name': 'FirstSchema',
+                    fields: []
+                }
+                //schema: formSchema
+
             }
-        },
-        updated: function () {
-            this.$nextTick(function () {
-                // Update events to ensure that toolbar will appear for newly added items
-                applyToolbarEvents();
-            })
         },
         methods: {
             addTxt() {
@@ -53,23 +55,49 @@ $(document).ready(function () {
 
                 
             }
+        },
+        created: function () {
+            // `this` est une référence à l'instance de vm
+            for (let [key, value] of registeredFields.entries()) {
+                this.$options.components[key] = value.fieldTemplate;
+            }
+            for (let [key, value] of Object.entries(this.$options.components)) {
+                value.components = this.$options.components;
+            }
+
+        },
+        updated: function () {
+            this.$nextTick(function () {
+                // Update events to ensure that toolbar will appear for newly added items
+                applyToolbarEvents();
+            })
+        },
+        mounted: function () {
+            this.$nextTick(function () {
+                // Update events to ensure that toolbar will appear for newly added items
+                applyToolbarEvents();
+
+                configureNestedTables();
+
+                M.updateTextFields();
+                M.AutoInit();
+
+                $('select').not(".select2").not(".select2-ajax").formSelect();
+
+                modalElement = document.getElementById("editForm");
+
+                $('.modal').modal();
+
+
+            })
         }
     });
 
-    configureNestedTables();
-
-    M.updateTextFields();
-    M.AutoInit();
-
-    $('select').not(".select2").not(".select2-ajax").formSelect();
-
-    modalElement = document.getElementById("editForm");
-
-    $('.modal').modal();
+   
 });
 
-export function RegisterField(fieldDefinition) {
-    registeredFields.set(fieldDefinition.name, fieldDefinition);
+function RegisterField(fieldDefinition) {
+    registeredFields.set(fieldDefinition.type, fieldDefinition);
 }
 
 

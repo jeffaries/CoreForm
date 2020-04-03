@@ -64,9 +64,9 @@
                 cursor: pointer
             }
 
-            .toolbar > div.toolbar-button:hover {
-                background-color: lightsteelblue;
-            }
+                .toolbar > div.toolbar-button:hover {
+                    background-color: lightsteelblue;
+                }
 
             .toolbar img {
                 display: block;
@@ -88,25 +88,51 @@
             padding: 5px !important;
         }
 
-        div.deleteHandle:hover {
-            background-color: orangered !important;
-            padding: 5px !important;
-        }
-
+            div.deleteHandle:hover {
+                background-color: orangered !important;
+                padding: 5px !important;
+            }
     </style>
 </head>
 <body>
     <div class="row">
         <div class="col s2">Tools</div>
         <div class="col s8">
-            <div id="app" class="">
-                <x-form :schema="schema" :values="data"></x-form>
+            <div id="app" class="col s12" v-cloak>
+                <div class="col s12" style="border-bottom:1px solid gray;margin-bottom:20px; padding-bottom:20px">
+                    <div class="col s12">
+                        <div class="col s10">
+                            <label for="formName">Name:</label>
+                            <input id="formName" v-model="schema.name" />
+                        </div>
+                        <div class="col s2">
+                            Version. 
+                            {{schema.formVersion"}}
+                        </div>
+                    </div>
+                    <div class="col s12">
+                        <div class="col s12">
+                            <label for="formTitle">Title:</label>
+                            <input id="formTitle" v-model="schema.title" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col s12   row x-form">
+                    <div id="formContainer" data-ref="root" class="col nested-sortable s12">
+                        <component v-for="field in schema.fields"
+                                   :key="field.id"
+                                   :is="field.type"
+                                   v-bind="field"
+                                   v-model="data[field.id]">
+                        </component>
+                    </div>&nbsp;
+                </div>
                 <button class="btn" @click="addTxt()">Add a textbox</button>
                 <button class="btn" @click="addSel()">Add a dropdown</button>
                 <button class="btn" @click="saveSchema()">Save</button>
                 <div class="row">
                     <div class="col">
-                        <pre><code>{{ schema.fields }}</code></pre>
+                        <pre><code>{{ schema }}</code></pre>
                     </div>
                     <div class="col">
                         <pre><code>{{ data }}</code></pre>
@@ -140,8 +166,8 @@
     <script src="./sortable.min.js"></script>
     <script src="./select2-materialize.js"></script>
     <script src="./data.js"></script>
-    <script src="./components.js"></script>
     <script src="./script.js"></script>
+    <script src="./components.js"></script>
 
 </body>
 </html>
