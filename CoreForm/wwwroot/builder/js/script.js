@@ -1,5 +1,5 @@
 var id = 100;
-var app, modalElement;
+var app, editFormModal;
 
 var registeredFields = new Map();
 
@@ -8,30 +8,31 @@ $(document).ready(function () {
 
     app = new Vue({
         el: '#app',
-        data : function() {
+        data: function () {
             return {
                 data: {},
                 schema: {
                     'schemaVersion': 1,
-                    'formVersion' : 0,
+                    'formVersion': 0,
                     'name': 'FirstSchema',
                     fields: []
-                }
-                //schema: formSchema
+                },
+                editformdata: {}
 
             }
         },
         methods: {
-            addTxt() {
+            addTxt: function () {
                 id++;
                 this.schema.fields.push({
                     'id': 'ctrl_' + id,
                     'label': 'Name',
                     'type': 'textField',
-                    'width': 12
+                    'variable': '',
+                    'placeholder':'Input text here'
                 });
             },
-            addSel() {
+            addSel: function () {
                 id++;
                 this.schema.fields.push({
                     'id': 'ctrl_' + id,
@@ -40,7 +41,13 @@ $(document).ready(function () {
                     'source': 'country123'
                 });
             },
-            saveSchema() {
+            applyEdit: function () {
+                var obj = findSchemaObjectById(this.editformdata.id);
+                Object.assign(obj, this.editformdata);
+                editFormModal.hide();
+                Object.assign(this.editformdata, {});
+            },
+            saveSchema: function () {
                 $.ajax({
                     url: "/Form/NewModel",
                     type: "POST",
@@ -51,15 +58,16 @@ $(document).ready(function () {
                         alert("Data Loaded: " + data);
                     }
                 });
-                
 
-                
+
+
             }
         },
         created: function () {
             // `this` est une référence à l'instance de vm
             for (let [key, value] of registeredFields.entries()) {
                 this.$options.components[key] = value.fieldTemplate;
+                this.$options.components['edit_' + key] = value.editForm;
             }
             for (let [key, value] of Object.entries(this.$options.components)) {
                 value.components = this.$options.components;
@@ -84,16 +92,15 @@ $(document).ready(function () {
 
                 $('select').not(".select2").not(".select2-ajax").formSelect();
 
-                modalElement = document.getElementById("editForm");
 
-                $('.modal').modal();
+                editFormModal = UIkit.modal(document.getElementById("editForm"));
 
 
             })
         }
     });
 
-   
+
 });
 
 function RegisterField(fieldDefinition) {
@@ -102,10 +109,12 @@ function RegisterField(fieldDefinition) {
 
 
 function openSettings(id) {
-    var instance = M.Modal.getInstance(modalElement);
-    instance.open();
-    var obj = findDataObjectById(id);
-    var comp = app.$options.components[obj.type];
+    var vmEditForm;
+    editFormModal.show();
+            var obj = findSchemaObjectById(id);
+    var comp = registeredFields.get(obj.type).editForm;
+    app.editformdata = Object.assign({}, obj);
+    //document.getElementById("editFormBody").innerHTML =
 
 }
 
@@ -146,7 +155,7 @@ function configureNestedTable(table) {
         dragClass: 'sortable-dragitem',
         onAdd: function (evt) {
             var elName;
-            if (evt.pullMode == "clone") {
+            if (evt.pullMode === "clone") {
 
                 var item = $(evt.item);
 
@@ -168,13 +177,13 @@ function configureNestedTable(table) {
                 }
 
                 var fieldConfig = component.GetFieldConfiguration(null);
-                if (fieldConfig != null) {
+                if (fieldConfig !== null) {
                     $("#editForm .modal-body").html(fieldConfig.htmlForm);
                     vm = new Vue({ el: '#editForm', data: fieldConfig.dataModel });
 
                     $('#editForm').modal('show').on('hide.bs.modal', function () {
                         elName = $("#ctrlName").val();
-                        if (elName == "") {
+                        if (elName === "") {
                             $(evt.item).remove();
                         }
                         else {
@@ -204,7 +213,7 @@ function configureNestedTable(table) {
             evt.clone // the clone element
             evt.pullMode;  // when item is in another sortable: `"clone"` if cloning, `true` if moving
 
-            var item = findDataObjectById($(evt.clone).data("ref"));
+            var item = findSchemaObjectById($(evt.clone).data("ref"));
             var collFrom = findDataCollectionByElement($(evt.from));
             var collTo = findDataCollectionByElement($(evt.to));
 
@@ -227,56 +236,57 @@ function configureNestedTable(table) {
 
 }
 
-    function findDataObjectById(id) {
-        if (id === "formContainer") return app.schema;
-        return findDataObjectByDataNode(app.schema, id)
-    }
+function findSchemaObjectById(id) {
+    if (id === "formContainer") return app.schema;
+    return findDataObjectByDataNode(app.schema, id)
+}
 
-    function findDataObjectByDataNode(node, id) {
-        var subColl = null;
-        if (typeof (node.columns) !== "undefined") subColl = node.columns;
-        if (typeof (node.fields) !== "undefined") subColl = node.fields;
+function findDataObjectByDataNode(node, id) {
+    var subColl = null;
+    if (typeof (node.columns) !== "undefined") subColl = node.columns;
+    if (typeof (node.fields) !== "undefined") subColl = node.fields;
 
-        if (id === node.id) {
-            return node;
-        } else {
-            if (subColl != null) {
-                for (var i = 0; i < subColl.length; i++) {
-                    var res = findDataObjectByDataNode(subColl[i], id);
-                    if (res != null) return res;
-                }
-            }
-        }
-        return null;
-    }
-
-
-    function findDataCollectionByElement(element) {
-        var id = null;
-        if ($(element).attr("id")) id = $(element).attr("id");
-        else if ($(element).data("ref")) id = $(element).data("ref");
-
-        if (id === "formContainer") return app.schema.fields;
-        return findDataCollectionInDataNode(app.schema, id)
-    }
-
-    function findDataCollectionInDataNode(node, id) {
-        var subColl = null;
-        if (typeof (node.columns) !== "undefined") subColl = node.columns;
-        if (typeof (node.fields) !== "undefined") subColl = node.fields;
-
-        if (subColl == null) return null;
-
-        if (id === node.id) {
-            return subColl;
-        } else {
+    if (id === node.id) {
+        return node;
+    } else {
+        if (subColl != null) {
             for (var i = 0; i < subColl.length; i++) {
-                var res = findDataCollectionInDataNode(subColl[i], id);
+                var res = findDataObjectByDataNode(subColl[i], id);
                 if (res != null) return res;
             }
         }
-        return null;
     }
+    return null;
+}
+
+
+function findDataCollectionByElement(element) {
+    var id = null;
+    if ($(element).attr("id")) id = $(element).attr("id");
+    else if ($(element).data("ref")) id = $(element).data("ref");
+
+    if (id === "formContainer") return app.schema.fields;
+    return findDataCollectionInDataNode(app.schema, id)
+}
+
+function findDataCollectionInDataNode(node, id) {
+    var subColl = null;
+    if (typeof (node.columns) !== "undefined") subColl = node.columns;
+    if (typeof (node.fields) !== "undefined") subColl = node.fields;
+
+    if (subColl == null) return null;
+
+    if (id === node.id) {
+        return subColl;
+    } else {
+        for (var i = 0; i < subColl.length; i++) {
+            var res = findDataCollectionInDataNode(subColl[i], id);
+            if (res != null) return res;
+        }
+    }
+    return null;
+}
+
 
 
 

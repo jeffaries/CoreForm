@@ -1,0 +1,9 @@
+[
+  {
+    "outputFileName": "wwwroot/builder/js/bundle.js",
+    "inputFiles": [
+      "wwwroot/builder/js/script.js",
+      "wwwroot/builder/js/components.js"
+    ]
+  }
+]

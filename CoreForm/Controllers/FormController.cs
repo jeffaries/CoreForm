@@ -30,7 +30,7 @@ namespace CoreForm.Controllers
         public IActionResult NewModel([FromBody] Object data)
         {
             var name = JObject.Parse(data.ToString()).GetValue("name").ToString();
-            var form = BusinessLogic.FormModel.CreateModel(name);
+            var form = BusinessLogic.FormModel.CreateModel(name, data.ToString());
             return Ok(form.Id);
         }
 

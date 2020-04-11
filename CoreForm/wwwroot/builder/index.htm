@@ -3,17 +3,15 @@
 <head>
     <meta charset="utf-8">
     <title>VueJS</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="./select2-materialize.css">
+    <link rel="stylesheet" href="css/uikit.min.css" />
+    <script src="js/uikit.min.js"></script>
+    <script src="js/uikit-icons.min.js"></script>
     <style>
 
         body {
             margin: 15px
-        }
-
-        .x-form {
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
         }
 
 
@@ -22,12 +20,11 @@
         }
 
         .sortable-ghost {
-            border: 1px dashed gray;
-            padding-top: 20px
+            border: 1px dashed gray !important;
         }
 
         .sortable-dragitem {
-            border: 1px dashed gray
+            border: 1px dashed gray !important
         }
 
         .gridrow {
@@ -44,20 +41,24 @@
                     padding-right: 0px
                 }
 
+        .sortable-item {
+            position: relative;
+            border: 1px solid transparent
+        }
 
         .toolbar {
             z-index: 999;
             position: absolute;
-            right: 20px;
-            top: 0px;
+            right: 0px;
+            top: 0.5em;
             display: none;
         }
 
             .toolbar > div.toolbar-button {
                 background-color: white;
-                box-shadow: 0px 0px 12px 0px rgba(128,128,170,0.8);
-                height: 18px;
-                width: 18px;
+                box-shadow: 0px 0px 0.2em 0px rgba(128,128,170,0.8);
+                height: 0.7em;
+                width: 0.7em;
                 margin-right: 3px;
                 padding: 3px;
                 display: inline-block;
@@ -85,51 +86,116 @@
 
         div.deleteHandle {
             background-color: darkred !important;
-            padding: 5px !important;
         }
 
             div.deleteHandle:hover {
                 background-color: orangered !important;
-                padding: 5px !important;
             }
+
+        /*.select2-container {
+            width: 270px !important;
+        }
+
+            .select2-container .select2-selection--single {
+                height: 45px;
+                padding: 8px 10px 8px 30px;
+            }
+
+        .select2-dropdown {
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 0px;
+        }
+
+        .select2-results__option {
+            padding: 6px;
+        }
+
+        .select2-container--default .select2-selection--single {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 0px;
+        }
+
+            .select2-container--default .select2-selection--single .select2-selection__rendered {
+                color: #444;
+            }
+
+            .select2-container--default .select2-selection--single .select2-selection__arrow {
+                height: 44px;
+                top: 1px;
+                right: 5px;
+                width: 20px;
+            }
+
+                .select2-container--default .select2-selection--single .select2-selection__arrow b {
+                    border-color: #888 transparent transparent transparent;
+                }
+
+        .select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b {
+            border-color: transparent transparent #888 transparent;
+            border-width: 0 4px 5px 4px;
+        }
+
+        .select2-container--default .select2-search--dropdown .select2-search__field {
+            border: 1px solid #ccc;
+        }
+
+        .select2-container--default .select2-results__option[aria-selected=true] {
+            background-color: #ddd;
+        }
+
+        .select2-container--default .select2-results__option--highlighted[aria-selected] {
+            background-color: #5897fb;
+            color: white;
+        }
+
+        .select2-container--default .select2-results__group {
+            padding: 6px;
+        }*/
+
+        
     </style>
 </head>
 <body>
-    <div class="row">
-        <div class="col s2">Tools</div>
-        <div class="col s8">
-            <div id="app" class="col s12" v-cloak>
-                <div class="col s12" style="border-bottom:1px solid gray;margin-bottom:20px; padding-bottom:20px">
-                    <div class="col s12">
-                        <div class="col s10">
-                            <label for="formName">Name:</label>
-                            <input id="formName" v-model="schema.name" />
-                        </div>
-                        <div class="col s2">
-                            Version. 
-                            {{schema.formVersion"}}
-                        </div>
+    <div id="app" v-cloak>
+        <div class="uk-grid-small uk-grid-divider" uk-grid>
+            <div class="uk-width-1-5@m">
+                <div>
+                    <div>
+                        <label class="uk-form-label" for="formName">Name:</label>
+                        <input id="formName" class="uk-input uk-form-small" v-model="schema.name" />
                     </div>
-                    <div class="col s12">
-                        <div class="col s12">
-                            <label for="formTitle">Title:</label>
-                            <input id="formTitle" v-model="schema.title" />
-                        </div>
+                    <div>
+                        <label class="uk-form-label" for="formTitle">Title:</label>
+                        <input id="formTitle" class="uk-input uk-form-small" v-model="schema.title" />
                     </div>
                 </div>
-                <div class="col s12   row x-form">
-                    <div id="formContainer" data-ref="root" class="col nested-sortable s12">
-                        <component v-for="field in schema.fields"
-                                   :key="field.id"
-                                   :is="field.type"
-                                   v-bind="field"
-                                   v-model="data[field.id]">
-                        </component>
-                    </div>&nbsp;
+
+                <div style="margin-bottom:1em;margin-top:1em;">
+                    <button class="uk-button uk-button-default uk-button-small uk-width-1-1" @click="addTxt()">Text input</button>
+                    <button class="uk-button uk-button-default uk-button-small uk-width-1-1" @click="addSel()">Selector</button>
                 </div>
-                <button class="btn" @click="addTxt()">Add a textbox</button>
-                <button class="btn" @click="addSel()">Add a dropdown</button>
-                <button class="btn" @click="saveSchema()">Save</button>
+                <button class="uk-button uk-button-primary uk-button-small uk-width-1-1" @click="saveSchema()">Save</button>
+
+            </div>
+            <div class="uk-width-3-5@m">
+
+
+                <fieldset class="uk-fieldset">
+
+                    <div>
+                        <h3 class="uk-card-title">{{schema.title}}</h3>
+                        <div id="formContainer" data-ref="root" class="nested-sortable uk-form-stacked ">
+                            <component v-for="field in schema.fields"
+                                       :key="field.id"
+                                       :is="field.type"
+                                       v-bind="field"
+                                       v-model="data[field.id]">
+                            </component>
+                        </div>&nbsp;
+                    </div>
+                </fieldset>
                 <div class="row">
                     <div class="col">
                         <pre><code>{{ schema }}</code></pre>
@@ -137,37 +203,44 @@
                     <div class="col">
                         <pre><code>{{ data }}</code></pre>
                     </div>
+                    <div class="col">
+                        <pre><code>{{ editformdata }}</code></pre>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
 
-    <div class="modal modal-fixed-footer" id="editForm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                <div class="editFormContent">
+
+        <div id="editForm" uk-modal>
+            <div class="uk-modal-dialog" uk-overflow-auto>
+                <button class="uk-modal-close-default" type="button" uk-close></button>
+                <div class="uk-modal-header">
+                    <h2 class="uk-modal-title">Settings</h2>
+                </div>
+                <div class="uk-modal-body" id="editFormBody">
+                    <component :key="'edit_' + editformdata.id" :id="'edit_' + editformdata.id" :is="'edit_' + editformdata.type" v-model="editformdata"></component>
 
                 </div>
-
+                <div class="uk-modal-footer">
+                    <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+                    <button class="uk-button uk-button-primary" type="button" @click="applyEdit()">Apply</button>
+                </div>
             </div>
         </div>
-        <div class="modal-footer">
-            <button type="button" class="modal-close btn btn-secondary">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
+
     </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.js"></script>
-    <script src="./sortable.min.js"></script>
-    <script src="./select2-materialize.js"></script>
-    <script src="./data.js"></script>
-    <script src="./script.js"></script>
-    <script src="./components.js"></script>
-
+    <script src="./js/sortable.min.js"></script>
+    <script src="./js/select2-materialize.js"></script>
+    <script src="./js/data.js"></script>
+    <script src="./js/script.js"></script>
+    <script src="./js/components.js"></script>
+    <!--<script src="./js/bundle.js"></script>-->
 </body>
 </html>

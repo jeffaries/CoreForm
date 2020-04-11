@@ -1,19 +1,19 @@
 Vue.component('cf_toolbutton', {
-    template: `<div v-on:click="click()" :class="'toolbar-button ' + cssclass"><img :src="'./'+ icon +'.svg'"/></div>`,
-    data() {
+    template: `<div v-on:click="click()" :class="'toolbar-button ' + cssclass"><img :src="'./img/'+ icon +'.svg'"/></div>`,
+    data: function () {
         return {}
     },
     props: ["onclick", "cssclass", "icon"],
     methods: {
-        click(evt) {
+        click: function (evt) {
             eval(this.onclick);
         }
     }
 });
 
 Vue.component('cf_field', {
-    template: `<div :data-ref="id" :class="'sortable-item input-field col s12'"><div class="toolbar"><cf_toolbutton icon="move" cssclass="moveHandle"/><cf_toolbutton icon="settings" :onclick="'openSettings(&quot;'+ id +'&quot;)'"/><cf_toolbutton icon="trash" cssclass="deleteHandle"/></div><slot></slot></div>`,
-    data() {
+    template: `<div :data-ref="id" class="sortable-item"><div class="toolbar"><cf_toolbutton icon="move" cssclass="moveHandle"/><cf_toolbutton icon="settings" :onclick="'openSettings(&quot;'+ id +'&quot;)'"/><cf_toolbutton icon="trash" cssclass="deleteHandle"/></div><slot></slot></div>`,
+    data: function () {
         return {}
     },
     props: ["id"]
@@ -23,7 +23,7 @@ Vue.component('cf_field', {
 
 
 RegisterField({
-    type:'grid',
+    type: 'grid',
     display: 'Columns',
     fieldTemplate: {
         template: `<cf_field :id="id"><div class="row gridrow">
@@ -35,7 +35,7 @@ RegisterField({
 				 v-model="$root.data[field.id]"
 				 v-bind="field"></component>
 			</div></div></cf_field>`,
-        data() {
+        data: function () {
             if (this.width === undefined) this.width = 12;
             return {}
         },
@@ -46,7 +46,7 @@ RegisterField({
 
     editForm: {
         template: `<div>Test Grid</div>`,
-        data() {
+        data: function () {
             return {}
         }
 
@@ -58,8 +58,8 @@ RegisterField({
     type: 'textField',
     display: 'Input field',
     fieldTemplate: {
-        template: `<cf_field :id="id"><label :for="id" class="active">{{ label }}</label><input type="text" :id="id" :value="value" @input="updateInput"></cf_field>`,
-        data() {
+        template: `<cf_field :id="id"><label :for="id" class="uk-form-label">{{ label }}</label><div class="uk-form-controls"><input type="text" :placeholder="placeholder" class="uk-input uk-form-small" :id="id" :value="value" @input="updateInput"></div></cf_field>`,
+        data: function () {
             if (this.width === undefined) this.width = 12;
             return {
             }
@@ -67,17 +67,30 @@ RegisterField({
         computed: {
         },
         methods: {
-            updateInput() {
+            updateInput: function () {
                 this.$emit('input', this.$el.getElementsByTagName("input")[0].value)
             }
         },
-        props: ["label", "id", "value", "width"]
+        props: ["label", "id", "value", "width", "placeholder"]
     },
     editForm: {
-        template: `<div>Test Textbox</div>`,
+        template: `<div>
+                        <div>
+                            <label for="txtValue">Name</label>
+                            <input id="txtValue" type="text" class="uk-input uk-form-small" v-model="variable"/></div>
+                        <div>
+                            <label for="txtPlaceholder">Placeholder text</label>
+                            <input id="txtPlaceholder" type="text" class="uk-input uk-form-small" v-model="placeholder"/></div>
+                        <div>
+                            <label for="txtPlaceholder">Label text</label>
+                            <input id="txtLabel" type="text" class="uk-input uk-form-small" v-model="label"/></div>
+                   </div>`,
+        computed: {
+        },
         data() {
-            return {}
-        }
+            return this.value;
+        },
+        props: ["value"]
 
     }
 });
@@ -85,20 +98,21 @@ RegisterField({
 
 
 RegisterField({
-    type:'selectField',
+    type: 'selectField',
     display: 'Dropdown select',
     fieldTemplate: {
         template:
-            `<cf_field :id="id"><label :for="id" class="active">{{ label }}</label>
-	<select @change="changeValue" class="select2 no-autoinit" v-model="id" :id="id" :name="id">
-	</select>
+            `<cf_field :id="id"><label :for="id" class="uk-form-label">{{ label }}</label>
+<div class="uk-form-control bt-select-field">
+	<select @change="changeValue" class="bt-select-field no-autoinit uk-select" v-model="id" :id="id" :name="id">
+	</select></div>
 	</cf_field>`,
-        data() {
+        data: function () {
             if (this.width === undefined) this.width = 12;
             return {}
         },
         methods: {
-            changeValue(evt) {
+            changeValue: function (evt) {
                 this.$emit('input', evt.srcElement.value)
             }
         },
@@ -110,7 +124,7 @@ RegisterField({
             var el = $(this.$el).find('select');
 
             var dataObj = { data: this.options };
-            if (this.source != undefined) {
+            if (this.source !== undefined) {
                 dataObj = {
                     ajax: {
                         url: function (params) {
@@ -134,6 +148,7 @@ RegisterField({
                         },
                         cache: true
                     },
+                    placeholder: 'Select an option',
                     minimumInputLength: this.source.minimumInputLength,
                     multiple: 'multiple'
                 };
@@ -170,10 +185,7 @@ RegisterField({
         }
     },
     editForm: {
-        template: `<div>Test Textbox</div>`,
-        data() {
-            return {}
-        }
+        template: `<div>Test Textbox {{id}}</div>`,
 
     }
 });

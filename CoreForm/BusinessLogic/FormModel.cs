@@ -11,7 +11,7 @@ namespace CoreForm.BusinessLogic
     {
         private static String getConnectionString()
         {
-            return @"Filename=coreform.db";
+            return @"Filename=coreform.db;Connection=shared";
         }
 
         public static List<FormModelVersionEntity> GetFormModels()

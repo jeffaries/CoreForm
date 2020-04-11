@@ -1,0 +1,10 @@
+﻿[
+  {
+    "outputFile": "wwwroot/builder/scss/StyleSheet.css",
+    "inputFile": "wwwroot/builder/scss/StyleSheet.scss"
+  },
+  {
+    "outputFile": "wwwroot/builder/css/materialize.css",
+    "inputFile": "wwwroot/builder/css/materialize.scss"
+  }
+]
