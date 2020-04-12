@@ -41,6 +41,24 @@ $(document).ready(function () {
                     'source': 'country123'
                 });
             },
+            addGrid: function () {
+                id++;
+                this.schema.fields.push({
+                    'id': 'ctrl_' + id,
+                    'type': 'grid',
+                    columns: [
+                        {
+                            'id': 'ctrl_' + id + '_1',
+                            'width': '1-2@m',
+                            'fields': []
+                        },
+                        {
+                            'id': 'ctrl_' + id + '_2',
+                            'width': '1-2@m',
+                            'fields': []
+                        }]
+                });
+            },
             applyEdit: function () {
                 var obj = findSchemaObjectById(this.editformdata.id);
                 Object.assign(obj, this.editformdata);
@@ -85,6 +103,19 @@ $(document).ready(function () {
                 // Update events to ensure that toolbar will appear for newly added items
                 applyToolbarEvents();
 
+
+                var toolbar = document.getElementById('mnuComponents');
+                new Sortable(toolbar, {
+                    group: {
+                        name: 'share',
+                        pull: 'clone', // To clone: set pull to 'clone'
+                        put:false
+                    },
+                    animation: 0,
+                    sort: false,
+                    dragClass: 'yellow-background-class',
+                });
+
                 configureNestedTables();
 
                 M.updateTextFields();
@@ -111,10 +142,9 @@ function RegisterField(fieldDefinition) {
 function openSettings(id) {
     var vmEditForm;
     editFormModal.show();
-            var obj = findSchemaObjectById(id);
+    var obj = findSchemaObjectById(id);
     var comp = registeredFields.get(obj.type).editForm;
     app.editformdata = Object.assign({}, obj);
-    //document.getElementById("editFormBody").innerHTML =
 
 }
 
@@ -147,7 +177,6 @@ function configureNestedTable(table) {
         },
         draggale: '.sortable-item',
         handle: '.moveHandle',
-        //removeOnSpill: true,
         animation: 150,
         fallbackOnBody: true,
         swapThreshold: 0.25,
@@ -162,37 +191,53 @@ function configureNestedTable(table) {
                 var callback = function (config) {
                     var newHtml = component.GetEditFieldTemplate(config);
 
-                    if (newHtml != '') {
+                    if (newHtml !== '') {
                         var newItem = $(newHtml);
                         item.replaceWith(newItem);
                         var dataType = item.data("type");
                         newItem.attr("data-type", dataType);
                         newItem.attr("data-name", elName);
                         newItem.attr('id', "ctrl_" + ctrlIndex++);
-                        if (config != null) {
+                        if (config !== null) {
                             newItem.data("config", config);
                         }
                         configureNestedTables();
                     }
                 }
 
-                var fieldConfig = component.GetFieldConfiguration(null);
-                if (fieldConfig !== null) {
-                    $("#editForm .modal-body").html(fieldConfig.htmlForm);
-                    vm = new Vue({ el: '#editForm', data: fieldConfig.dataModel });
+                id++;
+                var model = registeredFields.get(item.data("type")).buildNewModel();
+                model.id = 'ctrl_' + id;
+                model.type=item.data("type")
 
-                    $('#editForm').modal('show').on('hide.bs.modal', function () {
-                        elName = $("#ctrlName").val();
-                        if (elName === "") {
-                            $(evt.item).remove();
-                        }
-                        else {
-                            callback(vm.$data); //replace null with the result of the modal
-                        }
-                    })
-                } else {
-                    callback(null);
-                }
+                var newIndex = evt.newDraggableIndex;
+                var collTo = findDataCollectionByElement($(evt.to));
+                collTo.splice(newIndex, 0, model);
+                item.remove();
+                openSettings(model.id);
+                app.$nextTick(function () { configureNestedTables(); });
+
+                //var obj = findSchemaObjectById('ctrl_' + id);
+                //editFormModal.show();
+                //app.editformdata = obj;
+
+                //var fieldConfig = component.GetFieldConfiguration(null);
+                //if (fieldConfig !== null) {
+                //    $("#editForm .modal-body").html(fieldConfig.htmlForm);
+                //    vm = new Vue({ el: '#editForm', data: fieldConfig.dataModel });
+
+                //    $('#editForm').modal('show').on('hide.bs.modal', function () {
+                //        elName = $("#ctrlName").val();
+                //        if (elName === "") {
+                //            $(evt.item).remove();
+                //        }
+                //        else {
+                //            callback(vm.$data); //replace null with the result of the modal
+                //        }
+                //    })
+                //} else {
+                //    callback(null);
+                //}
 
 
 
@@ -249,10 +294,10 @@ function findDataObjectByDataNode(node, id) {
     if (id === node.id) {
         return node;
     } else {
-        if (subColl != null) {
+        if (subColl !== null) {
             for (var i = 0; i < subColl.length; i++) {
                 var res = findDataObjectByDataNode(subColl[i], id);
-                if (res != null) return res;
+                if (res !== null) return res;
             }
         }
     }
@@ -274,14 +319,14 @@ function findDataCollectionInDataNode(node, id) {
     if (typeof (node.columns) !== "undefined") subColl = node.columns;
     if (typeof (node.fields) !== "undefined") subColl = node.fields;
 
-    if (subColl == null) return null;
+    if (subColl === null) return null;
 
     if (id === node.id) {
         return subColl;
     } else {
         for (var i = 0; i < subColl.length; i++) {
             var res = findDataCollectionInDataNode(subColl[i], id);
-            if (res != null) return res;
+            if (res !== null) return res;
         }
     }
     return null;
@@ -320,12 +365,27 @@ Vue.component('cf_field', {
 RegisterField({
     type: 'grid',
     display: 'Columns',
+    buildNewModel: function () {
+        return {
+            showSeparator:false,
+            columns: [
+                {
+                    'id': 'ctrl_' + id + '_1',
+                    'width': '1-2',
+                    'fields': []
+                },
+                {
+                    'id': 'ctrl_' + id + '_2',
+                    'width': '1-2',
+                    'fields': []
+                }]
+        }
+    },
     fieldTemplate: {
-        template: `<cf_field :id="id"><div class="row gridrow">
-			    <div :class="'col nested-sortable s12 m' + column.width" :id="column.id" :data-column="index" :data-grid="id" v-for="(column,index) in columns">  
+        template: `<cf_field :id="id"><div class="row uk-grid" v-bind:class="{'uk-grid-divider uk-grid-collapse': showSeparator, 'uk-grid-medium': !showSeparator}" uk-grid>
+			    <div :class="'nested-sortable uk-width-'+ column.width + '@m'" style="min-height:60px;border:1px dotted silver" :id="column.id" :data-column="index" :data-grid="id" v-for="(column,index) in columns">  
 				<component v-for="field in column.fields" 
 				 :key="field.id"
-                 
 				 :is="field.type"
 				 v-model="$root.data[field.id]"
 				 v-bind="field"></component>
@@ -336,15 +396,21 @@ RegisterField({
         },
         computed: {
         },
-        props: ["id", "label", "value", "columns"]
+        props: ["id", "label", "value", "columns", "showSeparator"]
     },
 
     editForm: {
-        template: `<div>Test Grid</div>`,
-        data: function () {
-            return {}
-        }
+        template: `<div>
 
+                            <div>
+                            <label for="chkShowSeparator">Label text</label>
+                            <input id="chkShowSeparator" class="uk-checkbox uk-form-small" type="checkbox" v-model="showSeparator"/></div>
+
+                    </div>`,
+        data() {
+            return this.value;
+        },
+        props: ["value"]
     }
 });
 
@@ -352,6 +418,9 @@ RegisterField({
 RegisterField({
     type: 'textField',
     display: 'Input field',
+    buildNewModel: function () {
+        return { label: 'New label', variable: '', placeholder: '' }
+    },
     fieldTemplate: {
         template: `<cf_field :id="id"><label :for="id" class="uk-form-label">{{ label }}</label><div class="uk-form-controls"><input type="text" :placeholder="placeholder" class="uk-input uk-form-small" :id="id" :value="value" @input="updateInput"></div></cf_field>`,
         data: function () {
@@ -395,6 +464,9 @@ RegisterField({
 RegisterField({
     type: 'selectField',
     display: 'Dropdown select',
+    buildNewModel: function () {
+        return { label: 'New label', variable: '', placeholder: '', source: '' }
+    },
     fieldTemplate: {
         template:
             `<cf_field :id="id"><label :for="id" class="uk-form-label">{{ label }}</label>

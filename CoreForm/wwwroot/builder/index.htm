@@ -172,9 +172,10 @@
                     </div>
                 </div>
 
-                <div style="margin-bottom:1em;margin-top:1em;">
-                    <button class="uk-button uk-button-default uk-button-small uk-width-1-1" @click="addTxt()">Text input</button>
-                    <button class="uk-button uk-button-default uk-button-small uk-width-1-1" @click="addSel()">Selector</button>
+                <div id="mnuComponents" style="margin-bottom:1em;margin-top:1em;">
+                    <button class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="textField" @click="addTxt()">Text input</button>
+                    <button class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="selectField">Selector</button>
+                    <button class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="grid" @click="addGrid()">Columns</button>
                 </div>
                 <button class="uk-button uk-button-primary uk-button-small uk-width-1-1" @click="saveSchema()">Save</button>
 

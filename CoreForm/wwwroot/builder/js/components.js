@@ -25,12 +25,27 @@ Vue.component('cf_field', {
 RegisterField({
     type: 'grid',
     display: 'Columns',
+    buildNewModel: function () {
+        return {
+            showSeparator:false,
+            columns: [
+                {
+                    'id': 'ctrl_' + id + '_1',
+                    'width': '1-2',
+                    'fields': []
+                },
+                {
+                    'id': 'ctrl_' + id + '_2',
+                    'width': '1-2',
+                    'fields': []
+                }]
+        }
+    },
     fieldTemplate: {
-        template: `<cf_field :id="id"><div class="row gridrow">
-			    <div :class="'col nested-sortable s12 m' + column.width" :id="column.id" :data-column="index" :data-grid="id" v-for="(column,index) in columns">  
+        template: `<cf_field :id="id"><div class="row uk-grid" v-bind:class="{'uk-grid-divider uk-grid-collapse': showSeparator, 'uk-grid-medium': !showSeparator}" uk-grid>
+			    <div :class="'nested-sortable uk-width-'+ column.width + '@m'" style="min-height:60px;border:1px dotted silver" :id="column.id" :data-column="index" :data-grid="id" v-for="(column,index) in columns">  
 				<component v-for="field in column.fields" 
 				 :key="field.id"
-                 
 				 :is="field.type"
 				 v-model="$root.data[field.id]"
 				 v-bind="field"></component>
@@ -41,15 +56,21 @@ RegisterField({
         },
         computed: {
         },
-        props: ["id", "label", "value", "columns"]
+        props: ["id", "label", "value", "columns", "showSeparator"]
     },
 
     editForm: {
-        template: `<div>Test Grid</div>`,
-        data: function () {
-            return {}
-        }
+        template: `<div>
 
+                            <div>
+                            <label for="chkShowSeparator">Label text</label>
+                            <input id="chkShowSeparator" class="uk-checkbox uk-form-small" type="checkbox" v-model="showSeparator"/></div>
+
+                    </div>`,
+        data() {
+            return this.value;
+        },
+        props: ["value"]
     }
 });
 
@@ -57,6 +78,9 @@ RegisterField({
 RegisterField({
     type: 'textField',
     display: 'Input field',
+    buildNewModel: function () {
+        return { label: 'New label', variable: '', placeholder: '' }
+    },
     fieldTemplate: {
         template: `<cf_field :id="id"><label :for="id" class="uk-form-label">{{ label }}</label><div class="uk-form-controls"><input type="text" :placeholder="placeholder" class="uk-input uk-form-small" :id="id" :value="value" @input="updateInput"></div></cf_field>`,
         data: function () {
@@ -100,6 +124,9 @@ RegisterField({
 RegisterField({
     type: 'selectField',
     display: 'Dropdown select',
+    buildNewModel: function () {
+        return { label: 'New label', variable: '', placeholder: '', source: '' }
+    },
     fieldTemplate: {
         template:
             `<cf_field :id="id"><label :for="id" class="uk-form-label">{{ label }}</label>
