@@ -7,6 +7,6 @@ namespace CoreForm.Models
 {
     public class IndexViewModel
     {
-        public List<Data.FormModelVersionEntity> FormModels { get; set; }
+        public IEnumerable<Data.FormModelEntity> FormModels { get; set; }
     }
 }

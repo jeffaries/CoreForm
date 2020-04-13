@@ -9,17 +9,20 @@ Form models:
 <ul>
     @foreach (var item in Model.FormModels)
     {
-        <li>
-            <a href="/Form/@item.Id/Render">
-                @item.Name
-            </a>
-        </li>
+    <li>
+        <a href="/Form/@item.CurrentVersion.Id/Render">
+            @item.CurrentVersion.Name (ver.@item.CurrentVersion.Version)
+        </a>
+        [<a href="/builder/index.htm?schemaid=@item.Id">
+            Edit
+        </a>]
+    </li>
     }
 </ul>
 
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createNewModelModal">Create a model</button>
+@*<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createNewModelModal">Create a model</button>*@
 
-<a href="/builder/index.htm">New builder (beta)</a>
+<a class="btn btn-primary"  href="/builder/index.htm">New builder (beta)</a>
 
 <div class="modal fade" id="createNewModelModal" tabindex="-1" role="dialog" aria-labelledby="createNewModelModal" aria-hidden="true">
     <div class="modal-dialog" role="document">

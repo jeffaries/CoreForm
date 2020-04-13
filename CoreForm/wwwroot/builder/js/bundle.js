@@ -1,9 +1,17 @@
-var id = 100;
 var app, editFormModal;
 
 var registeredFields = new Map();
 
 $(document).ready(function () {
+
+    var schema = {
+        'schemaVersion': 1,
+        'formVersion': 0,
+        'name': '',
+        'title': 'New form schema',
+        fields: []
+    };
+
 
 
     app = new Vue({
@@ -15,6 +23,7 @@ $(document).ready(function () {
                     'schemaVersion': 1,
                     'formVersion': 0,
                     'name': 'FirstSchema',
+                    'title': 'My first schema',
                     fields: []
                 },
                 editformdata: {}
@@ -23,38 +32,37 @@ $(document).ready(function () {
         },
         methods: {
             addTxt: function () {
-                id++;
                 this.schema.fields.push({
-                    'id': 'ctrl_' + id,
+                    'id': 'ctrl_' + getNextId(),
                     'label': 'Name',
                     'type': 'textField',
                     'variable': '',
-                    'placeholder':'Input text here'
+                    'placeholder': 'Input text here'
                 });
             },
             addSel: function () {
-                id++;
                 this.schema.fields.push({
-                    'id': 'ctrl_' + id,
+                    'id': 'ctrl_' + getNextId(),
                     'label': 'Country',
                     'type': 'selectField',
                     'source': 'country123'
                 });
             },
             addGrid: function () {
-                id++;
+                var id = getNextId();
                 this.schema.fields.push({
+                    
                     'id': 'ctrl_' + id,
                     'type': 'grid',
                     columns: [
                         {
-                            'id': 'ctrl_' + id + '_1',
-                            'width': '1-2@m',
+                            'id': 'row_' + id + '_1',
+                            'width': '1-2',
                             'fields': []
                         },
                         {
-                            'id': 'ctrl_' + id + '_2',
-                            'width': '1-2@m',
+                            'id': 'row_' + id + '_2',
+                            'width': '1-2',
                             'fields': []
                         }]
                 });
@@ -66,8 +74,15 @@ $(document).ready(function () {
                 Object.assign(this.editformdata, {});
             },
             saveSchema: function () {
+                var url = "/Form/NewModel";
+                var urlParams = new URLSearchParams(window.location.search);
+                var schemaId = urlParams.get('schemaid');
+                if (schemaId !== undefined && schemaId !== "") {
+                    url = "/Form/" + schemaId + "/save";
+                }
+
                 $.ajax({
-                    url: "/Form/NewModel",
+                    url: url,
                     type: "POST",
                     data: JSON.stringify(this.schema),
                     contentType: "application/json; charset=utf-8",
@@ -91,6 +106,21 @@ $(document).ready(function () {
                 value.components = this.$options.components;
             }
 
+            var urlParams = new URLSearchParams(window.location.search);
+            var schemaId = urlParams.get('schemaid');
+            if (schemaId!==null && typeof(schemaId) !== 'undefined' && schemaId !== "") {
+                $.ajax({
+                    url: "/Form/" + schemaId + "/schema",
+                    type: "GET",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        app.schema = data;
+                    }
+                });
+            }
+
+
         },
         updated: function () {
             this.$nextTick(function () {
@@ -109,7 +139,7 @@ $(document).ready(function () {
                     group: {
                         name: 'share',
                         pull: 'clone', // To clone: set pull to 'clone'
-                        put:false
+                        put: false
                     },
                     animation: 0,
                     sort: false,
@@ -188,27 +218,26 @@ function configureNestedTable(table) {
 
                 var item = $(evt.item);
 
-                var callback = function (config) {
-                    var newHtml = component.GetEditFieldTemplate(config);
+                //var callback = function (config) {
+                //    var newHtml = component.GetEditFieldTemplate(config);
 
-                    if (newHtml !== '') {
-                        var newItem = $(newHtml);
-                        item.replaceWith(newItem);
-                        var dataType = item.data("type");
-                        newItem.attr("data-type", dataType);
-                        newItem.attr("data-name", elName);
-                        newItem.attr('id', "ctrl_" + ctrlIndex++);
-                        if (config !== null) {
-                            newItem.data("config", config);
-                        }
-                        configureNestedTables();
-                    }
-                }
+                //    if (newHtml !== '') {
+                //        var newItem = $(newHtml);
+                //        item.replaceWith(newItem);
+                //        var dataType = item.data("type");
+                //        newItem.attr("data-type", dataType);
+                //        newItem.attr("data-name", elName);
+                //        newItem.attr('id', "ctrl_" + ctrlIndex++);
+                //        if (config !== null) {
+                //            newItem.data("config", config);
+                //        }
+                //        configureNestedTables();
+                //    }
+                //}
 
-                id++;
                 var model = registeredFields.get(item.data("type")).buildNewModel();
-                model.id = 'ctrl_' + id;
-                model.type=item.data("type")
+                model.id = 'ctrl_' + getNextId();
+                model.type = item.data("type")
 
                 var newIndex = evt.newDraggableIndex;
                 var collTo = findDataCollectionByElement($(evt.to));
@@ -275,10 +304,44 @@ function configureNestedTable(table) {
                 collTo.splice(newIndex, 0, item);
                 collFrom.splice(oldIndex, 1);
             }
+
+            configureNestedTables();
         }
     });
 
 
+}
+
+function getNextId() {
+    return getHighestControlId() + 1;
+}
+
+function getHighestControlId() {
+    var highestId = 0;
+    tranverseDataNodes(app.schema, function (node) {
+        if (typeof (node.id) !== 'undefined') {
+            var sId = node.id;
+            if (sId.startsWith("ctrl_")) {
+                iId = parseInt(sId.substring(5));
+                if (iId > highestId) highestId = iId;
+            }
+        }
+    });
+    return highestId;
+}
+
+
+//traverse nodes and sub-nodes ans execute function for each node found
+function tranverseDataNodes(node, func) {
+    var subColl = null;
+    if (typeof (node.columns) !== "undefined") subColl = node.columns;
+    if (typeof (node.fields) !== "undefined") subColl = node.fields;
+    func(node);
+    if (subColl !== null) {
+        for (var i = 0; i < subColl.length; i++) {
+            tranverseDataNodes(subColl[i], func);
+        }
+    }
 }
 
 function findSchemaObjectById(id) {
@@ -370,12 +433,12 @@ RegisterField({
             showSeparator:false,
             columns: [
                 {
-                    'id': 'ctrl_' + id + '_1',
+                    'id': 'col_' + this.id + '_1',
                     'width': '1-2',
                     'fields': []
                 },
                 {
-                    'id': 'ctrl_' + id + '_2',
+                    'id': 'col_' + this.id + '_2',
                     'width': '1-2',
                     'fields': []
                 }]
@@ -383,7 +446,7 @@ RegisterField({
     },
     fieldTemplate: {
         template: `<cf_field :id="id"><div class="row uk-grid" v-bind:class="{'uk-grid-divider uk-grid-collapse': showSeparator, 'uk-grid-medium': !showSeparator}" uk-grid>
-			    <div :class="'nested-sortable uk-width-'+ column.width + '@m'" style="min-height:60px;border:1px dotted silver" :id="column.id" :data-column="index" :data-grid="id" v-for="(column,index) in columns">  
+			    <div :class="'nested-sortable uk-width-'+ column.width + '@m'" style="min-height:60px" :id="column.id" :data-column="index" :data-grid="id" v-for="(column,index) in columns">  
 				<component v-for="field in column.fields" 
 				 :key="field.id"
 				 :is="field.type"

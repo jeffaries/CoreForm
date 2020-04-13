@@ -14,7 +14,7 @@ namespace CoreForm.Controllers
 
         public IActionResult GetModels()
         {
-            var coll = BusinessLogic.FormModel.GetFormModels().Select(o => new { CreateDate = o.CreateDate, FormModelId = o.FormModelId, Id = o.Id, Name = o.Name });
+            var coll = BusinessLogic.FormModel.GetFormModels().Select(o => new { CreateDate = o.CurrentVersion.CreateDate, Id = o.Id, Name = o.CurrentVersion.Name });
             return Ok(coll);
         }
 
@@ -29,8 +29,7 @@ namespace CoreForm.Controllers
         [HttpPost]
         public IActionResult NewModel([FromBody] Object data)
         {
-            var name = JObject.Parse(data.ToString()).GetValue("name").ToString();
-            var form = BusinessLogic.FormModel.CreateModel(name, data.ToString());
+            var form = BusinessLogic.FormModel.CreateModel(data.ToString());
             return Ok(form.Id);
         }
 
@@ -42,11 +41,20 @@ namespace CoreForm.Controllers
             return View("Builder", form);
         }
 
+
+        [Route("{formModelId}/Schema")]
+        [HttpGet]
+        public IActionResult GetSchema(Guid formModelId)
+        {
+            var form = BusinessLogic.FormModel.GetCurrentFormModelVersion(formModelId);
+            return Ok(form.Content);
+        }
+
         [Route("{formModelId}/Save")]
         [HttpPost]
         public IActionResult Save([FromBody] Object data, Guid formModelId)
         {
-            var model = BusinessLogic.FormModel.UpdateModel(formModelId, "Title", data.ToString());
+            var model = BusinessLogic.FormModel.UpdateModel(formModelId, data.ToString());
             return Ok(model.Id);
         }
     }

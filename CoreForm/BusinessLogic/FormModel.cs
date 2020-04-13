@@ -1,5 +1,6 @@
 ﻿using CoreForm.Data;
 using LiteDB;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,15 +15,14 @@ namespace CoreForm.BusinessLogic
             return @"Filename=coreform.db;Connection=shared";
         }
 
-        public static List<FormModelVersionEntity> GetFormModels()
+        public static IEnumerable<FormModelEntity> GetFormModels()
         {
             using (var db = new LiteDatabase(getConnectionString()))
             {
                 // Get a collection (or create, if doesn't exist)
                 var forms = db.GetCollection<Data.FormModelEntity>("formmodels");
                 var l = forms.Include(x => x.CurrentVersion).FindAll();
-                var l2 = l.Select(o => o.CurrentVersion).ToList();
-                return l2;
+                return l;
             }
         }
 
@@ -46,18 +46,16 @@ namespace CoreForm.BusinessLogic
             }
         }
 
-        public static FormModelEntity CreateModel(String Name)
+
+        public static FormModelEntity CreateModel(String Model)
         {
-            return CreateModel(Name, "{}");
+            return UpdateModel(Guid.NewGuid(), Model);
         }
 
-        public static FormModelEntity CreateModel(String Name, String Model)
+        public static FormModelEntity UpdateModel(Guid ModelId, String Model)
         {
-            return UpdateModel(Guid.NewGuid(), Name, Model);
-        }
-
-        public static FormModelEntity UpdateModel(Guid ModelId, String Name, String Model)
-        {
+            JObject jModel = JObject.Parse(Model);
+            String Name = jModel.Value<String>("name");
             Data.FormModelEntity form;
             using (var db = new LiteDatabase(getConnectionString()))
             {
@@ -73,13 +71,20 @@ namespace CoreForm.BusinessLogic
                     };
                     forms.Insert(form);
                 }
+                int versionNum = 1;
+                if (form.CurrentVersion != null)
+                {
+                    versionNum = form.CurrentVersion.Version +1;
+                }
+                jModel["formVersion"] = versionNum;
                 var version = new Data.FormModelVersionEntity()
                 {
                     Id = Guid.NewGuid(),
                     Name = Name,
                     CreateDate = DateTime.Now,
-                    Content = Model,
-                    FormModelId = ModelId
+                    Content = jModel.ToString(),
+                    FormModelId = ModelId,
+                    Version = versionNum
                 };
                 versions.Insert(version);
                 form.CurrentVersion = version;

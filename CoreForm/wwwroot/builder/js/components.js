@@ -30,12 +30,12 @@ RegisterField({
             showSeparator:false,
             columns: [
                 {
-                    'id': 'ctrl_' + id + '_1',
+                    'id': 'col_' + this.id + '_1',
                     'width': '1-2',
                     'fields': []
                 },
                 {
-                    'id': 'ctrl_' + id + '_2',
+                    'id': 'col_' + this.id + '_2',
                     'width': '1-2',
                     'fields': []
                 }]
@@ -43,7 +43,7 @@ RegisterField({
     },
     fieldTemplate: {
         template: `<cf_field :id="id"><div class="row uk-grid" v-bind:class="{'uk-grid-divider uk-grid-collapse': showSeparator, 'uk-grid-medium': !showSeparator}" uk-grid>
-			    <div :class="'nested-sortable uk-width-'+ column.width + '@m'" style="min-height:60px;border:1px dotted silver" :id="column.id" :data-column="index" :data-grid="id" v-for="(column,index) in columns">  
+			    <div :class="'nested-sortable uk-width-'+ column.width + '@m'" style="min-height:60px" :id="column.id" :data-column="index" :data-grid="id" v-for="(column,index) in columns">  
 				<component v-for="field in column.fields" 
 				 :key="field.id"
 				 :is="field.type"

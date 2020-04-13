@@ -11,6 +11,7 @@ namespace CoreForm.Data
         public Guid Id { get; set; }
         public String Name { get; set; }
         public Guid FormModelId { get; set; }
+        public int Version { get; set; }
         public DateTime CreateDate { get; set; }
         public String Content { get; set; }
     }

@@ -14,10 +14,13 @@
             margin: 15px
         }
 
-
-        .input-field > label:not(.label-icon).active {
-            z-index: 998;
+        [v-cloak] {
+            display: none;
         }
+
+        /*.input-field > label:not(.label-icon).active {
+            z-index: 998;
+        }*/
 
         .sortable-ghost {
             border: 1px dashed gray !important;
@@ -27,7 +30,7 @@
             border: 1px dashed gray !important
         }
 
-        .gridrow {
+        /*.gridrow {
             border: 1px dotted silver;
             min-height: 35px;
         }
@@ -39,7 +42,7 @@
 
                 .gridrow > .col:last-child {
                     padding-right: 0px
-                }
+                }*/
 
         .sortable-item {
             position: relative;
@@ -91,6 +94,53 @@
             div.deleteHandle:hover {
                 background-color: orangered !important;
             }
+
+
+        .uk-grid-column-medium > *, .uk-grid-medium > *, .uk-grid-collapse > * {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+            .uk-grid-column-medium > *:last-child, .uk-grid-medium > *:last-child, .uk-grid-collapse > *:last-child {
+                padding-right: 0px;
+            }
+
+        .uk-first-column {
+            padding-left: 0px
+        }
+
+        .uk-grid-divider, .uk-grid-medium {
+            margin-left: 0px
+        }
+
+            .uk-grid-divider > :not(.uk-first-column)::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0px;
+                border-left: 1px solid #e5e5e5;
+            }
+
+            div[type="grid"] > .toolbar{
+                top:-0.75em
+            }
+
+        div[type="grid"] > .uk-grid > * {
+            border: 1px dotted #f0f0f0
+        }
+
+        div[type="grid"] > .uk-grid:hover > * {
+            border: 1px dotted silver
+        }
+
+        #formContainer:empty::before {
+            content: "Drop components here";
+        }
+        #formContainer:empty {
+            border:1px dashed silver
+        }
+
 
         /*.select2-container {
             width: 270px !important;
@@ -154,7 +204,7 @@
             padding: 6px;
         }*/
 
-        
+
     </style>
 </head>
 <body>
@@ -185,29 +235,35 @@
 
                 <fieldset class="uk-fieldset">
 
-                    <div>
+                    <div class="uk-card uk-card-default uk-card-body">
                         <h3 class="uk-card-title">{{schema.title}}</h3>
-                        <div id="formContainer" data-ref="root" class="nested-sortable uk-form-stacked ">
+                        <div id="formContainer" data-ref="root" class="nested-sortable uk-form-stacked" style="padding:10px;min-height:60px">
                             <component v-for="field in schema.fields"
                                        :key="field.id"
                                        :is="field.type"
                                        v-bind="field"
                                        v-model="data[field.id]">
                             </component>
-                        </div>&nbsp;
+                        </div>
+                        <small>version {{schema.formVersion}}</small>
                     </div>
                 </fieldset>
-                <div class="row">
-                    <div class="col">
-                        <pre><code>{{ schema }}</code></pre>
-                    </div>
-                    <div class="col">
-                        <pre><code>{{ data }}</code></pre>
-                    </div>
-                    <div class="col">
-                        <pre><code>{{ editformdata }}</code></pre>
-                    </div>
-                </div>
+
+                <ul uk-accordion="multiple: true">
+                    <li>
+                        <a class="uk-accordion-title" href="#">Schema</a>
+                        <div class="uk-accordion-content"><pre><code>{{ schema }}</code></pre></div>
+                    </li>
+                    <li>
+                        <a class="uk-accordion-title" href="#">Data</a>
+                        <div class="uk-accordion-content"><pre><code>{{ data }}</code></pre></div>
+                    </li>
+                    <li>
+                        <a class="uk-accordion-title" href="#">Edit form data</a>
+                        <div class="uk-accordion-content"><pre><code>{{ editformdata }}</code></pre></div>
+                    </li>
+                </ul>
+               
             </div>
         </div>
 
