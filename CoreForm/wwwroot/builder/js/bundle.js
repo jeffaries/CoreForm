@@ -430,7 +430,7 @@ RegisterField({
     display: 'Columns',
     buildNewModel: function () {
         return {
-            showSeparator:false,
+            showSeparator: false,
             columns: [
                 {
                     'id': 'col_' + this.id + '_1',
@@ -466,7 +466,7 @@ RegisterField({
         template: `<div>
 
                             <div>
-                            <label for="chkShowSeparator">Label text</label>
+                            <label for="chkShowSeparator">Show separator</label>
                             <input id="chkShowSeparator" class="uk-checkbox uk-form-small" type="checkbox" v-model="showSeparator"/></div>
 
                     </div>`,
@@ -528,7 +528,7 @@ RegisterField({
     type: 'selectField',
     display: 'Dropdown select',
     buildNewModel: function () {
-        return { label: 'New label', variable: '', placeholder: '', source: '' }
+        return { label: 'New label', variable: '', placeholder: '', source: '', multiple: false }
     },
     fieldTemplate: {
         template:
@@ -548,7 +548,7 @@ RegisterField({
         },
         computed: {
         },
-        props: ["label", "id", "options", "value", "width", "source"],
+        props: ["label", "id", "options", "value", "width", "source", "multiple", "placeholder", "variable"],
         mounted: function () {
             var vm = this;
             var el = $(this.$el).find('select');
@@ -578,9 +578,9 @@ RegisterField({
                         },
                         cache: true
                     },
-                    placeholder: 'Select an option',
+                    placeholder: this.placeholder,
                     minimumInputLength: this.source.minimumInputLength,
-                    multiple: 'multiple'
+                    multiple: this.multiple
                 };
             }
 
@@ -593,6 +593,8 @@ RegisterField({
                 .on("change", function () {
                     vm.$emit("input", $(this).val());
                 });
+
+
         },
         watch: {
             value: function (value) {
@@ -606,6 +608,12 @@ RegisterField({
                 $(this.$el)
                     .empty()
                     .select2({ data: options });
+            },
+            multiple: function (multiple) {
+                // update options
+                $(this.$el)
+                    .empty()
+                    .select2({ multiple: multiple });
             }
         },
         destroyed: function () {
@@ -615,7 +623,25 @@ RegisterField({
         }
     },
     editForm: {
-        template: `<div>Test Textbox {{id}}</div>`,
+        template: `<div>
+                        <div>
+                            <label for="txtValue">Name</label>
+                            <input id="txtValue" type="text" class="uk-input uk-form-small" v-model="variable"/></div>
+                        <div>
+                            <label for="txtPlaceholder">Placeholder text</label>
+                            <input id="txtPlaceholder" type="text" class="uk-input uk-form-small" v-model="placeholder"/></div>
+                        <div>
+                            <label for="txtPlaceholder">Label text</label>
+                            <input id="txtLabel" type="text" class="uk-input uk-form-small" v-model="label"/></div>
+                            <div>
+                            <label for="chkMultiple">Allow multiple selection?</label>
+                            <input id="chkMultiple" class="uk-checkbox uk-form-small" type="checkbox" v-model="multiple"/></div>
+
+                    </div>`,
+        data() {
+            return this.value;
+        },
+        props: ["value"]
 
     }
 });
