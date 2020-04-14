@@ -41,7 +41,7 @@ RegisterField({
                             <label for="chkShowSeparator" class="uk-form-label"><input id="chkShowSeparator" class="uk-checkbox" type="checkbox" v-model="showSeparator"/> Show separator</label>
                         </div>
                     </div>`,
-        data() {
+        data: function() {
             return this.schema;
         },
         props: ["schema"]
@@ -88,7 +88,7 @@ RegisterField({
                    </div>`,
         computed: {
         },
-        data() {
+        data: function() {
             return this.schema;
         },
         props: ["schema"]
@@ -205,7 +205,7 @@ RegisterField({
                             <label for="chkMultiple" class="uk-form-label"><input id="chkMultiple" class="uk-checkbox" type="checkbox" v-model="multiple"/> Allow multiple selection</label>
                         </div>
                     </div>`,
-        data() {
+        data: function() {
             return this.schema;
         },
         props: ["schema"]

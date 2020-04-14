@@ -1,9 +1,67 @@
 [
   {
-    "outputFileName": "wwwroot/builder/js/bundle.js",
+    "outputFileName": "wwwroot/css/coreform.renderer.css",
     "inputFiles": [
-      "wwwroot/builder/js/script.js",
+      "wwwroot/builder/css/select2.css",
+      "wwwroot/builder/css/styles.css"
+    ],
+    "minify": {
+      "enabled": true,
+      "commentMode": "all",
+      "alwaysEscapeNonAscii": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/css/coreform.builder.css",
+    "inputFiles": [
+      "wwwroot/builder/css/select2.css",
+      "wwwroot/builder/css/styles.css",
+      "wwwroot/builder/css/style_builder.css"
+    ],
+    "minify": {
+      "enabled": true,
+      "commentMode": "all",
+      "alwaysEscapeNonAscii": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/builder/js/coreform.renderer.js",
+    "inputFiles": [
+      "wwwroot/builder/js/select2.js",
+      "wwwroot/builder/js/script_common.js",
+      "wwwroot/builder/js/script_render.js",
+      "wwwroot/builder/js/components_render_helpers.js",
       "wwwroot/builder/js/components.js"
-    ]
+    ],
+    "minify": {
+      "enabled": true,
+      "alwaysEscapeNonAscii": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/coreform.renderer.min.js",
+    "inputFiles": [
+      "wwwroot/builder/js/uikit.min.js",
+      "wwwroot/builder/js/coreform.renderer.min.js"
+    ],
+    "minify": {
+      "enabled": false,
+      "alwaysEscapeNonAscii": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/coreform.builder.js",
+    "inputFiles": [
+      "wwwroot/builder/js/select2.js",
+      "wwwroot/builder/js/sortable.min.js",
+      "wwwroot/builder/js/script_common.js",
+      "wwwroot/builder/js/script_builder.js",
+      "wwwroot/builder/js/components_build_helpers.js",
+      "wwwroot/builder/js/components.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "alwaysEscapeNonAscii": true
+    }
   }
 ]

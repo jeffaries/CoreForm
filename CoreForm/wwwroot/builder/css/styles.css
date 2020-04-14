@@ -6,10 +6,6 @@
     display: none;
 }
 
-/*.input-field > label:not(.label-icon).active {
-            z-index: 998;
-        }*/
-
 .sortable-ghost {
     border: 1px dashed gray !important;
 }
@@ -17,20 +13,6 @@
 .sortable-dragitem {
     border: 1px dashed gray !important
 }
-
-/*.gridrow {
-            border: 1px dotted silver;
-            min-height: 35px;
-        }
-
-            .gridrow > .col {
-                height: 100%;
-                padding-left: 0px
-            }
-
-                .gridrow > .col:last-child {
-                    padding-right: 0px
-                }*/
 
 .sortable-item {
     position: relative;
