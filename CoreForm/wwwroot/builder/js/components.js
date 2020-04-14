@@ -62,7 +62,7 @@ RegisterField({
     editForm: {
         template: `<div>
                         <div class="uk-margin-small-bottom">
-                            <label for="chkShowSeparator" class="uk-form-label"><input id="chkShowSeparator" class="uk-checkbox" type="checkbox" v-model="showSeparator"/> Show separator</label>
+                            <label for="chkShowSeparator" class="uk-form-label"><input id="chkShowSeparator" class="uk-checkbox" type="checkbox" v-if="showSeparator" v-model="showSeparator"/> Show separator</label>
                         </div>
                     </div>`,
         data() {

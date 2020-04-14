@@ -2,6 +2,12 @@ var app, editFormModal;
 
 var registeredFields = new Map();
 
+
+
+Vue.config.errorHandler = function (err, vm, info) {
+    console.log(`Error: ${err.toString()}\nInfo: ${info}`);
+}
+
 $(document).ready(function () {
 
     var schema = {
