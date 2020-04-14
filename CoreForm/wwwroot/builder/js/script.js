@@ -141,7 +141,9 @@ $(document).ready(function () {
                         pull: 'clone', // To clone: set pull to 'clone'
                         put: false
                     },
+                    draggale: '.uk-button',
                     animation: 0,
+                    fallbackOnBody: true,
                     sort: false,
                     dragClass: 'yellow-background-class',
                 });
@@ -215,28 +217,11 @@ function configureNestedTable(table) {
         onAdd: function (evt) {
             var elName;
             if (evt.pullMode === "clone") {
-
                 var item = $(evt.item);
 
-                //var callback = function (config) {
-                //    var newHtml = component.GetEditFieldTemplate(config);
-
-                //    if (newHtml !== '') {
-                //        var newItem = $(newHtml);
-                //        item.replaceWith(newItem);
-                //        var dataType = item.data("type");
-                //        newItem.attr("data-type", dataType);
-                //        newItem.attr("data-name", elName);
-                //        newItem.attr('id', "ctrl_" + ctrlIndex++);
-                //        if (config !== null) {
-                //            newItem.data("config", config);
-                //        }
-                //        configureNestedTables();
-                //    }
-                //}
-
-                var model = registeredFields.get(item.data("type")).buildNewModel();
-                model.id = 'ctrl_' + getNextId();
+                var newId = 'ctrl_' + getNextId();
+                var model = registeredFields.get(item.data("type")).buildNewModel(newId);
+                model.id = newId
                 model.type = item.data("type")
 
                 var newIndex = evt.newDraggableIndex;
@@ -245,31 +230,6 @@ function configureNestedTable(table) {
                 item.remove();
                 openSettings(model.id);
                 app.$nextTick(function () { configureNestedTables(); });
-
-                //var obj = findSchemaObjectById('ctrl_' + id);
-                //editFormModal.show();
-                //app.editformdata = obj;
-
-                //var fieldConfig = component.GetFieldConfiguration(null);
-                //if (fieldConfig !== null) {
-                //    $("#editForm .modal-body").html(fieldConfig.htmlForm);
-                //    vm = new Vue({ el: '#editForm', data: fieldConfig.dataModel });
-
-                //    $('#editForm').modal('show').on('hide.bs.modal', function () {
-                //        elName = $("#ctrlName").val();
-                //        if (elName === "") {
-                //            $(evt.item).remove();
-                //        }
-                //        else {
-                //            callback(vm.$data); //replace null with the result of the modal
-                //        }
-                //    })
-                //} else {
-                //    callback(null);
-                //}
-
-
-
 
             }
 

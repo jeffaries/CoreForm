@@ -142,6 +142,8 @@
         }
 
 
+
+
         /*Select2*/
 
         .select2-container--default .select2-selection--multiple, .select2-selection .select2-selection--multiple {
@@ -192,67 +194,6 @@
             border-color: #1e87f0;
         }
 
-        /*.select2-container {
-            width: 270px !important;
-        }
-
-            .select2-container .select2-selection--single {
-                height: 45px;
-                padding: 8px 10px 8px 30px;
-            }
-
-        .select2-dropdown {
-            background-color: white;
-            border: 1px solid #ccc;
-            border-radius: 0px;
-        }
-
-        .select2-results__option {
-            padding: 6px;
-        }
-
-        .select2-container--default .select2-selection--single {
-            background-color: #fff;
-            border: 1px solid #ccc;
-            border-radius: 0px;
-        }
-
-            .select2-container--default .select2-selection--single .select2-selection__rendered {
-                color: #444;
-            }
-
-            .select2-container--default .select2-selection--single .select2-selection__arrow {
-                height: 44px;
-                top: 1px;
-                right: 5px;
-                width: 20px;
-            }
-
-                .select2-container--default .select2-selection--single .select2-selection__arrow b {
-                    border-color: #888 transparent transparent transparent;
-                }
-
-        .select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b {
-            border-color: transparent transparent #888 transparent;
-            border-width: 0 4px 5px 4px;
-        }
-
-        .select2-container--default .select2-search--dropdown .select2-search__field {
-            border: 1px solid #ccc;
-        }
-
-        .select2-container--default .select2-results__option[aria-selected=true] {
-            background-color: #ddd;
-        }
-
-        .select2-container--default .select2-results__option--highlighted[aria-selected] {
-            background-color: #5897fb;
-            color: white;
-        }
-
-        .select2-container--default .select2-results__group {
-            padding: 6px;
-        }*/
 
 
     </style>
@@ -273,9 +214,9 @@
                 </div>
 
                 <div id="mnuComponents" style="margin-bottom:1em;margin-top:1em;">
-                    <button class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="textField" @click="addTxt()">Text input</button>
-                    <button class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="selectField">Selector</button>
-                    <button class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="grid" @click="addGrid()">Columns</button>
+                    <a class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="textField" @click="addTxt()">Text input</a>
+                    <a class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="selectField">Selector</a>
+                    <a class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="grid" @click="addGrid()">Columns</a>
                 </div>
                 <button class="uk-button uk-button-primary uk-button-small uk-width-1-1" @click="saveSchema()">Save</button>
 
@@ -291,7 +232,7 @@
                             <component v-for="field in schema.fields"
                                        :key="field.id"
                                        :is="field.type"
-                                       v-bind="field"
+                                       :schema="field"
                                        v-model="data[field.id]">
                             </component>
                         </div>
@@ -326,7 +267,7 @@
                     <h2 class="uk-modal-title">Settings</h2>
                 </div>
                 <div class="uk-modal-body" id="editFormBody">
-                    <component :key="'edit_' + editformdata.id" :id="'edit_' + editformdata.id" :is="'edit_' + editformdata.type" v-model="editformdata"></component>
+                    <component :key="'edit_' + editformdata.id" :id="'edit_' + editformdata.id" :is="'edit_' + editformdata.type" :schema="editformdata"></component>
 
                 </div>
                 <div class="uk-modal-footer">

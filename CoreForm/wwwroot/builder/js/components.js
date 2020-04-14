@@ -12,11 +12,11 @@ Vue.component('cf_toolbutton', {
 });
 
 Vue.component('cf_field', {
-    template: `<div :data-ref="id" class="sortable-item"><div class="toolbar"><cf_toolbutton icon="move" cssclass="moveHandle"/><cf_toolbutton icon="settings" :onclick="'openSettings(&quot;'+ id +'&quot;)'"/><cf_toolbutton icon="trash" cssclass="deleteHandle"/></div><slot></slot></div>`,
+    template: `<div :data-ref="id" :type="type" class="sortable-item"><div class="toolbar"><cf_toolbutton icon="move" cssclass="moveHandle"/><cf_toolbutton icon="settings" :onclick="'openSettings(&quot;'+ id +'&quot;)'"/><cf_toolbutton icon="trash" cssclass="deleteHandle"/></div><slot></slot></div>`,
     data: function () {
-        return {}
+        return this.schema
     },
-    props: ["id"]
+    props: ["schema"]
 });
 
 
@@ -25,38 +25,38 @@ Vue.component('cf_field', {
 RegisterField({
     type: 'grid',
     display: 'Columns',
-    buildNewModel: function () {
+    buildNewModel: function (id) {
         return {
             showSeparator: false,
             columns: [
                 {
-                    'id': 'col_' + this.id + '_1',
+                    'id': 'col_' + id + '_1',
                     'width': '1-2',
                     'fields': []
                 },
                 {
-                    'id': 'col_' + this.id + '_2',
+                    'id': 'col_' + id + '_2',
                     'width': '1-2',
                     'fields': []
                 }]
         }
     },
     fieldTemplate: {
-        template: `<cf_field :id="id"><div class="row uk-grid" v-bind:class="{'uk-grid-divider uk-grid-collapse': showSeparator, 'uk-grid-medium': !showSeparator}" uk-grid>
-			    <div :class="'nested-sortable uk-width-'+ column.width + '@m'" style="min-height:60px" :id="column.id" :data-column="index" :data-grid="id" v-for="(column,index) in columns">  
+        template: `<cf_field :schema="schema"><div class="row uk-grid" v-bind:class="{'uk-grid-divider uk-grid-collapse': schema.showSeparator, 'uk-grid-medium': !schema.showSeparator}" uk-grid>
+			    <div :class="'nested-sortable uk-width-'+ column.width + '@m'" style="min-height:60px" :id="column.id" :data-column="index" :data-grid="schema.id" v-for="(column,index) in schema.columns">  
 				<component v-for="field in column.fields" 
 				 :key="field.id"
 				 :is="field.type"
 				 v-model="$root.data[field.id]"
-				 v-bind="field"></component>
+				 :schema="field"></component>
 			</div></div></cf_field>`,
         data: function () {
-            if (this.width === undefined) this.width = 12;
+            if (this.schema.width === undefined) this.schema.width = 12;
             return {}
         },
         computed: {
         },
-        props: ["id", "label", "value", "columns", "showSeparator"]
+        props: ["value", "schema"],
     },
 
     editForm: {
@@ -68,9 +68,9 @@ RegisterField({
 
                     </div>`,
         data() {
-            return this.value;
+            return this.schema;
         },
-        props: ["value"]
+        props: ["schema"]
     }
 });
 
@@ -82,9 +82,9 @@ RegisterField({
         return { label: 'New label', variable: '', placeholder: '' }
     },
     fieldTemplate: {
-        template: `<cf_field :id="id"><label :for="id" class="uk-form-label">{{ label }}</label><div class="uk-form-controls"><input type="text" :placeholder="placeholder" class="uk-input uk-form-small" :id="id" :value="value" @input="updateInput"></div></cf_field>`,
+        template: `<cf_field :schema="schema"><label :for="schema.id" class="uk-form-label">{{ schema.label }}</label><div class="uk-form-controls"><input type="text" :placeholder="schema.placeholder" class="uk-input uk-form-small" :id="schema.id" :value="value" @input="updateInput"></div></cf_field>`,
         data: function () {
-            if (this.width === undefined) this.width = 12;
+            if (this.schema.width === undefined) this.schema.width = 12;
             return {
             }
         },
@@ -95,7 +95,7 @@ RegisterField({
                 this.$emit('input', this.$el.getElementsByTagName("input")[0].value)
             }
         },
-        props: ["label", "id", "value", "width", "placeholder"]
+        props: ["value", "schema"]
     },
     editForm: {
         template: `<div>
@@ -112,9 +112,9 @@ RegisterField({
         computed: {
         },
         data() {
-            return this.value;
+            return this.schema;
         },
-        props: ["value"]
+        props: ["schema"]
 
     }
 });
@@ -129,69 +129,72 @@ RegisterField({
     },
     fieldTemplate: {
         template:
-            `<cf_field :id="id"><label :for="id" class="uk-form-label">{{ label }}</label>
-<div class="uk-form-control bt-select-field">
-	<select @change="changeValue" class="bt-select-field no-autoinit uk-select" v-model="id" :id="id" :name="id">
-	</select></div>
-	</cf_field>`,
+            `<cf_field :schema="schema"><label :for="schema.id" class="uk-form-label">{{ schema.label }}</label>
+                <div class="uk-form-control bt-select-field">
+	                <select @change="changeValue" class="bt-select-field no-autoinit uk-select" v-model="schema.id" :id="schema.id" :name="schema.id">
+	                </select>
+                </div>
+	        </cf_field>`,
         data: function () {
-            if (this.width === undefined) this.width = 12;
+            if (this.schema.width === undefined) this.schema.width = 12;
             return {}
+        },
+        computed: {
+        },
+        props: ["value", "schema"],
+        mounted: function () {
+            this.buildSelect2();
+            this.$watch('schema', this.buildSelect2, { deep: true })
         },
         methods: {
             changeValue: function (evt) {
                 this.$emit('input', evt.srcElement.value)
-            }
-        },
-        computed: {
-        },
-        props: ["label", "id", "options", "value", "width", "source", "multiple", "placeholder", "variable"],
-        mounted: function () {
-            var vm = this;
-            var el = $(this.$el).find('select');
+            },
+            buildSelect2: function () {
+                var vm = this;
+                var el = $(this.$el).find('select');
 
-            var dataObj = { data: this.options };
-            if (this.source !== undefined) {
-                dataObj = {
-                    ajax: {
-                        url: function (params) {
-                            if (params.term === undefined) {
-                                return 'https://restcountries.eu/rest/v2/all?fields=name;flag;alpha3Code'
-                            } else {
-                                return 'https://restcountries.eu/rest/v2/name/' + params.term + '?fields=name;flag;alpha3Code'
-                            }
+                var dataObj = { data: this.options };
+                if (this.schema.source !== undefined) {
+                    dataObj = {
+                        ajax: {
+                            url: function (params) {
+                                if (params.term === undefined) {
+                                    return 'https://restcountries.eu/rest/v2/all?fields=name;flag;alpha3Code'
+                                } else {
+                                    return 'https://restcountries.eu/rest/v2/name/' + params.term + '?fields=name;flag;alpha3Code'
+                                }
+                            },
+                            dataType: 'json',
+                            delay: 250,
+                            processResults: function (data, params) {
+                                params.page = params.page || 1;
+                                for (var i = 0; i < data.length; i++) {
+                                    data[i].id = data[i].alpha3Code;
+                                    data[i].text = data[i].name;
+                                }
+                                return {
+                                    results: data
+                                };
+                            },
+                            cache: true
                         },
-                        dataType: 'json',
-                        delay: 250,
-                        processResults: function (data, params) {
-                            params.page = params.page || 1;
-                            for (var i = 0; i < data.length; i++) {
-                                data[i].id = data[i].alpha3Code;
-                                data[i].text = data[i].name;
-                            }
-                            return {
-                                results: data
-                            };
-                        },
-                        cache: true
-                    },
-                    placeholder: this.placeholder,
-                    minimumInputLength: this.source.minimumInputLength,
-                    multiple: this.multiple
-                };
+                        placeholder: this.schema.placeholder,
+                        minimumInputLength: this.schema.source.minimumInputLength,
+                        multiple: this.schema.multiple
+                    };
+                }
+
+
+
+                el.select2(dataObj)
+                    .val(this.value)
+                    .trigger("change")
+                    // emit event on change.
+                    .on("change", function () {
+                        vm.$emit("input", $(this).val());
+                    });
             }
-
-
-
-            el.select2(dataObj)
-                .val(this.value)
-                .trigger("change")
-                // emit event on change.
-                .on("change", function () {
-                    vm.$emit("input", $(this).val());
-                });
-
-
         },
         watch: {
             value: function (value) {
@@ -199,24 +202,12 @@ RegisterField({
                 $(this.$el)
                     .val(value)
                     .trigger("change");
-            },
-            options: function (options) {
-                // update options
-                $(this.$el)
-                    .empty()
-                    .select2({ data: options });
-            },
-            multiple: function (multiple) {
-                // update options
-                $(this.$el)
-                    .empty()
-                    .select2({ multiple: multiple });
-            }
+            }           
         },
         destroyed: function () {
-            /*$(this.$el)
+            $(this.$el).find("select")
                 .off()
-                .select2("destroy");*/
+                .select2("destroy");
         }
     },
     editForm: {
@@ -236,9 +227,9 @@ RegisterField({
 
                     </div>`,
         data() {
-            return this.value;
+            return this.schema;
         },
-        props: ["value"]
+        props: ["schema"]
 
     }
 });
