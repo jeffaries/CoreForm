@@ -122,9 +122,9 @@
                 border-left: 1px solid #e5e5e5;
             }
 
-            div[type="grid"] > .toolbar{
-                top:-0.75em
-            }
+        div[type="grid"] > .toolbar {
+            top: -0.75em
+        }
 
         div[type="grid"] > .uk-grid > * {
             border: 1px dotted #f0f0f0
@@ -137,32 +137,34 @@
         #formContainer:empty::before {
             content: "Drop components here";
         }
+
         #formContainer:empty {
-            border:1px dashed silver
+            border: 1px dashed silver
+        }
+
+        *[uk-icon] {
+            margin-left: 5px
         }
 
 
 
-
         /*Select2*/
-
         .select2-container--default .select2-selection--multiple, .select2-selection .select2-selection--multiple {
             border-radius: 0;
             background-color: transparent;
             padding-left: 0;
             font-size: .875rem;
             min-height: 30px;
-            border:1px solid #e5e5e5
+            border: 1px solid #e5e5e5
         }
 
         .select2-container .select2-selection--multiple {
-            min-height:28px;
-            display:flex
+            min-height: 28px;
+            display: flex
         }
 
         .select2-container--default .select2-selection--multiple .select2-selection__choice, .select2-dropdown {
             border-radius: 0;
-           
             font: inherit;
             font-size: 14px;
             transition: 0.2s ease-in-out;
@@ -193,9 +195,6 @@
             color: #666;
             border-color: #1e87f0;
         }
-
-
-
     </style>
 </head>
 <body>
@@ -214,9 +213,15 @@
                 </div>
 
                 <div id="mnuComponents" style="margin-bottom:1em;margin-top:1em;">
-                    <a class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="textField" @click="addTxt()">Text input</a>
-                    <a class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="selectField">Selector</a>
-                    <a class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="grid" @click="addGrid()">Columns</a>
+                    <a class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="textField" @click="addTxt()">
+                        Text input
+                    </a>
+                    <a class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="selectField">
+                        Selector
+                    </a>
+                    <a class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="grid" @click="addGrid()">
+                        Columns
+                    </a>
                 </div>
                 <button class="uk-button uk-button-primary uk-button-small uk-width-1-1" @click="saveSchema()">Save</button>
 
@@ -254,7 +259,7 @@
                         <div class="uk-accordion-content"><pre><code>{{ editformdata }}</code></pre></div>
                     </li>
                 </ul>
-               
+
             </div>
         </div>
 
@@ -266,8 +271,8 @@
                 <div class="uk-modal-header">
                     <h2 class="uk-modal-title">Settings</h2>
                 </div>
-                <div class="uk-modal-body" id="editFormBody">
-                    <component :key="'edit_' + editformdata.id" :id="'edit_' + editformdata.id" :is="'edit_' + editformdata.type" :schema="editformdata"></component>
+                <div class="uk-modal-body uk-form-stacked" id="editFormBody">
+                    <component :key="editformId" :is="'edit_' + editformdata.type" :schema="editformdata"></component>
 
                 </div>
                 <div class="uk-modal-footer">

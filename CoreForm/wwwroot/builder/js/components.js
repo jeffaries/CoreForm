@@ -12,7 +12,7 @@ Vue.component('cf_toolbutton', {
 });
 
 Vue.component('cf_field', {
-    template: `<div :data-ref="id" :type="type" class="sortable-item"><div class="toolbar"><cf_toolbutton icon="move" cssclass="moveHandle"/><cf_toolbutton icon="settings" :onclick="'openSettings(&quot;'+ id +'&quot;)'"/><cf_toolbutton icon="trash" cssclass="deleteHandle"/></div><slot></slot></div>`,
+    template: `<div :data-ref="id" :type="type" class="sortable-item uk-margin-small-bottom"><div class="toolbar"><cf_toolbutton icon="move" cssclass="moveHandle"/><cf_toolbutton icon="settings" :onclick="'openSettingsById(&quot;'+ id +'&quot;)'"/><cf_toolbutton icon="trash" cssclass="deleteHandle"/></div><slot></slot></div>`,
     data: function () {
         return this.schema
     },
@@ -61,11 +61,9 @@ RegisterField({
 
     editForm: {
         template: `<div>
-
-                            <div>
-                            <label for="chkShowSeparator">Show separator</label>
-                            <input id="chkShowSeparator" class="uk-checkbox uk-form-small" type="checkbox" v-model="showSeparator"/></div>
-
+                        <div class="uk-margin-small-bottom">
+                            <label for="chkShowSeparator" class="uk-form-label"><input id="chkShowSeparator" class="uk-checkbox" type="checkbox" v-model="showSeparator"/> Show separator</label>
+                        </div>
                     </div>`,
         data() {
             return this.schema;
@@ -99,15 +97,18 @@ RegisterField({
     },
     editForm: {
         template: `<div>
-                        <div>
-                            <label for="txtValue">Name</label>
-                            <input id="txtValue" type="text" class="uk-input uk-form-small" v-model="variable"/></div>
-                        <div>
-                            <label for="txtPlaceholder">Placeholder text</label>
-                            <input id="txtPlaceholder" type="text" class="uk-input uk-form-small" v-model="placeholder"/></div>
-                        <div>
-                            <label for="txtPlaceholder">Label text</label>
-                            <input id="txtLabel" type="text" class="uk-input uk-form-small" v-model="label"/></div>
+                        <div class="uk-margin-small-bottom">
+                            <label for="txtLabel" class="uk-form-label">Label text</label>
+                            <input id="txtLabel" type="text" class="uk-input uk-form-small" v-model="label"/>
+                        </div>
+                        <div class="uk-margin-small-bottom">
+                            <label for="txtValue" class="uk-form-label">Name</label>
+                            <input id="txtValue" type="text" class="uk-input uk-form-small" v-model="variable"/>
+                        </div>
+                        <div class="uk-margin-small-bottom">
+                            <label for="txtPlaceholder" class="uk-form-label">Placeholder text</label>
+                            <input id="txtPlaceholder" type="text" class="uk-input uk-form-small" v-model="placeholder"/>
+                        </div>
                    </div>`,
         computed: {
         },
@@ -212,19 +213,21 @@ RegisterField({
     },
     editForm: {
         template: `<div>
-                        <div>
-                            <label for="txtValue">Name</label>
-                            <input id="txtValue" type="text" class="uk-input uk-form-small" v-model="variable"/></div>
-                        <div>
-                            <label for="txtPlaceholder">Placeholder text</label>
-                            <input id="txtPlaceholder" type="text" class="uk-input uk-form-small" v-model="placeholder"/></div>
-                        <div>
-                            <label for="txtPlaceholder">Label text</label>
-                            <input id="txtLabel" type="text" class="uk-input uk-form-small" v-model="label"/></div>
-                            <div>
-                            <label for="chkMultiple">Allow multiple selection?</label>
-                            <input id="chkMultiple" class="uk-checkbox uk-form-small" type="checkbox" v-model="multiple"/></div>
-
+                        <div class="uk-margin-small-bottom">
+                            <label for="txtPlaceholder" class="uk-form-label">Label text</label>
+                            <input id="txtLabel" type="text" class="uk-input uk-form-small" v-model="label"/>
+                        </div>
+                        <div class="uk-margin-small-bottom">
+                            <label for="txtValue" class="uk-form-label">Name</label>
+                            <input id="txtValue" type="text" class="uk-input uk-form-small" v-model="variable"/>
+                        </div>
+                        <div class="uk-margin-small-bottom">
+                            <label for="txtPlaceholder" class="uk-form-label">Placeholder text</label>
+                            <input id="txtPlaceholder" type="text" class="uk-input uk-form-small" v-model="placeholder"/>
+                        </div>
+                        <div class="uk-margin-small-bottom">
+                            <label for="chkMultiple" class="uk-form-label"><input id="chkMultiple" class="uk-checkbox" type="checkbox" v-model="multiple"/> Allow multiple selection</label>
+                        </div>
                     </div>`,
         data() {
             return this.schema;

@@ -26,7 +26,8 @@ $(document).ready(function () {
                     'title': 'My first schema',
                     fields: []
                 },
-                editformdata: {}
+                editformdata: {},
+                editformId : ''
 
             }
         },
@@ -68,10 +69,12 @@ $(document).ready(function () {
                 });
             },
             applyEdit: function () {
-                var obj = findSchemaObjectById(this.editformdata.id);
-                Object.assign(obj, this.editformdata);
                 editFormModal.hide();
-                Object.assign(this.editformdata, {});
+                if (editFormModal_callback !== null && typeof (editFormModal_callback) !== 'undefined') {
+                    var obj = Object.assign({}, this.editformdata);
+                    editFormModal_callback(obj);
+                }
+                this.editformdata = Object.assign(this.editformdata, {});
             },
             saveSchema: function () {
                 var url = "/Form/NewModel";
@@ -171,13 +174,22 @@ function RegisterField(fieldDefinition) {
 }
 
 
-function openSettings(id) {
-    var vmEditForm;
-    editFormModal.show();
+var editFormModal_callback = null;
+
+function openSettingsById(id) {
     var obj = findSchemaObjectById(id);
+    openSettingsByObject(obj, function (model) {
+        Object.assign(obj, app.editformdata);
+    });
+}
+
+function openSettingsByObject(obj, callback) {
+    var vmEditForm;
+    editFormModal_callback = callback;
+    app.editformId = Date.now();
+    editFormModal.show();
     var comp = registeredFields.get(obj.type).editForm;
     app.editformdata = Object.assign({}, obj);
-
 }
 
 function applyToolbarEvents() {
@@ -226,10 +238,14 @@ function configureNestedTable(table) {
 
                 var newIndex = evt.newDraggableIndex;
                 var collTo = findDataCollectionByElement($(evt.to));
-                collTo.splice(newIndex, 0, model);
                 item.remove();
-                openSettings(model.id);
-                app.$nextTick(function () { configureNestedTables(); });
+
+
+                openSettingsByObject(model, function(model) {
+                    collTo.splice(newIndex, 0, model);
+                    app.$nextTick(function () { configureNestedTables(); });
+
+                });
 
             }
 

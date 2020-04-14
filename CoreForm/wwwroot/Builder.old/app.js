@@ -44,7 +44,7 @@ $(document).ready(function () {
 		animation: 150,
 		sort: false,
 		put: false,
-		dragClass: 'yellow-background-class',
+		dragClass: 'dragElement',
 	});
 
 
@@ -71,19 +71,15 @@ function configureNestedTable(table) {
 		animation: 150,
 		fallbackOnBody: true,
 		swapThreshold: 0.65,
-		ghostClass: 'blue-background-class',
-		dragClass: 'yellow-background-class',
+		ghostClass: 'ghostElement',
+		dragClass: 'dragElement',
 		onAdd: function (evt) {
 			var elName;
 			if (evt.pullMode === "clone") {
-
 				var item = $(evt.item);
 				var component = componentObjects[item.data("type")];
-
-
 				var callback = function (config) {
 					var newHtml = component.GetEditFieldTemplate(config);
-
 					if (newHtml !== '') {
 						var newItem = $(newHtml);
 						item.replaceWith(newItem);

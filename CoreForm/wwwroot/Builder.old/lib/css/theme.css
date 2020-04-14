@@ -24,12 +24,12 @@ body {
 	margin-top: 5px;
 }
 
-.blue-background-class {
+.ghostElement {
 	background-color: #f0f0f4;
-	border:1px solid #d0d0d4;
+	border: 1px solid #d0d0d4;
 }
 
-.yellow-background-class {
+.dragElement {
 	background-color: #f0f0f4;
 }
 

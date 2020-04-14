@@ -71,7 +71,8 @@ $(document).ready(function () {
                 var obj = findSchemaObjectById(this.editformdata.id);
                 Object.assign(obj, this.editformdata);
                 editFormModal.hide();
-                Object.assign(this.editformdata, {});
+                Object.assign({}, this.editformdata);
+                editFormModal_callback(obj);
             },
             saveSchema: function () {
                 var url = "/Form/NewModel";
@@ -169,13 +170,19 @@ function RegisterField(fieldDefinition) {
 }
 
 
-function openSettings(id) {
-    var vmEditForm;
-    editFormModal.show();
+var editFormModal_callback = null;
+
+function openSettingsById(id, callback) {
     var obj = findSchemaObjectById(id);
+    openSettingsByObject(obj, callback);
+}
+
+function openSettingsByObject(obj, callback) {
+    var vmEditForm;
+    editFormModal_callback = callback;
+    editFormModal.show();
     var comp = registeredFields.get(obj.type).editForm;
     app.editformdata = Object.assign({}, obj);
-
 }
 
 function applyToolbarEvents() {
@@ -243,7 +250,7 @@ function configureNestedTable(table) {
                 var collTo = findDataCollectionByElement($(evt.to));
                 collTo.splice(newIndex, 0, model);
                 item.remove();
-                openSettings(model.id);
+                openSettingsById(model.id);
                 app.$nextTick(function () { configureNestedTables(); });
 
                 //var obj = findSchemaObjectById('ctrl_' + id);
@@ -415,7 +422,7 @@ Vue.component('cf_toolbutton', {
 });
 
 Vue.component('cf_field', {
-    template: `<div :data-ref="id" class="sortable-item"><div class="toolbar"><cf_toolbutton icon="move" cssclass="moveHandle"/><cf_toolbutton icon="settings" :onclick="'openSettings(&quot;'+ id +'&quot;)'"/><cf_toolbutton icon="trash" cssclass="deleteHandle"/></div><slot></slot></div>`,
+    template: `<div :data-ref="id" class="sortable-item"><div class="toolbar"><cf_toolbutton icon="move" cssclass="moveHandle"/><cf_toolbutton icon="settings" :onclick="'openSettingsById(&quot;'+ id +'&quot;)'"/><cf_toolbutton icon="trash" cssclass="deleteHandle"/></div><slot></slot></div>`,
     data: function () {
         return {}
     },
