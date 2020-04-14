@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>VueJS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/uikit.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <script src="js/uikit.min.js"></script>
+    <script src="js/uikit-icons.min.js"></script>
+    <style>
+    </style>
+</head>
+<body>
+    <div id="app" v-cloak>
+        [<a href="/"><< Back</a>]
+        <div class="uk-container">
+            <fieldset class="uk-fieldset">
+                <div class="uk-card uk-card-default uk-card-body">
+                    <h3 class="uk-card-title">{{schema.title}}</h3>
+                    <div id="formContainer" data-ref="root" class="nested-sortable uk-form-stacked" style="padding:10px;min-height:60px">
+                        <component v-for="field in schema.fields"
+                                   :key="field.id"
+                                   :is="field.type"
+                                   :schema="field"
+                                   v-model="data[field.variable]">
+                        </component>
+                    </div>
+                    <div class="uk-grid-collapse uk-child-width-1-2@m" uk-grid>
+                        <div>
+                            <small>version {{schema.formVersion}}</small>
+                        </div>
+
+                        <div style="text-align:right">
+                            <button class="uk-button uk-button-primary">Submit</button>
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+            </fieldset>
+
+            <ul uk-accordion="multiple: true">
+                <li>
+                    <a class="uk-accordion-title" href="#">Data</a>
+                    <div class="uk-accordion-content"><pre><code>{{ data }}</code></pre></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.js"></script>
+    <script src="./js/script_common.js"></script>
+    <script src="./js/script_render.js"></script>
+    <script src="./js/component_render_helpers.js"></script>
+    <script src="./js/components.js"></script>
+    <!--<script src="./js/bundle.js"></script>-->
+</body>
+</html>

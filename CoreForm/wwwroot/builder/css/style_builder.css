@@ -1,0 +1,15 @@
+﻿#formContainer:empty::before {
+    content: "Drop components here";
+}
+
+#formContainer:empty {
+    border: 1px dashed silver
+}
+
+div[type="grid"] > .uk-grid > * {
+    border: 1px dotted #f0f0f0
+}
+
+div[type="grid"] > .uk-grid:hover > * {
+    border: 1px dotted silver
+}

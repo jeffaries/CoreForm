@@ -10,10 +10,10 @@ Form models:
     @foreach (var item in Model.FormModels)
     {
     <li>
-        <a href="/Form/@item.CurrentVersion.Id/Render">
+        <a href="/builder/renderer.htm?schemaid=@item.Id">
             @item.CurrentVersion.Name (ver.@item.CurrentVersion.Version)
         </a>
-        [<a href="/builder/index.htm?schemaid=@item.Id">
+        [<a href="/builder/builder.htm?schemaid=@item.Id">
             Edit
         </a>]
     </li>

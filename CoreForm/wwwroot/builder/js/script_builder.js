@@ -1,12 +1,6 @@
 var app, editFormModal;
-
 var registeredFields = new Map();
 
-
-
-Vue.config.errorHandler = function (err, vm, info) {
-    console.log(`Error: ${err.toString()}\nInfo: ${info}`);
-}
 
 $(document).ready(function () {
 
@@ -33,8 +27,7 @@ $(document).ready(function () {
                     fields: []
                 },
                 editformdata: {},
-                editformId : ''
-
+                editformId: ''
             }
         },
         methods: {
@@ -58,7 +51,7 @@ $(document).ready(function () {
             addGrid: function () {
                 var id = getNextId();
                 this.schema.fields.push({
-                    
+
                     'id': 'ctrl_' + id,
                     'type': 'grid',
                     columns: [
@@ -117,7 +110,7 @@ $(document).ready(function () {
 
             var urlParams = new URLSearchParams(window.location.search);
             var schemaId = urlParams.get('schemaid');
-            if (schemaId!==null && typeof(schemaId) !== 'undefined' && schemaId !== "") {
+            if (schemaId !== null && typeof (schemaId) !== 'undefined' && schemaId !== "") {
                 $.ajax({
                     url: "/Form/" + schemaId + "/schema",
                     type: "GET",
@@ -158,12 +151,6 @@ $(document).ready(function () {
                 });
 
                 configureNestedTables();
-
-                M.updateTextFields();
-                M.AutoInit();
-
-                $('select').not(".select2").not(".select2-ajax").formSelect();
-
 
                 editFormModal = UIkit.modal(document.getElementById("editForm"));
 
@@ -247,7 +234,7 @@ function configureNestedTable(table) {
                 item.remove();
 
 
-                openSettingsByObject(model, function(model) {
+                openSettingsByObject(model, function (model) {
                     collTo.splice(newIndex, 0, model);
                     app.$nextTick(function () { configureNestedTables(); });
 
@@ -348,7 +335,6 @@ function findDataObjectByDataNode(node, id) {
     }
     return null;
 }
-
 
 function findDataCollectionByElement(element) {
     var id = null;
