@@ -21,14 +21,6 @@
 
   <ItemGroup>
     <None Include="bundleconfig.json" />
-    <None Include="wwwroot\Builder.old\app.js" />
-    <None Include="wwwroot\Builder.old\components\component.js" />
-    <None Include="wwwroot\Builder.old\components\select.js" />
-    <None Include="wwwroot\Builder.old\components\table.js" />
-    <None Include="wwwroot\Builder.old\components\textbox.js" />
-    <None Include="wwwroot\Builder.old\index.htm" />
-    <None Include="wwwroot\Builder.old\lib\css\theme.css" />
-    <None Include="wwwroot\Builder.old\lib\js\Sortable.min.js" />
   </ItemGroup>
 
   <ItemGroup>
