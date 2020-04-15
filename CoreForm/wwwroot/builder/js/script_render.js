@@ -1,7 +1,13 @@
 var app;
 
 
+
 $(document).ready(function () {
+    Vue.use(window.vuelidate.default)
+    var required = window.validators.required;
+    var minLength = window.validators.minLength;
+    var email = window.validators.email;
+
 
     app = new Vue({
         el: '#app',
@@ -11,8 +17,19 @@ $(document).ready(function () {
                 schema: {}
             }
         },
+        validations: {
+            data: {
+                att1: {
+                    required,
+                    minLength: minLength(5)
+                },
+                att2: {
+                    required
+                }
+            }
+        },
         methods: {
-           
+
             saveData: function () {
                 //var url = "/Form/NewModel";
                 //var urlParams = new URLSearchParams(window.location.search);
@@ -38,6 +55,12 @@ $(document).ready(function () {
         },
         created: function () {
             // `this` est une référence à l'instance de vm
+            for (const prop in this.$v.data['att1'].$params) {
+                prop.errorMessage = "Error!!!";
+            }
+
+            this.$v.data['att1'].$params.required.errorMessage = "errror";
+
             for (let [key, value] of registeredFields.entries()) {
                 this.$options.components[key] = value.fieldTemplate;
             }
@@ -63,7 +86,6 @@ $(document).ready(function () {
         }
 
     });
-
 
 });
 

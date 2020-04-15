@@ -41,7 +41,7 @@ RegisterField({
                             <label for="chkShowSeparator" class="uk-form-label"><input id="chkShowSeparator" class="uk-checkbox" type="checkbox" v-model="showSeparator"/> Show separator</label>
                         </div>
                     </div>`,
-        data: function() {
+        data: function () {
             return this.schema;
         },
         props: ["schema"]
@@ -56,17 +56,15 @@ RegisterField({
         return { label: 'New label', variable: '', placeholder: '' }
     },
     fieldTemplate: {
-        template: `<cf_field :schema="schema"><label :for="schema.id" class="uk-form-label">{{ schema.label }}</label><div class="uk-form-controls"><input type="text" :placeholder="schema.placeholder" class="uk-input uk-form-small" :id="schema.id" :value="value" @input="updateInput"></div></cf_field>`,
+        template: `<cf_field :schema="schema"><label :for="schema.id" class="uk-form-label">{{ schema.label }} <sup style="color:orangered" v-if="$isrequired"><small>Required</small></sup></label><div class="uk-form-controls"><input type="text" v-bind:class="{'uk-form-danger': ($validation?$validation.$error:false)}" :placeholder="schema.placeholder" class="uk-input uk-form-small" :id="schema.id" :value="value" @input="updateInput"></div></cf_field>`,
         data: function () {
             if (this.schema.width === undefined) this.schema.width = 12;
-            return {
-            }
-        },
-        computed: {
+            return {}
         },
         methods: {
             updateInput: function () {
                 this.$emit('input', this.$el.getElementsByTagName("input")[0].value)
+                this.$touch();
             }
         },
         props: ["value", "schema"]
@@ -88,7 +86,7 @@ RegisterField({
                    </div>`,
         computed: {
         },
-        data: function() {
+        data: function () {
             return this.schema;
         },
         props: ["schema"]
@@ -179,7 +177,7 @@ RegisterField({
                 $(this.$el)
                     .val(value)
                     .trigger("change");
-            }           
+            }
         },
         destroyed: function () {
             $(this.$el).find("select")
@@ -205,7 +203,7 @@ RegisterField({
                             <label for="chkMultiple" class="uk-form-label"><input id="chkMultiple" class="uk-checkbox" type="checkbox" v-model="multiple"/> Allow multiple selection</label>
                         </div>
                     </div>`,
-        data: function() {
+        data: function () {
             return this.schema;
         },
         props: ["schema"]

@@ -12,10 +12,10 @@
 });
 
 Vue.component('cf_field', {
-    template: `<div :data-ref="id" :type="type" class="sortable-item uk-margin-small-bottom"><div class="toolbar"><cf_toolbutton icon="move" cssclass="uk-drag moveHandle"/><cf_toolbutton icon="settings" :onclick="'openSettingsById(&quot;'+ id +'&quot;)'"/><cf_toolbutton icon="trash" cssclass="deleteHandle"/></div><slot></slot></div>`,
+    template: `<div :data-ref="id" :type="type" class="cf_validationError sortable-item uk-margin-small-bottom"><div class="toolbar"><cf_toolbutton icon="move" cssclass="uk-drag moveHandle"/><cf_toolbutton icon="settings" :onclick="'openSettingsById(&quot;'+ id +'&quot;)'"/><cf_toolbutton icon="trash" cssclass="deleteHandle"/></div><slot></slot></div>`,
     data: function () {
         return this.schema
     },
-    props: ["schema"]
+    props: ["schema","validation"]
 });
 

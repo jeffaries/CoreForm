@@ -52,12 +52,12 @@
 
 
   {
-    "outputFileName": "wwwroot/builder/js/coreform.renderer.js",
+    "outputFileName": "wwwroot/builder/js/coreform.renderer.temp.js",
     "inputFiles": [
       "wwwroot/builder/js/select2.js",
       "wwwroot/builder/js/script_common.js",
       "wwwroot/builder/js/script_render.js",
-      "wwwroot/builder/js/component_renderer_helpers.js",
+      "wwwroot/builder/js/component_renderer_helpers.temp.js",
       "wwwroot/builder/js/components.js"
     ],
     "minify": {
@@ -78,7 +78,7 @@
     }
   },
   {
-    "outputFileName": "wwwroot/builder/js/coreform.builder.js",
+    "outputFileName": "wwwroot/builder/js/coreform.builder.temp.js",
     "inputFiles": [
       "wwwroot/builder/js/select2.js",
       "wwwroot/builder/js/sortable.min.js",
@@ -93,7 +93,7 @@
     }
   },
   {
-    "outputFileName": "wwwroot/js/coreform.builder.min.js",
+    "outputFileName": "wwwroot/js/coreform.builder.min.temp.js",
     "inputFiles": [
       "wwwroot/builder/js/uikit.min.js",
       "wwwroot/builder/js/uikit-icons.min.js",

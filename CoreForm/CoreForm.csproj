@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <Content Remove="bundleconfig.json" />
+    <Content Remove="wwwroot\builder\js\coreform.builder.temp.js" />
+    <Content Remove="wwwroot\builder\js\coreform.builder.temp.min.js" />
     <Content Remove="wwwroot\builder\js\coreform.renderer.js" />
     <Content Remove="wwwroot\builder\js\coreform.renderer.min.js" />
     <Content Remove="wwwroot\js\coreform.builder.js" />
@@ -16,11 +18,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\builder\js\coreform.builder.temp.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\builder\js\coreform.builder.temp.min.js" />
     <_ContentIncludedByDefault Remove="wwwroot\css\coreform.renderer.css" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="bundleconfig.json" />
+    <None Include="wwwroot\builder\js\coreform.builder.temp.js" />
+    <None Include="wwwroot\builder\js\coreform.builder.temp.min.js" />
   </ItemGroup>
 
   <ItemGroup>

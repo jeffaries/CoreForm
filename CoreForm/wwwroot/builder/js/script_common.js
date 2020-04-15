@@ -2,8 +2,24 @@
 var registeredFields = new Map();
 
 function RegisterField(fieldDefinition) {
+
+    if (!fieldDefinition.fieldTemplate.computed) fieldDefinition.fieldTemplate.computed = {};
+    if (!fieldDefinition.fieldTemplate.methods) fieldDefinition.fieldTemplate.methods = {};
+    fieldDefinition.fieldTemplate.computed.$validation = function () {
+        return this.schema.variable ? (app.$v.data[this.schema.variable] ? app.$v.data[this.schema.variable] : null) : null;
+    }
+
+    fieldDefinition.fieldTemplate.computed.$isrequired = function () {
+        return (this.$validation ? this.$validation.$params.required : false);
+    }
+
+    fieldDefinition.fieldTemplate.methods.$touch = function () {
+        (this.$validation ? this.$validation.$touch() : false);
+    };
+
     registeredFields.set(fieldDefinition.type, fieldDefinition);
 }
+
 
 
 
