@@ -6,23 +6,44 @@
     <h1 class="display-4">CoreForm</h1>
 </div>
 Form models:
-<ul>
-    @foreach (var item in Model.FormModels)
-    {
-    <li>
-        <a href="/builder/renderer.htm?schemaid=@item.Id">
-            @item.CurrentVersion.Name (ver.@item.CurrentVersion.Version)
-        </a>
-        [<a href="/builder/builder.htm?schemaid=@item.Id">
-            Edit
-        </a>]
-    </li>
-    }
-</ul>
+
+<h3>Production</h3>
+
+@foreach (var item in Model.FormModels)
+{
+    <ul>
+        <li>
+            <a href="/renderer.htm?schemaid=@item.Id">
+                @item.CurrentVersion.Name (ver.@item.CurrentVersion.Version)
+            </a>
+            [<a href="/builder.htm?schemaid=@item.Id">
+                Edit
+            </a>]
+        </li>
+    </ul>
+}
+
+<hr>
+<h3>Development</h3>
+
+@foreach (var item in Model.FormModels)
+{
+    <ul>
+        <li>
+            <a href="/builder/renderer.htm?schemaid=@item.Id">
+                @item.CurrentVersion.Name (ver.@item.CurrentVersion.Version)
+            </a>
+            [<a href="/builder/builder.htm?schemaid=@item.Id">
+                Edit
+            </a>]
+        </li>
+    </ul>
+}
+
 
 @*<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createNewModelModal">Create a model</button>*@
 
-<a class="btn btn-primary"  href="/builder/index.htm">New builder (beta)</a>
+<a class="btn btn-primary" href="/builder/index.htm">New builder (beta)</a>
 
 <div class="modal fade" id="createNewModelModal" tabindex="-1" role="dialog" aria-labelledby="createNewModelModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -69,7 +90,7 @@ Form models:
                      data: JSON.stringify({Name:name}),
                         contentType: 'application/json',
                      type: 'POST',
-                        success: function(data){ 
+                        success: function(data){
                             window.location.href = "/Form/" + data + "/build";
                          }
                     });
