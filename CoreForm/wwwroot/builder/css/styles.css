@@ -41,6 +41,12 @@ div[type="grid"] > .toolbar {
 }
 
 
+.error-message {
+    color: #f0506e;
+    font-size:8pt;
+    min-height:15px
+}
+
 
 /*Select2*/
 .select2-container--default .select2-selection--single .select2-selection__rendered, select2-search__field {
@@ -57,9 +63,14 @@ div[type="grid"] > .toolbar {
 }
 
 .select2-container .select2-selection--multiple, .select2-container .select2-selection--single {
-    min-height: 28px;
+    min-height: 30px;
     display: flex
 }
+
+     .uk-form-danger .select2-container .select2-selection--multiple,  .uk-form-danger .select2-container .select2-selection--single {
+        color: #f0506e;
+        border-color: #f0506e;
+    }
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice, .select2-dropdown {
     border-radius: 0;

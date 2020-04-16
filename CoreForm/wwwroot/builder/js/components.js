@@ -56,9 +56,8 @@ RegisterField({
         return { label: 'New label', variable: '', placeholder: '' }
     },
     fieldTemplate: {
-        template: `<cf_field :schema="schema"><label :for="schema.id" class="uk-form-label">{{ schema.label }} <sup style="color:orangered" v-if="$isrequired"><small>Required</small></sup></label><div class="uk-form-controls"><input type="text" v-bind:class="{'uk-form-danger': ($validation?$validation.$error:false)}" :placeholder="schema.placeholder" class="uk-input uk-form-small" :id="schema.id" :value="value" @input="updateInput"></div><div>{{this.$errorMessage}}</div></cf_field>`,
+        template: `<cf_field :schema="schema"><label :for="schema.id" class="uk-form-label">{{ schema.label }} <sup style="color:orangered" v-if="$isrequired"><small>Required</small></sup></label><div class="uk-form-controls"><input type="text" v-bind:class="{'uk-form-danger': this.$error}" :placeholder="schema.placeholder" class="uk-input uk-form-small" :id="schema.id" :value="value" @input="updateInput"></div><div class="error-message">{{this.$errorMessage}}&nbsp;</div></cf_field>`,
         data: function () {
-            if (this.schema.width === undefined) this.schema.width = 12;
             return {}
         },
         methods: {
@@ -104,14 +103,14 @@ RegisterField({
     },
     fieldTemplate: {
         template:
-            `<cf_field :schema="schema"><label :for="schema.id" class="uk-form-label">{{ schema.label }}</label>
-                <div class="uk-form-control bt-select-field">
+            `<cf_field :schema="schema"><label :for="schema.id" class="uk-form-label">{{ schema.label }} <sup style="color:orangered" v-if="$isrequired"><small>Required</small></sup></label>
+                <div class="uk-form-control bt-select-field" v-bind:class="{'uk-form-danger': this.$error}">
 	                <select @change="changeValue" class="bt-select-field no-autoinit uk-select" v-model="schema.id" :id="schema.id" :name="schema.id">
 	                </select>
                 </div>
+                <div class="error-message">{{this.$errorMessage}}</div>
 	        </cf_field>`,
         data: function () {
-            if (this.schema.width === undefined) this.schema.width = 12;
             return {}
         },
         computed: {

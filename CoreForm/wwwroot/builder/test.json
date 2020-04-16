@@ -3,6 +3,26 @@
   "formVersion": 1,
   "name": "contactForm",
   "title": "Formulaire de contact",
+  "variables": [
+    {
+      "name": "name",
+      "validations": [
+        {
+          "type": "required",
+          "errorMessage": "This field is required"
+        }
+      ]
+    },
+    {
+      "name": "countries",
+      "validations": [
+        {
+          "type": "required",
+          "errorMessage": "At least one country"
+        }
+      ]
+    }
+  ],
   "fields": [
     {
       "label": "Nom",

@@ -3,7 +3,6 @@ var required = window.validators.required;
 var minLength = window.validators.minLength;
 var email = window.validators.email;
 
-
 var registeredFields = new Map();
 
 function RegisterField(fieldDefinition) {
@@ -26,15 +25,18 @@ function RegisterField(fieldDefinition) {
         if (this.$validation && this.$validation.$error && this.schema.variable) {
             for (const valid in this.$validation) {
                 if (!String(this.$validation[valid]).startsWith("$") && this.$validation[valid] === false) {
-                    var valiName = this.$validation[valid];
-                    alert(valid);
                     for (const varid in app.schema.variables) {
                         var variable = app.schema.variables[varid];
-                        variable.validations[] = {
-                            required
-                        };
+                        if (variable.name === this.schema.variable) {
+                            for (const vali in variable.validations) {
+                                var validation = variable.validations[vali];
+                                if (validation.type === valid) {
+                                    return validation.errorMessage;
+                                }
+                            }
+                        }
                     }
-                    return msg;
+                 
                 }
             }
         }
