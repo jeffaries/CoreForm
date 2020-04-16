@@ -10,6 +10,11 @@
         {
           "type": "required",
           "errorMessage": "This field is required"
+        },
+        {
+          "type": "minLength",
+          "minLength" : 3,
+          "errorMessage": "Minimum length of 3 characters"
         }
       ]
     },

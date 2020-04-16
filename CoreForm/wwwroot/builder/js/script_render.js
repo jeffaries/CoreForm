@@ -13,45 +13,51 @@ $(document).ready(function () {
                 schema: {}
             }
         },
-        validations: function() {
+        validations: function () {
             var obj = { data: {} };
 
             for (const varid in this.schema.variables) {
                 var variable = this.schema.variables[varid];
-                obj.data[variable.name] = {
-                    required
-                };
-            }
-            return obj;
+                obj.data[variable.name] = {};
+                var rv = obj.data[variable.name];
+                var i = 0;
+                for (const valid in variable.validations) {
+                    var v = variable.validations[valid];
+                    rv["v" + i] = formValidators[v.type].build(v);
+                    i++;
+                }
 
-        },
+            };
+            return obj;        
+
+    },
         methods: {
-            submit: function () {
-                this.$v.$touch();
-            },
-            saveData: function () {
-                //var url = "/Form/NewModel";
-                //var urlParams = new URLSearchParams(window.location.search);
-                //var schemaId = urlParams.get('schemaid');
-                //if (schemaId !== undefined && schemaId !== "") {
-                //    url = "/Form/" + schemaId + "/save";
-                //}
-
-                //$.ajax({
-                //    url: url,
-                //    type: "POST",
-                //    data: JSON.stringify(this.schema),
-                //    contentType: "application/json; charset=utf-8",
-                //    dataType: "json",
-                //    success: function (data) {
-                //        alert("Data Loaded: " + data);
-                //    }
-                //});
-
-
-
-            }
+        submit: function () {
+            this.$v.$touch();
         },
+        saveData: function () {
+            //var url = "/Form/NewModel";
+            //var urlParams = new URLSearchParams(window.location.search);
+            //var schemaId = urlParams.get('schemaid');
+            //if (schemaId !== undefined && schemaId !== "") {
+            //    url = "/Form/" + schemaId + "/save";
+            //}
+
+            //$.ajax({
+            //    url: url,
+            //    type: "POST",
+            //    data: JSON.stringify(this.schema),
+            //    contentType: "application/json; charset=utf-8",
+            //    dataType: "json",
+            //    success: function (data) {
+            //        alert("Data Loaded: " + data);
+            //    }
+            //});
+
+
+
+        }
+    },
         created: function () {
             // `this` est une référence à l'instance de vm
 
