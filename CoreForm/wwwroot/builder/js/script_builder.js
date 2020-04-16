@@ -28,16 +28,22 @@ $(document).ready(function () {
                 editformId: ''
             }
         },
-        validations: {
-            data: {
-                street: {
-                    required,
-                    minLength: minLength(5)
-                },
-                countries: {
-                    required
+        validations: function () {
+            var obj = { data: {} };
+
+            for (const varid in this.schema.variables) {
+                var variable = this.schema.variables[varid];
+                obj.data[variable.name] = {};
+                var rv = obj.data[variable.name];
+                var i = 0;
+                for (const valid in variable.validations) {
+                    var v = variable.validations[valid];
+                    rv["v" + i] = formValidators[v.type].build(v);
+                    i++;
                 }
-            }
+
+            };
+            return obj;
         },
         methods: {
             addTxt: function () {

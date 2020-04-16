@@ -28,36 +28,35 @@ $(document).ready(function () {
                 }
 
             };
-            return obj;        
-
-    },
-        methods: {
-        submit: function () {
-            this.$v.$touch();
+            return obj;
         },
-        saveData: function () {
-            //var url = "/Form/NewModel";
-            //var urlParams = new URLSearchParams(window.location.search);
-            //var schemaId = urlParams.get('schemaid');
-            //if (schemaId !== undefined && schemaId !== "") {
-            //    url = "/Form/" + schemaId + "/save";
-            //}
+        methods: {
+            submit: function () {
+                this.$v.$touch();
+            },
+            saveData: function () {
+                //var url = "/Form/NewModel";
+                //var urlParams = new URLSearchParams(window.location.search);
+                //var schemaId = urlParams.get('schemaid');
+                //if (schemaId !== undefined && schemaId !== "") {
+                //    url = "/Form/" + schemaId + "/save";
+                //}
 
-            //$.ajax({
-            //    url: url,
-            //    type: "POST",
-            //    data: JSON.stringify(this.schema),
-            //    contentType: "application/json; charset=utf-8",
-            //    dataType: "json",
-            //    success: function (data) {
-            //        alert("Data Loaded: " + data);
-            //    }
-            //});
+                //$.ajax({
+                //    url: url,
+                //    type: "POST",
+                //    data: JSON.stringify(this.schema),
+                //    contentType: "application/json; charset=utf-8",
+                //    dataType: "json",
+                //    success: function (data) {
+                //        alert("Data Loaded: " + data);
+                //    }
+                //});
 
 
 
-        }
-    },
+            }
+        },
         created: function () {
             // `this` est une référence à l'instance de vm
 
