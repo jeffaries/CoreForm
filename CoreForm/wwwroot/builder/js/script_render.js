@@ -3,10 +3,6 @@ var app;
 
 
 $(document).ready(function () {
-    Vue.use(window.vuelidate.default)
-    var required = window.validators.required;
-    var minLength = window.validators.minLength;
-    var email = window.validators.email;
 
 
     app = new Vue({
@@ -17,19 +13,22 @@ $(document).ready(function () {
                 schema: {}
             }
         },
-        validations: {
-            data: {
-                att1: {
-                    required,
-                    minLength: minLength(5)
-                },
-                att2: {
+        validations: function() {
+            var obj = { data: {} };
+
+            for (const varid in this.schema.variables) {
+                var variable = this.schema.variables[varid];
+                obj.data[variable.name] = {
                     required
-                }
+                };
             }
+            return obj;
+
         },
         methods: {
-
+            submit: function () {
+                this.$v.$touch();
+            },
             saveData: function () {
                 //var url = "/Form/NewModel";
                 //var urlParams = new URLSearchParams(window.location.search);
@@ -55,11 +54,6 @@ $(document).ready(function () {
         },
         created: function () {
             // `this` est une référence à l'instance de vm
-            for (const prop in this.$v.data['att1'].$params) {
-                prop.errorMessage = "Error!!!";
-            }
-
-            this.$v.data['att1'].$params.required.errorMessage = "errror";
 
             for (let [key, value] of registeredFields.entries()) {
                 this.$options.components[key] = value.fieldTemplate;
@@ -72,7 +66,8 @@ $(document).ready(function () {
             var schemaId = urlParams.get('schemaid');
             if (schemaId !== null && typeof (schemaId) !== 'undefined' && schemaId !== "") {
                 $.ajax({
-                    url: "/Form/" + schemaId + "/schema",
+                    //url: "/Form/" + schemaId + "/schema",
+                    url: "/builder/test.json?" + Date.now(),
                     type: "GET",
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",

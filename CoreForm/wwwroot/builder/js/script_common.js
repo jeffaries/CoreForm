@@ -1,4 +1,9 @@
-﻿
+﻿Vue.use(window.vuelidate.default)
+var required = window.validators.required;
+var minLength = window.validators.minLength;
+var email = window.validators.email;
+
+
 var registeredFields = new Map();
 
 function RegisterField(fieldDefinition) {
@@ -12,6 +17,30 @@ function RegisterField(fieldDefinition) {
     fieldDefinition.fieldTemplate.computed.$isrequired = function () {
         return (this.$validation ? this.$validation.$params.required : false);
     }
+
+    fieldDefinition.fieldTemplate.computed.$error = function () {
+        return (this.$validation ? this.$validation.$error : false);
+    }
+
+    fieldDefinition.fieldTemplate.computed.$errorMessage = function () {
+        if (this.$validation && this.$validation.$error && this.schema.variable) {
+            for (const valid in this.$validation) {
+                if (!String(this.$validation[valid]).startsWith("$") && this.$validation[valid] === false) {
+                    var valiName = this.$validation[valid];
+                    alert(valid);
+                    for (const varid in app.schema.variables) {
+                        var variable = app.schema.variables[varid];
+                        variable.validations[] = {
+                            required
+                        };
+                    }
+                    return msg;
+                }
+            }
+        }
+        return "";
+    }
+
 
     fieldDefinition.fieldTemplate.methods.$touch = function () {
         (this.$validation ? this.$validation.$touch() : false);

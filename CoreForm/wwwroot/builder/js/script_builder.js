@@ -1,9 +1,7 @@
 var app, editFormModal;
-var registeredFields = new Map();
 
 
 $(document).ready(function () {
-
     var schema = {
         'schemaVersion': 1,
         'formVersion': 0,
@@ -28,6 +26,17 @@ $(document).ready(function () {
                 },
                 editformdata: {},
                 editformId: ''
+            }
+        },
+        validations: {
+            data: {
+                street: {
+                    required,
+                    minLength: minLength(5)
+                },
+                countries: {
+                    required
+                }
             }
         },
         methods: {
@@ -161,10 +170,6 @@ $(document).ready(function () {
 
 
 });
-
-function RegisterField(fieldDefinition) {
-    registeredFields.set(fieldDefinition.type, fieldDefinition);
-}
 
 
 var editFormModal_callback = null;

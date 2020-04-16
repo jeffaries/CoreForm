@@ -56,7 +56,7 @@ RegisterField({
         return { label: 'New label', variable: '', placeholder: '' }
     },
     fieldTemplate: {
-        template: `<cf_field :schema="schema"><label :for="schema.id" class="uk-form-label">{{ schema.label }} <sup style="color:orangered" v-if="$isrequired"><small>Required</small></sup></label><div class="uk-form-controls"><input type="text" v-bind:class="{'uk-form-danger': ($validation?$validation.$error:false)}" :placeholder="schema.placeholder" class="uk-input uk-form-small" :id="schema.id" :value="value" @input="updateInput"></div></cf_field>`,
+        template: `<cf_field :schema="schema"><label :for="schema.id" class="uk-form-label">{{ schema.label }} <sup style="color:orangered" v-if="$isrequired"><small>Required</small></sup></label><div class="uk-form-controls"><input type="text" v-bind:class="{'uk-form-danger': ($validation?$validation.$error:false)}" :placeholder="schema.placeholder" class="uk-input uk-form-small" :id="schema.id" :value="value" @input="updateInput"></div><div>{{this.$errorMessage}}</div></cf_field>`,
         data: function () {
             if (this.schema.width === undefined) this.schema.width = 12;
             return {}
