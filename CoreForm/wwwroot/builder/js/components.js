@@ -49,16 +49,19 @@ RegisterField({
 });
 
 
-RegisterField({
+var textInput = {
     type: 'textField',
     display: 'Input field',
     buildNewModel: function () {
         return { label: 'New label', variable: '', placeholder: '' }
     },
     fieldTemplate: {
-        template: `<cf_field :schema="schema"><label :for="schema.id" class="uk-form-label">{{ schema.label }} <div class="required-tag" v-if="$isrequired"/></label><div class="uk-form-controls"><input type="text" v-bind:class="{'uk-form-danger': this.$error}" :placeholder="schema.placeholder" class="uk-input uk-form-small" :id="schema.id" :value="value" @input="updateInput"></div><div class="error-message">{{this.$errorMessage}}&nbsp;</div></cf_field>`,
+        template: `<cf_field :schema="schema"><label :for="schema.id" class="uk-form-label">{{ schema.label }} <div class="required-tag" v-if="$isrequired"/></label><div class="uk-form-controls"><input :type="inputType" v-bind:class="{'uk-form-danger': this.$error}" :placeholder="schema.placeholder" class="uk-input uk-form-small" :id="schema.id" :value="value" @input="updateInput"></div><div class="error-message">{{this.$errorMessage}}&nbsp;</div></cf_field>`,
         data: function () {
             return {}
+        },
+        computed: {
+            inputType: function () { return 'text';}
         },
         methods: {
             updateInput: function () {
@@ -91,8 +94,66 @@ RegisterField({
         props: ["schema"]
 
     }
-});
+};
 
+var passwordInput = {
+    ...textInput, ...{
+        type: 'passwordField',
+        display: 'Password field',
+        fieldTemplate: {
+            ...textInput.fieldTemplate, ...{
+                computed: {
+                    ...textInput.fieldTemplate.computed, ...{
+                        inputType: function () { return 'password'; }
+                    }
+                }
+            }
+        }
+
+    }
+};
+
+
+var dateInput = {
+    ...textInput, ...{
+        type: 'dateField',
+        display: 'Date field',
+        fieldTemplate: {
+            ...textInput.fieldTemplate, ...{
+                computed: {
+                    ...textInput.fieldTemplate.computed, ...{
+                        inputType: function () { return 'date'; }
+                    }
+                }
+            }
+        }
+
+    }
+};
+
+
+var emailInput = {
+    ...textInput, ...{
+        type: 'emailField',
+        display: 'E-Mail field',
+        fieldTemplate: {
+            ...textInput.fieldTemplate, ...{
+                computed: {
+                    ...textInput.fieldTemplate.computed, ...{
+                        inputType: function () { return 'email'; }
+                    }
+                }
+            }
+        }
+
+    }
+}
+
+
+RegisterField(textInput);
+RegisterField(passwordInput);
+RegisterField(dateInput);
+RegisterField(emailInput);
 
 
 RegisterField({
