@@ -46,42 +46,7 @@ $(document).ready(function () {
             return obj;
         },
         methods: {
-            addTxt: function () {
-                this.schema.fields.push({
-                    'id': 'ctrl_' + getNextId(),
-                    'label': 'Name',
-                    'type': 'textField',
-                    'variable': '',
-                    'placeholder': 'Input text here'
-                });
-            },
-            addSel: function () {
-                this.schema.fields.push({
-                    'id': 'ctrl_' + getNextId(),
-                    'label': 'Country',
-                    'type': 'selectField',
-                    'source': 'country123'
-                });
-            },
-            addGrid: function () {
-                var id = getNextId();
-                this.schema.fields.push({
 
-                    'id': 'ctrl_' + id,
-                    'type': 'grid',
-                    columns: [
-                        {
-                            'id': 'row_' + id + '_1',
-                            'width': '1-2',
-                            'fields': []
-                        },
-                        {
-                            'id': 'row_' + id + '_2',
-                            'width': '1-2',
-                            'fields': []
-                        }]
-                });
-            },
 
             saveSchema: function () {
                 var url = "/Form/NewModel";
@@ -101,10 +66,18 @@ $(document).ready(function () {
                         alert("Data Loaded: " + data);
                     }
                 });
+            },
 
 
-
+            openSettingsById: function (id) {
+                var obj = findSchemaObjectById(id, this.schema);
+                openSettingsByObject(obj, function (model) {
+                    Object.assign(obj, model);
+                })
             }
+
+
+
         },
         created: function () {
             // `this` est une référence à l'instance de vm
@@ -120,6 +93,7 @@ $(document).ready(function () {
 
             var urlParams = new URLSearchParams(window.location.search);
             var schemaId = urlParams.get('schemaid');
+            var root = this;
             if (schemaId !== null && typeof (schemaId) !== 'undefined' && schemaId !== "") {
                 $.ajax({
                     url: "/Form/" + schemaId + "/schema",
@@ -127,7 +101,7 @@ $(document).ready(function () {
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (data) {
-                        app.schema = data;
+                        root.schema = data;
                     }
                 });
             }
@@ -160,7 +134,7 @@ $(document).ready(function () {
                     dragClass: 'yellow-background-class',
                 });
 
-                configureNestedTables();
+                configureNestedTables(this);
 
                 editFormModal = UIkit.modal(document.getElementById("editForm"));
 
@@ -182,8 +156,10 @@ $(document).ready(function () {
             var obj = {
                 editformdata: {}
             };
-            for (let [key, value] of Object.entries(v)) {
-                if (!key.startsWith("$"))  obj.editformdata[key] = value;
+            if (v) {
+                for (let [key, value] of Object.entries(v)) {
+                    if (!key.startsWith("$")) obj.editformdata[key] = value;
+                }
             }
 
             return obj;
@@ -192,6 +168,11 @@ $(document).ready(function () {
         created: function () {
             for (let [key, value] of editControls.entries()) {
                 this.$options.components[key] = value;
+            }
+        },
+        watch: {
+            editformdata:function(evt) {
+                this.$v.$reset();
             }
         },
         methods: {
@@ -214,15 +195,7 @@ $(document).ready(function () {
 
 var editFormModal_callback = null;
 
-function openSettingsById(id) {
-    var obj = findSchemaObjectById(id);
-    openSettingsByObject(obj, function (model) {
-        Object.assign(obj, model);
-    });
-}
-
 function openSettingsByObject(obj, callback) {
-    var vmEditForm;
     editFormModal_callback = callback;
     editFormModal.show();
     editVm.editformId = Date.now();
@@ -242,16 +215,16 @@ function applyToolbarEvents() {
 }
 
 
-function configureNestedTables() {
+function configureNestedTables(app) {
     var nestedSortables = [].slice.call(document.querySelectorAll('.nested-sortable'));
 
     // Loop through each nested sortable element
     for (var i = 0; i < nestedSortables.length; i++) {
-        configureNestedTable(nestedSortables[i]);
+        configureNestedTable(nestedSortables[i],app);
     }
 }
 
-function configureNestedTable(table) {
+function configureNestedTable(table, app) {
     new Sortable(table, {
         group: {
             name: 'share',
@@ -268,19 +241,18 @@ function configureNestedTable(table) {
             if (evt.pullMode === "clone") {
                 var item = $(evt.item);
 
-                var newId = 'ctrl_' + getNextId();
+                var newId = 'ctrl_' + getNextId(app.schema);
                 var model = registeredFields.get(item.data("type")).buildNewModel(newId);
                 model.id = newId
                 model.type = item.data("type")
 
                 var newIndex = evt.newDraggableIndex;
-                var collTo = findDataCollectionByElement($(evt.to));
+                var collTo = findDataCollectionByElement($(evt.to), app.schema);
                 item.remove();
-
 
                 openSettingsByObject(model, function (model) {
                     collTo.splice(newIndex, 0, model);
-                    app.$nextTick(function () { configureNestedTables(); });
+                    app.$nextTick(function () { configureNestedTables(app); });
 
                 });
 
@@ -300,9 +272,9 @@ function configureNestedTable(table) {
             evt.clone // the clone element
             evt.pullMode;  // when item is in another sortable: `"clone"` if cloning, `true` if moving
 
-            var item = findSchemaObjectById($(evt.clone).data("ref"));
-            var collFrom = findDataCollectionByElement($(evt.from));
-            var collTo = findDataCollectionByElement($(evt.to));
+            var item = findSchemaObjectById($(evt.clone).data("ref"), this);
+            var collFrom = findDataCollectionByElement($(evt.from), this);
+            var collTo = findDataCollectionByElement($(evt.to), this);
 
             if (typeof (item) !== 'undefined' && typeof (collFrom) !== 'undefined' && typeof (collTo) !== 'undefined') {
                 var newIndex = evt.newDraggableIndex;
@@ -318,20 +290,20 @@ function configureNestedTable(table) {
                 collFrom.splice(oldIndex, 1);
             }
 
-            configureNestedTables();
+            configureNestedTables(this);
         }
     });
 
 
 }
 
-function getNextId() {
-    return getHighestControlId() + 1;
+function getNextId(schema) {
+    return getHighestControlId(schema) + 1;
 }
 
-function getHighestControlId() {
+function getHighestControlId(schema) {
     var highestId = 0;
-    tranverseDataNodes(app.schema, function (node) {
+    tranverseDataNodes(schema, function (node) {
         if (typeof (node.id) !== 'undefined') {
             var sId = node.id;
             if (sId.startsWith("ctrl_")) {
@@ -357,9 +329,9 @@ function tranverseDataNodes(node, func) {
     }
 }
 
-function findSchemaObjectById(id) {
-    if (id === "formContainer") return app.schema;
-    return findDataObjectByDataNode(app.schema, id)
+function findSchemaObjectById(id, schema) {
+    if (id === "formContainer") return schema;
+    return findDataObjectByDataNode(schema, id)
 }
 
 function findDataObjectByDataNode(node, id) {
@@ -380,13 +352,13 @@ function findDataObjectByDataNode(node, id) {
     return null;
 }
 
-function findDataCollectionByElement(element) {
+function findDataCollectionByElement(element, schema) {
     var id = null;
     if ($(element).attr("id")) id = $(element).attr("id");
     else if ($(element).data("ref")) id = $(element).data("ref");
 
-    if (id === "formContainer") return app.schema.fields;
-    return findDataCollectionInDataNode(app.schema, id)
+    if (id === "formContainer") return schema.fields;
+    return findDataCollectionInDataNode(schema, id)
 }
 
 function findDataCollectionInDataNode(node, id) {

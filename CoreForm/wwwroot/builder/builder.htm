@@ -94,16 +94,29 @@
 
     </div>
 
-    <div id="editForm" v-cloak uk-modal>
-        <div class="uk-modal-dialog" uk-overflow-auto>
+    <div id="editForm" class="uk-flex-top" uk-modal v-cloak>
+        <div class="uk-modal-dialog uk-margin-auto-vertical ">
             <button class="uk-modal-close-default" type="button" uk-close></button>
-            <div class="uk-modal-header">
+            <!--<div class="uk-modal-header">
                 <h2 class="uk-modal-title">Settings</h2>
-            </div>
+            </div>-->
             <div class="uk-modal-body uk-form-stacked" id="editFormBody">
-                <component :key="editformId" :is="'edit_' + editformdata.type" v-bind="editformdata" v-model="editformdata"></component>
+                <div>
+                    <ul uk-tab>
+                        <li><a href="#">Basic</a></li>
+                        <li><a href="#">Debug</a></li>
+                    </ul>
+                    <ul class="uk-switcher uk-margin" uk-overflow-auto>
+                        <li>
+                            <component :key="editformId" :is="'edit_' + editformdata.type" v-bind="editformdata" v-model="editformdata"></component>
+                        </li>
+                        <li>
+                            <pre><code>{{editformdata}}</code></pre>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div class="uk-modal-footer">
+            <div class="uk-modal-footer uk-text-right">
                 <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
                 <button class="uk-button uk-button-primary" type="button" @click="applyEdit()">Apply</button>
             </div>

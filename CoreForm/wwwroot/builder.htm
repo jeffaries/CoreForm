@@ -69,10 +69,7 @@
                         <a class="uk-accordion-title" href="#">Data</a>
                         <div class="uk-accordion-content"><pre><code>{{ data }}</code></pre></div>
                     </li>
-                    <li>
-                        <a class="uk-accordion-title" href="#">Edit form data</a>
-                        <div class="uk-accordion-content"><pre><code>{{ editformdata }}</code></pre></div>
-                    </li>
+                  
                 </ul>
 
             </div>
@@ -80,12 +77,12 @@
 
 
 
-        <div id="editForm" uk-modal>
-            <div class="uk-modal-dialog" uk-overflow-auto>
+        <div id="editForm">
+            <div class="uk-modal-dialog" uk-modal uk-overflow-auto>
                 <button class="uk-modal-close-default" type="button" uk-close></button>
-                <div class="uk-modal-header">
-                    <h2 class="uk-modal-title">Settings</h2>
-                </div>
+                <!--<div class="uk-modal-header">
+                    <h4 class="uk-modal-title">Settings</h4>
+                </div>-->
                 <div class="uk-modal-body uk-form-stacked" id="editFormBody">
                     <component :key="editformId" :is="'edit_' + editformdata.type" :schema="editformdata"></component>
 
