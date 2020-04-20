@@ -92,25 +92,24 @@
         </div>
 
 
+    </div>
 
-        <div id="editForm" uk-modal>
-            <div class="uk-modal-dialog" uk-overflow-auto>
-                <button class="uk-modal-close-default" type="button" uk-close></button>
-                <div class="uk-modal-header">
-                    <h2 class="uk-modal-title">Settings</h2>
-                </div>
-                <div class="uk-modal-body uk-form-stacked" id="editFormBody">
-                    <component :key="editformId" :is="'edit_' + editformdata.type" :schema="editformdata"></component>
-
-                </div>
-                <div class="uk-modal-footer">
-                    <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
-                    <button class="uk-button uk-button-primary" type="button" @click="applyEdit()">Apply</button>
-                </div>
+    <div id="editForm" v-cloak uk-modal>
+        <div class="uk-modal-dialog" uk-overflow-auto>
+            <button class="uk-modal-close-default" type="button" uk-close></button>
+            <div class="uk-modal-header">
+                <h2 class="uk-modal-title">Settings</h2>
+            </div>
+            <div class="uk-modal-body uk-form-stacked" id="editFormBody">
+                <component :key="editformId" :is="'edit_' + editformdata.type" :schema="editformdata"></component>
+            </div>
+            <div class="uk-modal-footer">
+                <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+                <button class="uk-button uk-button-primary" type="button" @click="applyEdit()">Apply</button>
             </div>
         </div>
-
     </div>
+
 
 
     <script src="/js/vue.min.js"></script>

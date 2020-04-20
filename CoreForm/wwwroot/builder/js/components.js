@@ -88,6 +88,11 @@ var textInput = {
                    </div>`,
         computed: {
         },
+        validations: {
+            'variable':{
+                'required': required
+            }
+        },
         data: function () {
             return this.schema;
         },
@@ -266,6 +271,7 @@ RegisterField({
         data: function () {
             return this.schema;
         },
+
         props: ["schema"]
 
     }

@@ -6361,7 +6361,7 @@ var editFormModal_callback = null;
 function openSettingsById(id) {
     var obj = findSchemaObjectById(id);
     openSettingsByObject(obj, function (model) {
-        Object.assign(obj, app.editformdata);
+        Object.assign(obj, model);
     });
 }
 

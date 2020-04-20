@@ -1,5 +1,5 @@
-var app, editFormModal;
-
+var app, editFormModal, editVm;
+var editControls = new Map();
 
 $(document).ready(function () {
     var schema = {
@@ -29,7 +29,7 @@ $(document).ready(function () {
             }
         },
         validations: function () {
-            var obj = { data: {} };
+            var obj = { data: {}, editformdata: this.editformdata.validations };
 
             for (const varid in this.schema.variables) {
                 var variable = this.schema.variables[varid];
@@ -82,14 +82,7 @@ $(document).ready(function () {
                         }]
                 });
             },
-            applyEdit: function () {
-                editFormModal.hide();
-                if (editFormModal_callback !== null && typeof (editFormModal_callback) !== 'undefined') {
-                    var obj = Object.assign({}, this.editformdata);
-                    editFormModal_callback(obj);
-                }
-                this.editformdata = Object.assign(this.editformdata, {});
-            },
+
             saveSchema: function () {
                 var url = "/Form/NewModel";
                 var urlParams = new URLSearchParams(window.location.search);
@@ -117,7 +110,9 @@ $(document).ready(function () {
             // `this` est une référence à l'instance de vm
             for (let [key, value] of registeredFields.entries()) {
                 this.$options.components[key] = value.fieldTemplate;
-                this.$options.components['edit_' + key] = value.editForm;
+                editControls.set('edit_' + key, value.editForm);
+                editControls.set(key, value.fieldTemplate);
+
             }
             for (let [key, value] of Object.entries(this.$options.components)) {
                 value.components = this.$options.components;
@@ -174,7 +169,38 @@ $(document).ready(function () {
         }
     });
 
+    editVm = new Vue({
+        el: '#editForm',
+        data: function () {
+            return {
+                editformId: Date.now(),
+                editformdata: {}
+            };
+        },
+        validations: function () {
+            var v = this.$options.components['edit_' + this.editformdata.type].validations;
+            return {
+                editformdata: v
+            }
+        },
+        created: function () {
+            for (let [key, value] of editControls.entries()) {
+                this.$options.components[key] = value;
+            }
+        },
+        methods: {
+            applyEdit: function () {
+                this.$v.$touch();
+                editFormModal.hide();
+                if (editFormModal_callback !== null && typeof (editFormModal_callback) !== 'undefined') {
+                    var obj = Object.assign({}, this.editformdata);
+                    editFormModal_callback(obj);
+                    this.editformdata = Object.assign(this.editformdata, {});
+                }
 
+            },
+        }
+    });
 });
 
 
@@ -183,17 +209,16 @@ var editFormModal_callback = null;
 function openSettingsById(id) {
     var obj = findSchemaObjectById(id);
     openSettingsByObject(obj, function (model) {
-        Object.assign(obj, app.editformdata);
+        Object.assign(obj, model);
     });
 }
 
 function openSettingsByObject(obj, callback) {
     var vmEditForm;
     editFormModal_callback = callback;
-    app.editformId = Date.now();
     editFormModal.show();
-    var comp = registeredFields.get(obj.type).editForm;
-    app.editformdata = Object.assign({}, obj);
+    editVm.editformId = Date.now();
+    editVm.editformdata = Object.assign({}, obj);
 }
 
 function applyToolbarEvents() {
