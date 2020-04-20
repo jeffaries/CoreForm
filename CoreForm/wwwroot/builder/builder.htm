@@ -101,7 +101,7 @@
                 <h2 class="uk-modal-title">Settings</h2>
             </div>
             <div class="uk-modal-body uk-form-stacked" id="editFormBody">
-                <component :key="editformId" :is="'edit_' + editformdata.type" :schema="editformdata"></component>
+                <component :key="editformId" :is="'edit_' + editformdata.type" v-bind="editformdata" v-model="editformdata"></component>
             </div>
             <div class="uk-modal-footer">
                 <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>

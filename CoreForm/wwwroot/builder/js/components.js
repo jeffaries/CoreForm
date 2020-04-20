@@ -61,7 +61,7 @@ var textInput = {
             return {}
         },
         computed: {
-            inputType: function () { return 'text';}
+            inputType: function () { return 'text'; }
         },
         methods: {
             updateInput: function () {
@@ -79,7 +79,8 @@ var textInput = {
                         </div>
                         <div class="uk-margin-small-bottom">
                             <label for="txtValue" class="uk-form-label">Name</label>
-                            <input id="txtValue" type="text" class="uk-input uk-form-small" v-model="variable"/>
+                            <input id="txtValue" type="text" class="uk-input uk-form-small" v-model="variable" v-bind:class="{'uk-form-danger': validation.variable.$error}"/>
+                                    
                         </div>
                         <div class="uk-margin-small-bottom">
                             <label for="txtPlaceholder" class="uk-form-label">Placeholder text</label>
@@ -87,16 +88,20 @@ var textInput = {
                         </div>
                    </div>`,
         computed: {
+            validation: function(){
+                return this.$root.$v.editformdata;
+            }
         },
         validations: {
-            'variable':{
-                'required': required
+            'variable': {
+                'required': required,
+                'minLength':minLength(3)
             }
         },
         data: function () {
-            return this.schema;
+            return this.value;
         },
-        props: ["schema"]
+        props: ["value"]
 
     }
 };

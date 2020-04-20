@@ -179,9 +179,15 @@ $(document).ready(function () {
         },
         validations: function () {
             var v = this.$options.components['edit_' + this.editformdata.type].validations;
-            return {
-                editformdata: v
+            var obj = {
+                editformdata: {}
+            };
+            for (let [key, value] of Object.entries(v)) {
+                if (!key.startsWith("$"))  obj.editformdata[key] = value;
             }
+
+            return obj;
+
         },
         created: function () {
             for (let [key, value] of editControls.entries()) {
@@ -191,11 +197,13 @@ $(document).ready(function () {
         methods: {
             applyEdit: function () {
                 this.$v.$touch();
-                editFormModal.hide();
-                if (editFormModal_callback !== null && typeof (editFormModal_callback) !== 'undefined') {
-                    var obj = Object.assign({}, this.editformdata);
-                    editFormModal_callback(obj);
-                    this.editformdata = Object.assign(this.editformdata, {});
+                if (!this.$v.$error) {
+                    editFormModal.hide();
+                    if (editFormModal_callback !== null && typeof (editFormModal_callback) !== 'undefined') {
+                        var obj = Object.assign({}, this.editformdata);
+                        editFormModal_callback(obj);
+                        this.editformdata = Object.assign(this.editformdata, {});
+                    }
                 }
 
             },
