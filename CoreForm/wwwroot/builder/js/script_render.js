@@ -1,8 +1,11 @@
+var app;
+
+
 
 $(document).ready(function () {
 
 
-    new Vue({
+    app = new Vue({
         el: '#app',
         data: function () {
             return {
@@ -67,8 +70,6 @@ $(document).ready(function () {
             var urlParams = new URLSearchParams(window.location.search);
             var schemaId = urlParams.get('schemaid');
             if (schemaId !== null && typeof (schemaId) !== 'undefined' && schemaId !== "") {
-                var app = this;
-
                 $.ajax({
                     //url: "/Form/" + schemaId + "/schema",
                     url: "/builder/test.json?" + Date.now(),
