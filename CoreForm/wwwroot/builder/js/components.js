@@ -42,9 +42,9 @@ RegisterField({
                         </div>
                     </div>`,
         data: function () {
-            return this.value;
+            return this.schema;
         },
-        props: ["value"]
+        props: ["schema"]
     }
 });
 
@@ -79,7 +79,8 @@ var textInput = {
                         </div>
                         <div class="uk-margin-small-bottom">
                             <label for="txtValue" class="uk-form-label">Name</label>
-                            <input id="txtValue" type="text" class="uk-input uk-form-small" v-model="variable" v-bind:class="{'uk-form-danger': $validation.variable.$error}"/>                                   
+                            <input id="txtValue" type="text" class="uk-input uk-form-small" v-model="variable" v-bind:class="{'uk-form-danger': validation.variable.$error}"/>
+                                    
                         </div>
                         <div class="uk-margin-small-bottom">
                             <label for="txtPlaceholder" class="uk-form-label">Placeholder text</label>
@@ -89,7 +90,7 @@ var textInput = {
         validations: {
             'label': {
                 'required': required,
-                'minLength':minLength(3)
+                'minLength': minLength(3)
             }
         },
         data: function () {
@@ -100,64 +101,17 @@ var textInput = {
     }
 };
 
-var passwordInput = {
-    ...textInput, ...{
-        type: 'passwordField',
-        display: 'Password field',
-        fieldTemplate: {
-            ...textInput.fieldTemplate, ...{
-                computed: {
-                    ...textInput.fieldTemplate.computed, ...{
-                        inputType: function () { return 'password'; }
-                    }
-                }
-            }
-        }
-
-    }
-};
-
-
-var dateInput = {
-    ...textInput, ...{
-        type: 'dateField',
-        display: 'Date field',
-        fieldTemplate: {
-            ...textInput.fieldTemplate, ...{
-                computed: {
-                    ...textInput.fieldTemplate.computed, ...{
-                        inputType: function () { return 'date'; }
-                    }
-                }
-            }
-        }
-
-    }
-};
-
-
-var emailInput = {
-    ...textInput, ...{
-        type: 'emailField',
-        display: 'E-Mail field',
-        fieldTemplate: {
-            ...textInput.fieldTemplate, ...{
-                computed: {
-                    ...textInput.fieldTemplate.computed, ...{
-                        inputType: function () { return 'email'; }
-                    }
-                }
-            }
-        }
-
-    }
-}
-
+var passwordInput = extend(textInput, {
+    type : 'passwordField'
+});
+//passwordInput.type = 'passwordField';
+Object.assign(passwordInput.fieldTemplate.computed, { inputType: function () { return 'password'; } });
 
 RegisterField(textInput);
 RegisterField(passwordInput);
-RegisterField(dateInput);
-RegisterField(emailInput);
+
+
+
 
 
 RegisterField({

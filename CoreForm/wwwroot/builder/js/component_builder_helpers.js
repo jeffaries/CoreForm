@@ -12,7 +12,7 @@
 });
 
 Vue.component('cf_field', {
-    template: `<div :data-ref="id" :type="type" class="cf_validationError sortable-item uk-margin-small-bottom"><div class="toolbar"><label v-if="variableText">Data: {{variableText}}</label><cf_toolbutton icon="move" cssclass="uk-drag moveHandle"/><cf_toolbutton icon="settings" :onclick="openSettings"/><cf_toolbutton icon="trash" cssclass="deleteHandle"/></div><slot></slot></div>`,
+    template: `<div :data-ref="id" :type="type" class="cf_validationError sortable-item uk-margin-small-bottom"><div class="toolbar"><label v-if="variableText">Data: {{variableText}}</label><cf_toolbutton icon="move" cssclass="uk-drag moveHandle"/><cf_toolbutton icon="settings" :onclick="openSettings"/><cf_toolbutton icon="trash" cssclass="deleteHandle" :onclick="removeNode"/></div><slot></slot></div>`,
     data: function () {
         return this.schema
     },
@@ -29,8 +29,13 @@ Vue.component('cf_field', {
     methods: {
         openSettings: function (evt) {
             this.$root.openSettingsById(this.id);
+        },
+        removeNode: function (evt) {
+            this.$root.removeNodeById(this.id);
         }
     },
     props: ["schema","validation"]
 });
+
+
 

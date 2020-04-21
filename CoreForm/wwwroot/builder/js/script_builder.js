@@ -22,7 +22,8 @@ $(document).ready(function () {
                     'formVersion': 0,
                     'name': 'FirstSchema',
                     'title': 'My first schema',
-                    fields: []
+                    fields: [],
+                    variables: []
                 },
                 editformdata: {},
                 editformId: ''
@@ -74,7 +75,27 @@ $(document).ready(function () {
                 openSettingsByObject(obj, function (model) {
                     Object.assign(obj, model);
                 })
-            }
+            },
+
+            removeNodeById: function (id) {
+                var schema = this.schema;
+
+                UIkit.modal.confirm('Are you sure to want to delete this field?').then(function () {
+
+                    var obj = findSchemaObjectById(id, schema);
+                    var coll = findParentCollectionForDataNode(schema, id);
+                    const index = coll.indexOf(obj);
+                    if (index > -1) {
+                        coll.splice(index, 1);
+                    }
+
+                }, function () {
+                    
+                });
+
+
+
+            },
 
 
 
@@ -175,7 +196,7 @@ $(document).ready(function () {
             }
         },
         watch: {
-            editformdata:function(evt) {
+            editformdata: function (evt) {
                 this.$v.$reset();
             }
         },
@@ -224,7 +245,7 @@ function configureNestedTables(app) {
 
     // Loop through each nested sortable element
     for (var i = 0; i < nestedSortables.length; i++) {
-        configureNestedTable(nestedSortables[i],app);
+        configureNestedTable(nestedSortables[i], app);
     }
 }
 
@@ -380,6 +401,26 @@ function findDataCollectionInDataNode(node, id) {
             if (res !== null) return res;
         }
     }
+    return null;
+}
+
+function findParentCollectionForDataNode(node, id) {
+    var subColl = null;
+    if (typeof (node.columns) !== "undefined") subColl = node.columns;
+    if (typeof (node.fields) !== "undefined") subColl = node.fields;
+
+    if (subColl === null) return null;
+
+    for (var i = 0; i < subColl.length; i++) {
+
+        if (subColl[i].id && subColl[i].id === id) {
+            return subColl;
+        }
+
+        var res = findParentCollectionForDataNode(subColl[i], id);
+        if (res !== null) return res;
+    }
+
     return null;
 }
 

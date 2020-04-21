@@ -10,25 +10,21 @@ namespace CoreForm.BusinessLogic
 {
     public static class FormModel
     {
-        private static String getConnectionString()
-        {
-            return @"Filename=coreform.db;Connection=shared";
-        }
 
         public static IEnumerable<FormModelEntity> GetFormModels()
         {
-            using (var db = new LiteDatabase(getConnectionString()))
+            using (var db = new LiteDatabase(DataLayer.GetConnectionString()))
             {
                 // Get a collection (or create, if doesn't exist)
                 var forms = db.GetCollection<Data.FormModelEntity>("formmodels");
                 var l = forms.Include(x => x.CurrentVersion).FindAll();
-                return l;
+                return l.ToList();
             }
         }
 
         public static FormModelVersionEntity GetFormModelVersion(Guid formModelVersionId)
         {
-            using (var db = new LiteDatabase(getConnectionString()))
+            using (var db = new LiteDatabase(DataLayer.GetConnectionString()))
             {
                 // Get a collection (or create, if doesn't exist)
                 var versions = db.GetCollection<Data.FormModelVersionEntity>("formmodelversions");
@@ -38,7 +34,7 @@ namespace CoreForm.BusinessLogic
 
         public static FormModelVersionEntity GetCurrentFormModelVersion(Guid formModelId)
         {
-            using (var db = new LiteDatabase(getConnectionString()))
+            using (var db = new LiteDatabase(DataLayer.GetConnectionString()))
             {
                 // Get a collection (or create, if doesn't exist)
                 var forms = db.GetCollection<Data.FormModelEntity>("formmodels");
@@ -57,7 +53,7 @@ namespace CoreForm.BusinessLogic
             JObject jModel = JObject.Parse(Model);
             String Name = jModel.Value<String>("name");
             Data.FormModelEntity form;
-            using (var db = new LiteDatabase(getConnectionString()))
+            using (var db = new LiteDatabase(DataLayer.GetConnectionString()))
             {
                 // Get a collection (or create, if doesn't exist)
                 var forms = db.GetCollection<Data.FormModelEntity>("formmodels");
