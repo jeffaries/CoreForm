@@ -56,7 +56,7 @@ namespace CoreForm.BusinessLogic
             using (var db = new LiteDatabase(DataLayer.GetConnectionString()))
             {
                 // Get a collection (or create, if doesn't exist)
-                var forms = db.GetCollection<Data.FormModelEntity>("formmodels");
+                var forms = db.GetCollection<Data.FormModelEntity>("formmodels").Include(o=>o.Versions).Include(o=>o.CurrentVersion);
                 var versions = db.GetCollection<Data.FormModelVersionEntity>("formmodelversions");
                 form = forms.FindById(ModelId);
                 if (form is null)
