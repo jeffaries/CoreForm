@@ -9,14 +9,10 @@ namespace CoreForm.BusinessLogic
 {
     public static class FormSubmission
     {
-        private static String getConnectionString()
-        {
-            return @"Filename=coreform.db";
-        }
 
         public static void SaveSubmission(Guid SubmissionId, SubmissionStatusEnum Status, String User, String submissionData)
         {
-            using (var db = new LiteDatabase(getConnectionString()))
+            using (var db = new LiteDatabase(DataLayer.GetConnectionString()))
             {
                 // Get a collection (or create, if doesn't exist)
                 var submissions = db.GetCollection<Data.FormSubmission>("formsubmissions").Include(x => x.Versions);

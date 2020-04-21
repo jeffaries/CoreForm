@@ -8,10 +8,7 @@ namespace CoreForm.BusinessLogic
 {
     public static class FormDataSource
     {
-        private static String getConnectionString()
-        {
-            return @"Filename=coreform.db";
-        }
+
 
     }
 }
