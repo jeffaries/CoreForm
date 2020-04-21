@@ -9,6 +9,7 @@
   <ItemGroup>
     <Content Remove="wwwroot\builder\js\coreform.renderer.js" />
     <Content Remove="wwwroot\builder\js\coreform.renderer.min.js" />
+    <Content Remove="wwwroot\builder\js\coreform.renderer.temp.min.js" />
     <Content Remove="wwwroot\js\coreform.builder.js" />
     <Content Remove="wwwroot\js\coreform.builder.min.js" />
     <Content Remove="wwwroot\js\coreform.renderer.min.js" />
@@ -19,6 +20,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="bundleconfig.json" />
+    <None Include="wwwroot\builder\js\coreform.builder.temp.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BuildBundlerMinifier" Version="3.2.447" />
     <PackageReference Include="LiteDB" Version="5.0.7" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.10" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />

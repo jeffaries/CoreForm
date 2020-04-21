@@ -87,12 +87,11 @@ var textInput = {
                             <label for="txtPlaceholder" class="uk-form-label">Placeholder text</label>
                             <input id="txtPlaceholder" type="text" class="uk-input uk-form-small" v-model="placeholder"/>
                         </div>
-                   </div>
-`,
+                   </div>`,
         validations: {
-            'variable': {
+            'label': {
                 'required': required,
-                'minLength':minLength(3)
+                'minLength': minLength(3)
             }
         },
         data: function () {
@@ -103,64 +102,17 @@ var textInput = {
     }
 };
 
-var passwordInput = {
-    ...textInput, ...{
-        type: 'passwordField',
-        display: 'Password field',
-        fieldTemplate: {
-            ...textInput.fieldTemplate, ...{
-                computed: {
-                    ...textInput.fieldTemplate.computed, ...{
-                        inputType: function () { return 'password'; }
-                    }
-                }
-            }
-        }
-
-    }
-};
-
-
-var dateInput = {
-    ...textInput, ...{
-        type: 'dateField',
-        display: 'Date field',
-        fieldTemplate: {
-            ...textInput.fieldTemplate, ...{
-                computed: {
-                    ...textInput.fieldTemplate.computed, ...{
-                        inputType: function () { return 'date'; }
-                    }
-                }
-            }
-        }
-
-    }
-};
-
-
-var emailInput = {
-    ...textInput, ...{
-        type: 'emailField',
-        display: 'E-Mail field',
-        fieldTemplate: {
-            ...textInput.fieldTemplate, ...{
-                computed: {
-                    ...textInput.fieldTemplate.computed, ...{
-                        inputType: function () { return 'email'; }
-                    }
-                }
-            }
-        }
-
-    }
-}
-
+var passwordInput = extend(textInput, {
+    type : 'passwordField'
+});
+//passwordInput.type = 'passwordField';
+Object.assign(passwordInput.fieldTemplate.computed, { inputType: function () { return 'password'; } });
 
 RegisterField(textInput);
 RegisterField(passwordInput);
-RegisterField(dateInput);
-RegisterField(emailInput);
+
+
+
 
 
 RegisterField({
