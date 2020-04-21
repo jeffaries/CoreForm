@@ -42,9 +42,9 @@ RegisterField({
                         </div>
                     </div>`,
         data: function () {
-            return this.value;
+            return this.schema;
         },
-        props: ["value"]
+        props: ["schema"]
     }
 });
 
@@ -72,23 +72,26 @@ var textInput = {
         props: ["value", "schema"]
     },
     editForm: {
-        template: `
-                        <div>
+        template: `<div>
                         <div class="uk-margin-small-bottom">
                             <label for="txtLabel" class="uk-form-label">Label text</label>
                             <input id="txtLabel" type="text" class="uk-input uk-form-small" v-model="label"/>
                         </div>
                         <div class="uk-margin-small-bottom">
                             <label for="txtValue" class="uk-form-label">Name</label>
-                            <input id="txtValue" type="text" class="uk-input uk-form-small" v-model="variable" v-bind:class="{'uk-form-danger': $validation.variable.$error}"/>
+                            <input id="txtValue" type="text" class="uk-input uk-form-small" v-model="variable" v-bind:class="{'uk-form-danger': validation.variable.$error}"/>
                                     
                         </div>
                         <div class="uk-margin-small-bottom">
                             <label for="txtPlaceholder" class="uk-form-label">Placeholder text</label>
                             <input id="txtPlaceholder" type="text" class="uk-input uk-form-small" v-model="placeholder"/>
                         </div>
-                   </div>
-`,
+                   </div>`,
+        computed: {
+            validation: function(){
+                return this.$root.$v.editformdata;
+            }
+        },
         validations: {
             'variable': {
                 'required': required,
