@@ -22,7 +22,8 @@ $(document).ready(function () {
                     'formVersion': 0,
                     'name': 'FirstSchema',
                     'title': 'My first schema',
-                    fields: []
+                    fields: [],
+                    variables: []
                 },
                 editformdata: {},
                 editformId: ''

@@ -71,8 +71,8 @@ $(document).ready(function () {
             var schemaId = urlParams.get('schemaid');
             if (schemaId !== null && typeof (schemaId) !== 'undefined' && schemaId !== "") {
                 $.ajax({
-                    //url: "/Form/" + schemaId + "/schema",
-                    url: "/builder/test.json?" + Date.now(),
+                    url: "/Form/" + schemaId + "/schema",
+                    //url: "/builder/test.json?" + Date.now(),
                     type: "GET",
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
