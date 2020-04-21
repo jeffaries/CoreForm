@@ -161,6 +161,10 @@ $(document).ready(function () {
                     if (!key.startsWith("$")) obj.editformdata[key] = value;
                 }
             }
+            obj.editformdata.variable = {
+                'required': required,
+                'minLength': minLength(3)
+            };
 
             return obj;
 
