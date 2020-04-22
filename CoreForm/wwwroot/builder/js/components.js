@@ -75,13 +75,13 @@ var textInput = {
         template: `
                         <div>
                         <div class="uk-margin-small-bottom">
-                            <label for="txtLabel" class="uk-form-label">Label text</label>
-                            <input id="txtLabel" type="text" class="uk-input uk-form-small" v-model="label" v-bind:class="{'uk-form-danger': $validation.label.$error}"/>
-                        </div>
-                        <div class="uk-margin-small-bottom">
                             <label for="txtValue" class="uk-form-label">Name</label>
                             <input id="txtValue" type="text" class="uk-input uk-form-small" v-model="variable" v-bind:class="{'uk-form-danger': $validation.variable.$error}"/>
                                     
+                        </div>
+                        <div class="uk-margin-small-bottom">
+                            <label for="txtLabel" class="uk-form-label">Label text</label>
+                            <input id="txtLabel" type="text" class="uk-input uk-form-small" v-model="label" v-bind:class="{'uk-form-danger': $validation.label.$error}"/>
                         </div>
                         <div class="uk-margin-small-bottom">
                             <label for="txtPlaceholder" class="uk-form-label">Placeholder text</label>

@@ -56,15 +56,16 @@ $(document).ready(function () {
                 if (schemaId !== undefined && schemaId !== "") {
                     url = "/Form/" + schemaId + "/save";
                 }
-
+                var schema = this.schema;
                 $.ajax({
                     url: url,
                     type: "POST",
-                    data: JSON.stringify(this.schema),
+                    data: JSON.stringify(schema),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (data) {
-                        alert("Data Loaded: " + data);
+                        UIkit.modal.alert("Successfully saved");
+                        Object.assign(schema, data);
                     }
                 });
             },
@@ -72,9 +73,15 @@ $(document).ready(function () {
 
             openSettingsById: function (id) {
                 var obj = findSchemaObjectById(id, this.schema);
-                openSettingsByObject(obj, function (model) {
+
+                this.$refs.editFormModal.show(obj, function (model) {
+                    alert(JSON.stringify(model));
                     Object.assign(obj, model);
-                })
+                });
+
+                //openSettingsByObject(obj, function (model) {
+                //    Object.assign(obj, model);
+                //})
             },
 
             removeNodeById: function (id) {
@@ -159,7 +166,7 @@ $(document).ready(function () {
 
                 editFormModal = UIkit.modal(document.getElementById("editForm"));
 
-
+            
             })
         }
     });

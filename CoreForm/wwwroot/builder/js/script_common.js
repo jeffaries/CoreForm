@@ -73,9 +73,11 @@ function RegisterField(fieldDefinition) {
     };
 
     fieldDefinition.editForm.computed.$validation = function () {
-        return this.$root.$v.editformdata;
+        return this.$parent.$v.field;
     }
 
+    Vue.component(fieldDefinition.type, fieldDefinition.fieldTemplate);
+    Vue.component('edit_' + fieldDefinition.type, fieldDefinition.editForm);
 
     registeredFields.set(fieldDefinition.type, fieldDefinition);
 }

@@ -55,7 +55,7 @@ namespace CoreForm.Controllers
         public IActionResult Save([FromBody] Object data, Guid formModelId)
         {
             var model = BusinessLogic.FormModel.UpdateModel(formModelId, data.ToString());
-            return Ok(model.Id);
+            return Ok(model.CurrentVersion.Content);
         }
     }
 }
