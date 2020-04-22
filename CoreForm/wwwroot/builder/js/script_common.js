@@ -25,9 +25,12 @@ var formValidators = {
 
 function RegisterField(fieldDefinition) {
 
+    if (typeof (fieldDefinition.isDataField) === "undefined") fieldDefinition.isDataField = true;
+
     if (!fieldDefinition.fieldTemplate.computed) fieldDefinition.fieldTemplate.computed = {};
     if (!fieldDefinition.editForm.computed) fieldDefinition.editForm.computed = {};
     if (!fieldDefinition.fieldTemplate.methods) fieldDefinition.fieldTemplate.methods = {};
+
     fieldDefinition.fieldTemplate.computed.$validation = function () {
         return this.schema.variable ? (this.$root.$v.data[this.schema.variable] ? this.$root.$v.data[this.schema.variable] : null) : null;
     }

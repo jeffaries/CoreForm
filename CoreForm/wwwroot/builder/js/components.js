@@ -1,6 +1,7 @@
 RegisterField({
     type: 'grid',
     display: 'Columns',
+    isDataField: false,
     buildNewModel: function (id) {
         return {
             showSeparator: false,
@@ -53,7 +54,7 @@ var textInput = {
     type: 'textField',
     display: 'Input field',
     buildNewModel: function () {
-        return { label: 'New label', variable: '', placeholder: '' }
+        return { label: '', variable: '', placeholder: '' }
     },
     fieldTemplate: {
         template: `<cf_field :schema="schema"><label :for="schema.id" class="uk-form-label">{{ schema.label }} <div class="required-tag" v-if="$isrequired"/></label><div class="uk-form-controls"><input :type="inputType" v-bind:class="{'uk-form-danger': this.$error}" :placeholder="schema.placeholder" class="uk-input uk-form-small" :id="schema.id" :value="value" @input="updateInput"></div><div class="error-message">{{this.$errorMessage}}&nbsp;</div></cf_field>`,
@@ -74,11 +75,6 @@ var textInput = {
     editForm: {
         template: `
                         <div>
-                        <div class="uk-margin-small-bottom">
-                            <label for="txtValue" class="uk-form-label">Name</label>
-                            <input id="txtValue" type="text" class="uk-input uk-form-small" v-model="variable" v-bind:class="{'uk-form-danger': $validation.variable.$error}"/>
-                                    
-                        </div>
                         <div class="uk-margin-small-bottom">
                             <label for="txtLabel" class="uk-form-label">Label text</label>
                             <input id="txtLabel" type="text" class="uk-input uk-form-small" v-model="label" v-bind:class="{'uk-form-danger': $validation.label.$error}"/>
@@ -103,11 +99,11 @@ var textInput = {
 };
 
 var passwordInput = extend(textInput, {
-    type : 'passwordField'
+    type: 'passwordField'
 });
-//passwordInput.type = 'passwordField';
-Object.assign(passwordInput.fieldTemplate.computed, { inputType: function () { return 'password'; } });
 
+//Lazy method for the password ;)
+Object.assign(passwordInput.fieldTemplate.computed, { inputType: function () { return 'password'; } });
 RegisterField(textInput);
 RegisterField(passwordInput);
 
@@ -211,10 +207,6 @@ RegisterField({
                             <input id="txtLabel" type="text" class="uk-input uk-form-small" v-model="label"/>
                         </div>
                         <div class="uk-margin-small-bottom">
-                            <label for="txtValue" class="uk-form-label">Name</label>
-                            <input id="txtValue" type="text" class="uk-input uk-form-small" v-model="variable"/>
-                        </div>
-                        <div class="uk-margin-small-bottom">
                             <label for="txtPlaceholder" class="uk-form-label">Placeholder text</label>
                             <input id="txtPlaceholder" type="text" class="uk-input uk-form-small" v-model="placeholder"/>
                         </div>
@@ -222,11 +214,17 @@ RegisterField({
                             <label for="chkMultiple" class="uk-form-label"><input id="chkMultiple" class="uk-checkbox" type="checkbox" v-model="multiple"/> Allow multiple selection</label>
                         </div>
                     </div>`,
+        validations: {
+            'label': {
+                'required': required,
+                'minLength': minLength(3)
+            }
+        },
         data: function () {
-            return this.schema;
+            return this.value;
         },
 
-        props: ["schema"]
+        props: ["value"]
 
     }
 });
