@@ -693,6 +693,11 @@ div[type="grid"] > .toolbar {
     }
 
 
+/*Quill*/
+.ql-editor em {
+    color:inherit
+}
+
 
 
 /*Select2*/

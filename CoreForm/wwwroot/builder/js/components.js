@@ -108,7 +108,123 @@ RegisterField(textInput);
 RegisterField(passwordInput);
 
 
+RegisterField({
+    type: 'richtextField',
+    display: 'Richtext Field',
+    buildNewModel: function () {
+        return { label: 'New label', variable: '', placeholder: '', source: '', multiple: false }
+    },
+    fieldTemplate: {
+        template:
+            `<cf_field :schema="schema"><label :for="schema.id" class="uk-form-label">{{ schema.label }} <div class="required-tag" v-if="$isrequired"/></label>
+                <div class="uk-form-control bt-select-field" v-bind:class="{'uk-form-danger': this.$error}">
+  <div ref="quillToolbar">
+    <span class="ql-formats">
+      <select class="ql-font"></select>
+      <select class="ql-size"></select>
+    </span>
+    <span class="ql-formats">
+      <button class="ql-bold"></button>
+      <button class="ql-italic"></button>
+      <button class="ql-underline"></button>
+      <button class="ql-strike"></button>
+    </span>
+    <span class="ql-formats">
+      <select class="ql-color"></select>
+      <select class="ql-background"></select>
+    </span>
+    <span class="ql-formats">
+      <button class="ql-script" value="sub"></button>
+      <button class="ql-script" value="super"></button>
+    </span>
+    <span class="ql-formats">
+      <button class="ql-header" value="1"></button>
+      <button class="ql-header" value="2"></button>
+      <button class="ql-blockquote"></button>
+      <button class="ql-code-block"></button>
+    </span>
+    <span class="ql-formats">
+      <button class="ql-list" value="ordered"></button>
+      <button class="ql-list" value="bullet"></button>
+      <button class="ql-indent" value="-1"></button>
+      <button class="ql-indent" value="+1"></button>
+    </span>
+    <span class="ql-formats">
+      <button class="ql-direction" value="rtl"></button>
+      <select class="ql-align"></select>
+    </span>
+    <span class="ql-formats">
+      <button class="ql-link"></button>
+      <button class="ql-image"></button>
+    </span>
+  </div>
+	                <div ref="quillEditor"></div>
+                </div>
+                <div class="error-message">{{this.$errorMessage}}</div>
+	        </cf_field>`,
+        data: function(){
+            return { };
+        },
+        validations: {
+            'label': {
+                'required': required,
+                'minLength': minLength(3)
+            }
+        },
+        props: ["value", "schema"],
+        mounted: function () {
+            this.$quill = new Quill(this.$refs.quillEditor, {
+                placeholder: this.schema.placeholder,
+                readOnly: false,
+                theme: 'snow',
+                modules: {
+                    toolbar: this.$refs.quillToolbar
+                },
+            });
+            var quill = this.$quill;
+            var t = this;
+            quill.on('text-change', function (delta, oldDelta, source) {
+                if (source === "user") {
+                    var c = quill.getContents();
+                    t.$emit('input', c);
+                }
+            });
+            quill.setContents(this.value, "api")
+        },
+        watch: {
+            value: function (newValue,oldValue) {
+                // update value
+                if (JSON.stringify(newValue.ops) !== JSON.stringify(this.$quill.getContents().ops)) {
+                    this.$quill.setContents(newValue, "silent");
+                }
+            }
+        },
+    },
+    editForm: {
+        template: `
+                        <div>
+                        <div class="uk-margin-small-bottom">
+                            <label for="txtLabel" class="uk-form-label">Label text</label>
+                            <input id="txtLabel" type="text" class="uk-input uk-form-small" v-model="label" v-bind:class="{'uk-form-danger': $validation.label.$error}"/>
+                        </div>
+                        <div class="uk-margin-small-bottom">
+                            <label for="txtPlaceholder" class="uk-form-label">Placeholder text</label>
+                            <input id="txtPlaceholder" type="text" class="uk-input uk-form-small" v-model="placeholder"/>
+                        </div>
+                   </div>`,
+        validations: {
+            'label': {
+                'required': required,
+                'minLength': minLength(3)
+            }
+        },
+        data: function () {
+            return this.value;
+        },
+        props: ["value"]
 
+    }
+});
 
 
 RegisterField({

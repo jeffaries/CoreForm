@@ -693,6 +693,11 @@ div[type="grid"] > .toolbar {
     }
 
 
+/*Quill*/
+.ql-editor em {
+    color:inherit
+}
+
 
 
 /*Select2*/
@@ -828,15 +833,6 @@ div[type="grid"] > .uk-grid:hover > * {
         height: 100%;
         width: 100%;
     }
-
-
-/*div.moveHandle {
-    cursor: grab !important;
-}
-
-    div.moveHandle:active {
-        cursor: grabbing !important;
-    }*/
 
 div.deleteHandle {
     background-color: darkred !important;

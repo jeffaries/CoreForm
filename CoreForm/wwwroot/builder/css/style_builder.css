@@ -68,15 +68,6 @@ div[type="grid"] > .uk-grid:hover > * {
         width: 100%;
     }
 
-
-/*div.moveHandle {
-    cursor: grab !important;
-}
-
-    div.moveHandle:active {
-        cursor: grabbing !important;
-    }*/
-
 div.deleteHandle {
     background-color: darkred !important;
 }

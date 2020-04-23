@@ -7,7 +7,7 @@
     ],
     "minify": {
       "enabled": true,
-      "commentMode": "all",
+      "commentMode": "none",
       "alwaysEscapeNonAscii": true
     }
   },
@@ -18,8 +18,8 @@
       "wwwroot/builder/css/coreform.renderer.min.css"
     ],
     "minify": {
-      "enabled": false,
-      "commentMode": "all",
+      "enabled": true,
+      "commentMode": "none",
       "alwaysEscapeNonAscii": true
     }
   },
@@ -32,7 +32,7 @@
     ],
     "minify": {
       "enabled": true,
-      "commentMode": "all",
+      "commentMode": "none",
       "alwaysEscapeNonAscii": true
     }
   },
@@ -43,8 +43,8 @@
       "wwwroot/builder/css/coreform.builder.min.css"
     ],
     "minify": {
-      "enabled": false,
-      "commentMode": "all",
+      "enabled": true,
+      "commentMode": "none",
       "alwaysEscapeNonAscii": true
     }
   },
@@ -64,6 +64,7 @@
     ],
     "minify": {
       "enabled": true,
+      "commentMode": "none",
       "alwaysEscapeNonAscii": true
     }
   },
@@ -76,6 +77,7 @@
     ],
     "minify": {
       "enabled": false,
+      "commentMode": "none",
       "alwaysEscapeNonAscii": true
     }
   },
@@ -94,6 +96,7 @@
     ],
     "minify": {
       "enabled": true,
+      "commentMode": "none",
       "alwaysEscapeNonAscii": true
     }
   },
@@ -106,6 +109,7 @@
     ],
     "minify": {
       "enabled": false,
+      "commentMode": "none",
       "alwaysEscapeNonAscii": true
     }
   }

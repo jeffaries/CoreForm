@@ -23,8 +23,8 @@ Vue.component('v-formbuilder', {
                                 <a class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="passwordField">
                                     Password input
                                 </a>
-                                <a class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="dateField">
-                                    Date input
+                                <a class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="richtextField">
+                                    Richtext Field
                                 </a>
                                 <a class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="selectField">
                                     Selector
@@ -121,10 +121,10 @@ Vue.component('v-formbuilder', {
         },
         removeNodeById: function (id) {
             var schema = this.schema;
+            var app = this;
             UIkit.modal.confirm('Are you sure to want to delete this field?').then(function () {
-
-                var obj = this.findNodeById(id, schema);
-                var coll = this.findParentNodeCollectionById(schema, id);
+                var obj = app.findNodeById(id, schema);
+                var coll = app.findParentNodeCollectionById(schema, id);
                 const index = coll.indexOf(obj);
                 if (index > -1) {
                     coll.splice(index, 1);
@@ -217,18 +217,18 @@ Vue.component('v-formbuilder', {
         },
         getNextId: function (schema) {
             var highestId = 0;
-            var tranverseDataNodes = function (node, func) {
+            var _s = function (node, func) {
                 var subColl = null;
                 if (typeof (node.columns) !== "undefined") subColl = node.columns;
                 if (typeof (node.fields) !== "undefined") subColl = node.fields;
                 func(node);
                 if (subColl !== null) {
                     for (var i = 0; i < subColl.length; i++) {
-                        tranverseDataNodes(subColl[i], func);
+                        _s(subColl[i], func);
                     }
                 }
             }
-            tranverseDataNodes(schema, function (node) {
+            _s(schema, function (node) {
                 if (typeof (node.id) !== 'undefined') {
                     var sId = node.id;
                     if (sId.startsWith("ctrl_")) {
@@ -298,7 +298,7 @@ Vue.component('v-formbuilder', {
                     return subColl;
                 }
 
-                var res = findParentNodeCollectionById(subColl[i], id);
+                var res = this.findParentNodeCollectionById(subColl[i], id);
                 if (res !== null) return res;
             }
 
