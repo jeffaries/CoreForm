@@ -24,7 +24,7 @@ RegisterField({
 				<component v-for="field in column.fields" 
 				 :key="field.id"
 				 :is="field.type"
-				 v-model="$root.data[field.variable]"
+				 v-model="$root.$form.data[field.variable]"
 				 :schema="field"></component>
 			</div></div></cf_field>`,
         data: function () {

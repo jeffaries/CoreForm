@@ -28,10 +28,10 @@ Vue.component('cf_field', {
     },
     methods: {
         openSettings: function (evt) {
-            this.$root.openSettingsById(this.id);
+            this.$root.$form.openSettingsById(this.id);
         },
         removeNode: function (evt) {
-            this.$root.removeNodeById(this.id);
+            this.$root.$form.removeNodeById(this.id);
         }
     },
     props: ["schema", "validation"]

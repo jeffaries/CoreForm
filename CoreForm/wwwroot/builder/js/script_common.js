@@ -25,14 +25,15 @@ var formValidators = {
 
 function RegisterField(fieldDefinition) {
 
-    if (typeof (fieldDefinition.isDataField) === "undefined") fieldDefinition.isDataField = true;
+   if (typeof (fieldDefinition.isDataField) === "undefined") fieldDefinition.isDataField = true;
 
     if (!fieldDefinition.fieldTemplate.computed) fieldDefinition.fieldTemplate.computed = {};
     if (!fieldDefinition.editForm.computed) fieldDefinition.editForm.computed = {};
     if (!fieldDefinition.fieldTemplate.methods) fieldDefinition.fieldTemplate.methods = {};
 
+
     fieldDefinition.fieldTemplate.computed.$validation = function () {
-        return this.schema.variable ? (this.$root.$v.data[this.schema.variable] ? this.$root.$v.data[this.schema.variable] : null) : null;
+        return this.schema.variable ? (this.$root.$form.$v.data[this.schema.variable] ? this.$root.$form.$v.data[this.schema.variable] : null) : null;
     }
 
     fieldDefinition.fieldTemplate.computed.$isrequired = function () {
@@ -53,8 +54,8 @@ function RegisterField(fieldDefinition) {
         if (this.$validation && this.$validation.$error && this.schema.variable) {
             for (const valid in this.$validation) {
                 if (!String(this.$validation[valid]).startsWith("$") && this.$validation[valid] === false) {
-                    for (const varid in this.$root.schema.variables) {
-                        var variable = this.$root.schema.variables[varid];
+                    for (const varid in this.$root.$form.schema.variables) {
+                        var variable = this.$root.$form.schema.variables[varid];
                         if (variable.name === this.schema.variable) {
                             for (const vali in variable.validations) {
                                 var validation = variable.validations[vali];
@@ -85,50 +86,6 @@ function RegisterField(fieldDefinition) {
     registeredFields.set(fieldDefinition.type, fieldDefinition);
 }
 
-function findDataObjectByDataNode(node, id) {
-    var subColl = null;
-    if (typeof (node.columns) !== "undefined") subColl = node.columns;
-    if (typeof (node.fields) !== "undefined") subColl = node.fields;
-
-    if (id === node.id) {
-        return node;
-    } else {
-        if (subColl !== null) {
-            for (var i = 0; i < subColl.length; i++) {
-                var res = findDataObjectByDataNode(subColl[i], id);
-                if (res !== null) return res;
-            }
-        }
-    }
-    return null;
-}
-
-function findDataCollectionByElement(element) {
-    var id = null;
-    if ($(element).attr("id")) id = $(element).attr("id");
-    else if ($(element).data("ref")) id = $(element).data("ref");
-
-    if (id === "formContainer") return app.schema.fields;
-    return findDataCollectionInDataNode(app.schema, id)
-}
-
-function findDataCollectionInDataNode(node, id) {
-    var subColl = null;
-    if (typeof (node.columns) !== "undefined") subColl = node.columns;
-    if (typeof (node.fields) !== "undefined") subColl = node.fields;
-
-    if (subColl === null) return null;
-
-    if (id === node.id) {
-        return subColl;
-    } else {
-        for (var i = 0; i < subColl.length; i++) {
-            var res = findDataCollectionInDataNode(subColl[i], id);
-            if (res !== null) return res;
-        }
-    }
-    return null;
-}
 
 
 function extend(source, update) {
@@ -153,6 +110,59 @@ function _extend(from, to) {
     return to;
 }
 
+
+var coreform = {
+    formBuilder: function (elementPath, opts) {
+        $(elementPath).empty();
+        $(elementPath).append($("<v-formbuilder id='___formapp___' ref='___formapp___'/>"));
+        new Vue({
+            el: elementPath,
+            data: function () {
+                return {
+                    data: {},
+                    schema: {
+                        'schemaVersion': 1,
+                        'formVersion': 0,
+                        'name': 'FirstSchema',
+                        'title': 'My first schema',
+                        fields: [],
+                        variables: []
+                    }
+                }
+            },
+            computed: {
+                $form: function () {
+                    return this.$refs.___formapp___;
+                }
+            }
+        });
+    },
+    formRenderer: function (elementPath, opts) {
+        $(elementPath).empty();
+        $(elementPath).append($("<v-formrenderer id='___formapp___' ref='___formapp___'/>"));
+        new Vue({
+            el: elementPath,
+            data: function () {
+                return {
+                    data: {},
+                    schema: {
+                        'schemaVersion': 1,
+                        'formVersion': 0,
+                        'name': 'FirstSchema',
+                        'title': 'My first schema',
+                        fields: [],
+                        variables: []
+                    }
+                }
+            },
+            computed: {
+                $form: function () {
+                    return this.$refs.___formapp___;
+                }
+            }
+        });
+    }
+}
 
 
 

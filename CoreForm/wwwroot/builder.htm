@@ -4,82 +4,22 @@
     <meta charset="utf-8">
     <title>VueJS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <link rel="stylesheet" href="css/coreform.builder.css" />
-
-    <style>
-    </style>
+    <link rel="stylesheet" href="css/coreform.builder.min.css" />
+    <script src="js/vue.min.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/coreform.builder.min.js"></script>
 </head>
 <body>
-    <div id="app" v-cloak>
-        <div class="uk-grid-small uk-grid-divider" uk-grid>
-            <div class="uk-width-1-5@m">
-                <div>
-                    [<a href="/"><< Back</a>]
+    [<a href="/"><< Back</a>]
 
-                    <div>
-                        <label class="uk-form-label" for="formName">Name:</label>
-                        <input id="formName" class="uk-input uk-form-small" v-model="schema.name" />
-                    </div>
-                    <div>
-                        <label class="uk-form-label" for="formTitle">Title:</label>
-                        <input id="formTitle" class="uk-input uk-form-small" v-model="schema.title" />
-                    </div>
-                </div>
-
-                <div id="mnuComponents" style="margin-bottom:1em;margin-top:1em;">
-                    <a class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="textField" @click="addTxt()">
-                        Text input
-                    </a>
-                    <a class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="selectField">
-                        Selector
-                    </a>
-                    <a class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="grid" @click="addGrid()">
-                        Columns
-                    </a>
-                </div>
-                <button class="uk-button uk-button-primary uk-button-small uk-width-1-1" @click="saveSchema()">Save</button>
-
-            </div>
-            <div class="uk-width-3-5@m">
-
-
-                <fieldset class="uk-fieldset">
-
-                    <div class="uk-card uk-card-default uk-card-body">
-                        <h3 class="uk-card-title">{{schema.title}}</h3>
-                        <div id="formContainer" data-ref="root" class="nested-sortable uk-form-stacked" style="padding:10px;min-height:60px">
-                            <component v-for="field in schema.fields"
-                                       :key="field.id"
-                                       :is="field.type"
-                                       :schema="field"
-                                       v-model="data[field.variable]">
-                            </component>
-                        </div>
-                        <small>version {{schema.formVersion}}</small>
-                    </div>
-                </fieldset>
-
-                <ul uk-accordion="multiple: true">
-                    <li>
-                        <a class="uk-accordion-title" href="#">Schema</a>
-                        <div class="uk-accordion-content"><pre><code>{{ schema }}</code></pre></div>
-                    </li>
-                    <li>
-                        <a class="uk-accordion-title" href="#">Data</a>
-                        <div class="uk-accordion-content"><pre><code>{{ data }}</code></pre></div>
-                    </li>
-                  
-                </ul>
-
-            </div>
-        </div>
+    <div id="app">
 
     </div>
 
-
-    <script src="js/vue.min.js"></script>
-    <script src="js/jquery.js"></script>
-    <script src="js/coreform.builder.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            coreform.formBuilder("#app", {});
+        });
+    </script>
 </body>
 </html>

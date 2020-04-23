@@ -54,11 +54,13 @@
   {
     "outputFileName": "wwwroot/builder/js/coreform.renderer.temp.js",
     "inputFiles": [
+      "wwwroot/builder/js/vuelidate.min.js",
+      "wwwroot/builder/js/validators.min.js",
       "wwwroot/builder/js/select2.js",
       "wwwroot/builder/js/script_common.js",
-      "wwwroot/builder/js/script_render.js",
       "wwwroot/builder/js/component_renderer_helpers.js",
-      "wwwroot/builder/js/components.js"
+      "wwwroot/builder/js/components.js",
+      "wwwroot/builder/js/script_render.js"
     ],
     "minify": {
       "enabled": true,
@@ -70,7 +72,7 @@
     "inputFiles": [
       "wwwroot/builder/js/uikit.min.js",
       "wwwroot/builder/js/uikit-icons.min.js",
-      "wwwroot/builder/js/coreform.renderer.min.js"
+      "wwwroot/builder/js/coreform.renderer.temp.min.js"
     ],
     "minify": {
       "enabled": false,
@@ -80,12 +82,15 @@
   {
     "outputFileName": "wwwroot/builder/js/coreform.builder.temp.js",
     "inputFiles": [
+      "wwwroot/builder/js/vuelidate.min.js",
+      "wwwroot/builder/js/validators.min.js",
       "wwwroot/builder/js/select2.js",
       "wwwroot/builder/js/sortable.min.js",
       "wwwroot/builder/js/script_common.js",
-      "wwwroot/builder/js/script_builder.js",
+      "wwwroot/builder/js/editfieldmodal.js",
       "wwwroot/builder/js/component_builder_helpers.js",
-      "wwwroot/builder/js/components.js"
+      "wwwroot/builder/js/components.js",
+      "wwwroot/builder/js/script_builder.js"
     ],
     "minify": {
       "enabled": true,
@@ -93,11 +98,11 @@
     }
   },
   {
-    "outputFileName": "wwwroot/js/coreform.builder.min.temp.js",
+    "outputFileName": "wwwroot/js/coreform.builder.min.js",
     "inputFiles": [
       "wwwroot/builder/js/uikit.min.js",
       "wwwroot/builder/js/uikit-icons.min.js",
-      "wwwroot/builder/js/coreform.builder.min.js"
+      "wwwroot/builder/js/coreform.builder.temp.min.js"
     ],
     "minify": {
       "enabled": false,

@@ -10,51 +10,6 @@
     <link rel="stylesheet" href="/builder/css/styles.css" />
     <style>
     </style>
-</head>
-<body>
-    <div id="app" v-cloak>
-        [<a href="/"><< Back</a>]
-        <div class="uk-container uk-container-small">
-            <fieldset class="uk-fieldset">
-                <div class="uk-card uk-card-default uk-card-body">
-                    <h3 class="uk-card-title">{{schema.title}}</h3>
-                    <div id="formContainer" data-ref="root" class="nested-sortable uk-form-stacked" style="padding:10px;min-height:60px">
-                        <component v-for="field in schema.fields"
-                                   :key="field.id"
-                                   :is="field.type"
-                                   :schema="field"
-                                   v-model="data[field.variable]">
-                        </component>
-                    </div>
-                    <div class="uk-grid-collapse uk-child-width-1-2@m" uk-grid>
-                        <div>
-                            <small>version {{schema.formVersion}}</small>
-                        </div>
-
-                        <div style="text-align:right">
-                            <button class="uk-button uk-button-primary" @click="submit()">Submit</button>
-                        </div>
-
-                    </div>
-
-
-
-                </div>
-            </fieldset>
-
-            <ul uk-accordion="multiple: true">
-                <li>
-                    <a class="uk-accordion-title" href="#">Data</a>
-                    <div class="uk-accordion-content"><pre><code>{{ data }}</code></pre></div>
-                </li>
-                <li>
-                    <a class="uk-accordion-title" href="#">$Model</a>
-                    <div class="uk-accordion-content"><pre><code>{{ $v }}</code></pre></div>
-                </li>
-            </ul>
-        </div>
-    </div>
-
 
     <script src="/js/vue.min.js"></script>
     <script src="/js/jquery.min.js"></script>
@@ -68,6 +23,19 @@
     <script src="/builder/js/script_render.js"></script>
     <script src="/builder/js/component_renderer_helpers.js"></script>
     <script src="/builder/js/components.js"></script>
+</head>
+<body>
+    [<a href="/"><< Back</a>]
+
+    <div id="app">
+
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            coreform.formRenderer("#app", {});
+        });
+    </script>
 
 
 
