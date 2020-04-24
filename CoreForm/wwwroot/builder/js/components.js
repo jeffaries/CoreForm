@@ -189,6 +189,13 @@ RegisterField({
                     t.$emit('input', c);
                 }
             });
+            quill.on('selection-change', function (range, oldRange, source) {
+                if (range === null && oldRange !== null) {
+                    quill.container.classList.remove("ql-focus");
+                } else if (range !== null && oldRange === null) {
+                    quill.container.classList.add("ql-focus");
+                }
+            });
             quill.setContents(this.value, "api")
         },
         watch: {
