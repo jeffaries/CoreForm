@@ -18,7 +18,7 @@
       "wwwroot/builder/css/coreform.renderer.min.css"
     ],
     "minify": {
-      "enabled": true,
+      "enabled": false,
       "commentMode": "none",
       "alwaysEscapeNonAscii": true
     }
@@ -43,7 +43,7 @@
       "wwwroot/builder/css/coreform.builder.min.css"
     ],
     "minify": {
-      "enabled": true,
+      "enabled": false,
       "commentMode": "none",
       "alwaysEscapeNonAscii": true
     }
