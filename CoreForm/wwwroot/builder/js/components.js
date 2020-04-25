@@ -2,21 +2,15 @@ RegisterField({
     type: 'grid',
     display: 'Columns',
     isDataField: false,
-    buildNewModel: function (id) {
-        return {
-            showSeparator: false,
-            columns: [
-                {
-                    'id': 'col_' + id + '_1',
-                    'width': '1-2',
-                    'fields': []
-                },
-                {
-                    'id': 'col_' + id + '_2',
-                    'width': '1-2',
-                    'fields': []
-                }]
+    sanitizeSchemaModel: function (model, id) {
+        if (!model) model = {};
+        if ((typeof (model.showSeparator) === 'undefined')) model.showSeparator = false;
+        if (!model.columns) model.columns = [];
+        if (model.columns.length === 0) {
+            model.columns.push({ 'id': 'col_' + id + '_1', 'width': '1-2', 'fields': [] });
+            model.columns.push({ 'id': 'col_' + id + '_2', 'width': '1-2', 'fields': [] });
         }
+        return model;
     },
     fieldTemplate: {
         template: `<cf_field :schema="schema"><div class="row uk-grid" v-bind:class="{'uk-grid-divider uk-grid-collapse': schema.showSeparator, 'uk-grid-medium': !schema.showSeparator}" uk-grid>
@@ -53,8 +47,12 @@ RegisterField({
 var textInput = {
     type: 'textField',
     display: 'Input field',
-    buildNewModel: function () {
-        return { label: '', variable: '', placeholder: '' }
+    sanitizeSchemaModel: function (model) {
+        if (!model) model = {};
+        if (!model.label) model.label = '';
+        if (!model.variable) model.variable = '';
+        if (!model.placeholder) model.placeholder = '';
+        return model;
     },
     fieldTemplate: {
         template: `<cf_field :schema="schema"><label :for="schema.id" class="uk-form-label">{{ schema.label }} <div class="required-tag" v-if="$isrequired"/></label><div class="uk-form-controls"><input :type="inputType" v-bind:class="{'uk-form-danger': this.$error}" :placeholder="schema.placeholder" class="uk-input uk-form-small" :id="schema.id" :value="value" @input="updateInput"></div><div class="error-message">{{this.$errorMessage}}&nbsp;</div></cf_field>`,
@@ -111,8 +109,12 @@ RegisterField(passwordInput);
 RegisterField({
     type: 'richtextField',
     display: 'Richtext Field',
-    buildNewModel: function () {
-        return { label: 'New label', variable: '', placeholder: '', source: '', multiple: false }
+    sanitizeSchemaModel: function (model) {
+        if (!model) model = {};
+        if (!model.label) model.label = '';
+        if (!model.variable) model.variable = '';
+        if (!model.placeholder) model.placeholder = '';
+        return model;
     },
     fieldTemplate: {
         template:
@@ -162,8 +164,8 @@ RegisterField({
                 </div>
                 <div class="error-message">{{this.$errorMessage}}</div>
 	        </cf_field>`,
-        data: function(){
-            return { };
+        data: function () {
+            return {};
         },
         validations: {
             'label': {
@@ -199,7 +201,7 @@ RegisterField({
             quill.setContents(this.value, "api")
         },
         watch: {
-            value: function (newValue,oldValue) {
+            value: function (newValue, oldValue) {
                 // update value
                 if (JSON.stringify(newValue.ops) !== JSON.stringify(this.$quill.getContents().ops)) {
                     this.$quill.setContents(newValue, "silent");
@@ -235,10 +237,145 @@ RegisterField({
 
 
 RegisterField({
+    type: 'datetimeField',
+    display: 'DateTime Field',
+    sanitizeSchemaModel: function (model) {
+        if (!model) model = {};
+        if (!model.label) model.label = '';
+        if (!model.variable) model.variable = '';
+        if (!model.placeholder) model.placeholder = '';
+        if (typeof (model.timePicker) === 'undefined') model.timePicker = false;
+        if (typeof (model.rangePicker) === 'undefined') model.rangePicker = false;
+        return model;
+    },
+    fieldTemplate: {
+        template: `<cf_field :schema="schema"><label :for="schema.id" class="uk-form-label">{{ schema.label }} <div class="required-tag" v-if="$isrequired"/></label><div class="uk-form-controls"><input type="text" v-bind:class="{'uk-form-danger': this.$error}" :placeholder="schema.placeholder" class="uk-input uk-form-small" ref="dtCtrl" :id="schema.id" :value="formattedValue" ></div><div class="error-message">{{this.$errorMessage}}&nbsp;</div></cf_field>`,
+        data: function () {
+            return {};
+        },
+        validations: {
+            'label': {
+                'required': required,
+                'minLength': minLength(3)
+            }
+        },
+        props: ["value", "schema"],
+        computed: {
+            formattedValue: function () {
+                var m = moment();
+                var format = "l";
+                if (this.schema.timePicker) format = "l LT";
+                var v = "";
+                if (this.value) {
+                    if (this.value.start) {
+                        v = v + moment(this.value.start).format(format);
+                        if (this.schema.rangePicker && this.value.end) {
+                                v = v + " - " + moment(this.value.end).format(format);
+                        }
+                    }
+                }
+                return v;
+            }
+        },
+        methods: {
+            build: function () {
+                var locale = window.navigator.userLanguage || window.navigator.language;
+                moment.locale(locale);
+                var options = {
+                    autoUpdateInput: false,
+                    singleDatePicker: !this.schema.rangePicker,
+                    timePicker: this.schema.timePicker,
+                    timePicker24Hour: true,
+                    autoApply: true,
+                    locale: {
+                        format: 'l LT',
+                        separator: ' - ',
+                    //    applyLabel: 'Apply',
+                    //    cancelLabel: 'Cancel',
+                    //    fromLabel: 'From',
+                    //    toLabel: 'To',
+                    //    customRangeLabel: 'Custom',
+                    //    daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+                    //    //monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                    //    firstDay: 1
+                    }
+                };
+                if (this.value) {
+                    if (this.value.start) options.startDate = this.value.start;
+                    if (this.value.end) options.endDate = this.value.end;
+                }
+                var t = this;
+                this.$datetime = $(this.$refs.dtCtrl).daterangepicker(options,
+                    function (start, end, label) {
+                        t.$emit('input', { start: start, end: end });
+                        console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
+                    });
+            }
+        },
+        mounted: function () {
+            this.build();
+            if (this.value && this.value.start) {
+                $(this.$refs.dtCtrl).data('daterangepicker').setStartDate(this.value.start);
+                if (this.value.end) {
+                    $(this.$refs.dtCtrl).data('daterangepicker').setEndDate(this.value.end);
+                }
+            }
+            this.$watch('schema', this.build, { deep: true });
+        },
+        watch: {
+            value: function (newValue, oldValue) {
+                // update value
+                if (newValue && newValue.start) {
+                    $(this.$refs.dtCtrl).data('daterangepicker').setStartDate(newValue.start);
+                    if (newValue.end) {
+                        $(this.$refs.dtCtrl).data('daterangepicker').setEndDate(newValue.end);
+                    }
+                }
+            }
+        },
+    },
+    editForm: {
+        template: `
+                        <div>
+                        <div class="uk-margin-small-bottom">
+                            <label for="txtLabel" class="uk-form-label">Label text</label>
+                            <input id="txtLabel" type="text" class="uk-input uk-form-small" v-model="label" v-bind:class="{'uk-form-danger': $validation.label.$error}"/>
+                        </div>
+                        <div class="uk-margin-small-bottom">
+                            <label for="txtPlaceholder" class="uk-form-label">Placeholder text</label>
+                            <input id="txtPlaceholder" type="text" class="uk-input uk-form-small" v-model="placeholder"/>
+                        </div>
+                        <div class="uk-margin-small-bottom">
+                            <label for="chkRangePicker" class="uk-form-label"><input id="chkRangePicker" class="uk-checkbox" type="checkbox" v-model="rangePicker"/> date range selection</label>
+                        </div>
+                        <div class="uk-margin-small-bottom">
+                            <label for="chkTimePicker" class="uk-form-label"><input id="chkTimePicker" class="uk-checkbox" type="checkbox" v-model="timePicker"/> allow time selection</label>
+                        </div>
+                   </div>`,
+        validations: {
+            'label': {
+                'required': required,
+                'minLength': minLength(3)
+            }
+        },
+        data: function () {
+            return this.value;
+        },
+        props: ["value"]
+
+    }
+});
+
+RegisterField({
     type: 'selectField',
     display: 'Dropdown select',
-    buildNewModel: function () {
-        return { label: 'New label', variable: '', placeholder: '', source: '', multiple: false }
+    sanitizeSchemaModel: function (model) {
+        if (!model) model = {};
+        if (!model.label) model.label = '';
+        if (!model.variable) model.variable = '';
+        if (!model.placeholder) model.placeholder = '';
+        if ((typeof (model.multiple) === 'undefined')) model.multiple = false;
+        return model;
     },
     fieldTemplate: {
         template:

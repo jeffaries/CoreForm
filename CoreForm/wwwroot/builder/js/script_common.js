@@ -1,4 +1,4 @@
-﻿Vue.use(window.vuelidate.default)
+﻿Vue.use(window.vuelidate.default);
 var registeredFields = new Map();
 
 

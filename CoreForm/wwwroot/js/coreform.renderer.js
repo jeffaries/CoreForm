@@ -6414,7 +6414,7 @@ RegisterField({
     type: 'grid',
     display: 'Columns',
     isDataField: false,
-    buildNewModel: function (id) {
+    sanitizeSchemaModel: function (id) {
         return {
             showSeparator: false,
             columns: [
@@ -6465,7 +6465,7 @@ RegisterField({
 var textInput = {
     type: 'textField',
     display: 'Input field',
-    buildNewModel: function () {
+    sanitizeSchemaModel: function () {
         return { label: '', variable: '', placeholder: '' }
     },
     fieldTemplate: {
@@ -6526,7 +6526,7 @@ RegisterField(passwordInput);
 RegisterField({
     type: 'selectField',
     display: 'Dropdown select',
-    buildNewModel: function () {
+    sanitizeSchemaModel: function () {
         return { label: 'New label', variable: '', placeholder: '', source: '', multiple: false }
     },
     fieldTemplate: {

@@ -26,6 +26,9 @@ Vue.component('v-formbuilder', {
                                 <a class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="richtextField">
                                     Richtext Field
                                 </a>
+                                <a class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="datetimeField">
+                                    Date & Time Field
+                                </a>
                                 <a class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="selectField">
                                     Selector
                                 </a>
@@ -45,6 +48,7 @@ Vue.component('v-formbuilder', {
                                                     :key="field.id"
                                                     :is="field.type"
                                                     :schema="field"
+                                                    v-bind="field"
                                                     v-model="data[field.variable]">
                                         </component>
                                     </div>
@@ -95,6 +99,7 @@ Vue.component('v-formbuilder', {
                 url = "/Form/" + schemaId + "/save";
             }
             var schema = this.schema;
+            var t = this;
             $.ajax({
                 url: url,
                 type: "POST",
@@ -108,6 +113,7 @@ Vue.component('v-formbuilder', {
             });
         },
         openSettingsByObject: function (obj, callback) {
+            Object.assign(obj, registeredFields.get(obj.type).sanitizeSchemaModel(obj, obj.id));
             this.$refs.editFormModal.show(obj, function (model) {
                 Object.assign(obj, model);
                 if (callback) callback(obj);
@@ -166,7 +172,7 @@ Vue.component('v-formbuilder', {
                         if (evt.pullMode === "clone") {
                             var item = $(evt.item);
                             var newId = 'ctrl_' + _parent.getNextId(_parent.schema);
-                            var model = registeredFields.get(item.data("type")).buildNewModel(newId);
+                            var model = registeredFields.get(item.data("type")).sanitizeSchemaModel(null, newId);
                             model.id = newId
                             model.type = item.data("type")
 
@@ -215,7 +221,8 @@ Vue.component('v-formbuilder', {
 
             }
         },
-        getNextId: function (schema) {
+        getNextId: function () {
+            var schema = this.schema;
             var highestId = 0;
             var _s = function (node, func) {
                 var subColl = null;
@@ -240,7 +247,8 @@ Vue.component('v-formbuilder', {
             return highestId + 1;
         },
 
-        findNodeById: function (id, schema) {
+        findNodeById: function (id) {
+            var schema = this.schema;
             if (id === "formContainer") return schema;
             var __s = function (node, id) {
                 var subColl = null;
@@ -260,8 +268,24 @@ Vue.component('v-formbuilder', {
             }
             return __s(schema, id)
         },
-
-        findNodeCollectionByDomElement: function (element, schema) {
+        sanitizeSchemaModel: function (schema) {
+            var __s = function (node) {
+                if (!node) return node;
+                var subColl = null;
+                if (typeof (node.columns) !== "undefined") subColl = node.columns;
+                if (typeof (node.fields) !== "undefined") subColl = node.fields;
+                if (node.type) Object.assign(node, registeredFields.get(node.type).sanitizeSchemaModel(node, node.id));
+                if (subColl !== null) {
+                    for (var i = 0; i < subColl.length; i++) {
+                        var res = __s(subColl[i]);
+                    }
+                }
+            }
+            __s(schema)
+            return schema;
+        },
+        findNodeCollectionByDomElement: function (element) {
+            var schema = this.schema;
             var id = null;
             if ($(element).attr("id")) id = $(element).attr("id");
             else if ($(element).data("ref")) id = $(element).data("ref");
@@ -326,7 +350,7 @@ Vue.component('v-formbuilder', {
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (data) {
-                    root.schema = data;
+                    root.schema = root.sanitizeSchemaModel(data);
                 }
             });
         }
@@ -337,14 +361,14 @@ Vue.component('v-formbuilder', {
         this.$nextTick(function () {
             // Update events to ensure that toolbar will appear for newly added items
             this.applyToolbarEvents();
+            this.sanitizeSchemaModel();
         })
     },
     mounted: function () {
         this.$nextTick(function () {
             // Update events to ensure that toolbar will appear for newly added items
             this.applyToolbarEvents();
-
-
+           
             var toolbar = document.getElementById('mnuComponents');
             new Sortable(toolbar, {
                 group: {
@@ -360,6 +384,7 @@ Vue.component('v-formbuilder', {
             });
 
             this.configureNestedTables();
+
 
         })
     }
