@@ -23,6 +23,9 @@ Vue.component('v-formbuilder', {
                                 <a class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="passwordField">
                                     Password input
                                 </a>
+                                <a class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="checkboxField">
+                                    Decision
+                                </a>
                                 <a class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="richtextField">
                                     Richtext Field
                                 </a>

@@ -5,6 +5,7 @@
       "wwwroot/builder/css/quill.core.css",
       "wwwroot/builder/css/quill.bubble.css",
       "wwwroot/builder/css/quill.snow.css",
+      "wwwroot/builder/css/daterangepicker.css",
       "wwwroot/builder/css/select2.css",
       "wwwroot/builder/css/styles.css"
     ],
@@ -32,6 +33,7 @@
       "wwwroot/builder/css/quill.core.css",
       "wwwroot/builder/css/quill.bubble.css",
       "wwwroot/builder/css/quill.snow.css",
+      "wwwroot/builder/css/daterangepicker.css",
       "wwwroot/builder/css/select2.css",
       "wwwroot/builder/css/styles.css",
       "wwwroot/builder/css/style_builder.css"
@@ -64,6 +66,8 @@
       "wwwroot/builder/js/validators.min.js",
       "wwwroot/builder/js/select2.js",
       "wwwroot/builder/js/quill.min.js",
+      "wwwroot/builder/js/moment.min.js",
+      "wwwroot/builder/js/daterangepicker.js",
       "wwwroot/builder/js/script_common.js",
       "wwwroot/builder/js/component_renderer_helpers.js",
       "wwwroot/builder/js/components.js",
@@ -95,6 +99,8 @@
       "wwwroot/builder/js/validators.min.js",
       "wwwroot/builder/js/select2.js",
       "wwwroot/builder/js/quill.min.js",
+      "wwwroot/builder/js/moment.min.js",
+      "wwwroot/builder/js/daterangepicker.js",
       "wwwroot/builder/js/sortable.min.js",
       "wwwroot/builder/js/script_common.js",
       "wwwroot/builder/js/editfieldmodal.js",

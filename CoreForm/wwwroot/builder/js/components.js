@@ -107,6 +107,70 @@ RegisterField(passwordInput);
 
 
 RegisterField({
+    type: 'checkboxField',
+    display: 'Decision field',
+    sanitizeSchemaModel: function (model) {
+        if (!model) model = {};
+        if (!model.label) model.label = '';
+        if (!model.variable) model.variable = '';
+        if (!model.checkedValue) model.checkedValue = 'OK';
+        if (!model.uncheckedValue) model.uncheckedValue = 'NOK';
+        return model;
+    },
+    fieldTemplate: {
+        template: `<cf_field :schema="schema"><div class=" uk-child-width-auto uk-grid"><label class="uk-form-label" :for="schema.id"><input type="checkbox" class="uk-checkbox" :id="schema.id" @input="updateInput" :checked="value===schema.checkedValue"> {{ schema.label }}</label></div><div class="error-message">{{this.$errorMessage}}&nbsp;</div></cf_field>`,
+        data: function () {
+            return {}
+        },
+        computed: {
+            inputType: function () { return 'text'; }
+        },
+        methods: {
+            updateInput: function () {
+                this.$emit('input', (this.$el.getElementsByTagName("input")[0].checked ? this.schema.checkedValue : this.schema.uncheckedValue))
+                this.$touch();
+            }
+        },
+        props: ["value", "schema"]
+    },
+    editForm: {
+        template: `
+                        <div>
+                        <div class="uk-margin-small-bottom">
+                            <label for="txtLabel" class="uk-form-label">Label text</label>
+                            <input id="txtLabel" type="text" class="uk-input uk-form-small" v-model="label" v-bind:class="{'uk-form-danger': $validation.label.$error}"/>
+                        </div>
+                        <div class="uk-margin-small-bottom">
+                            <label for="txtcheckedValue" class="uk-form-label">Value if checked</label>
+                            <input id="txtcheckedValue" type="text" class="uk-input uk-form-small" v-model="checkedValue" v-bind:class="{'uk-form-danger': $validation.checkedValue.$error}"/>
+                        </div>
+                        <div class="uk-margin-small-bottom">
+                            <label for="txtuncheckedValue" class="uk-form-label">Value if unchecked</label>
+                            <input id="txtuncheckedValue" type="text" class="uk-input uk-form-small" v-model="uncheckedValue" v-bind:class="{'uk-form-danger': $validation.uncheckedValue.$error}"/>
+                        </div>
+                   </div>`,
+        validations: {
+            'label': {
+                'required': required,
+                'minLength': minLength(3)
+            },
+            'checkedValue': {
+                'required': required,
+            },
+            'uncheckedValue': {
+                'required': required,
+            }
+        },
+        data: function () {
+            return this.value;
+        },
+        props: ["value"]
+
+    }
+});
+
+
+RegisterField({
     type: 'richtextField',
     display: 'Richtext Field',
     sanitizeSchemaModel: function (model) {
@@ -270,7 +334,7 @@ RegisterField({
                     if (this.value.start) {
                         v = v + moment(this.value.start).format(format);
                         if (this.schema.rangePicker && this.value.end) {
-                                v = v + " - " + moment(this.value.end).format(format);
+                            v = v + " - " + moment(this.value.end).format(format);
                         }
                     }
                 }
@@ -290,14 +354,14 @@ RegisterField({
                     locale: {
                         format: 'l LT',
                         separator: ' - ',
-                    //    applyLabel: 'Apply',
-                    //    cancelLabel: 'Cancel',
-                    //    fromLabel: 'From',
-                    //    toLabel: 'To',
-                    //    customRangeLabel: 'Custom',
-                    //    daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-                    //    //monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-                    //    firstDay: 1
+                        //    applyLabel: 'Apply',
+                        //    cancelLabel: 'Cancel',
+                        //    fromLabel: 'From',
+                        //    toLabel: 'To',
+                        //    customRangeLabel: 'Custom',
+                        //    daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+                        //    //monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                        //    firstDay: 1
                     }
                 };
                 if (this.value) {
