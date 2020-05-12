@@ -6,28 +6,15 @@
 
 <h1>FormRenderer <h1>@Model.Name</h1></h1>
 <div class="flex-center flex-column">
-    <div class="w-75 p-3" id='formio'></div>
+    <div class="w-75 p-3" id='app'></div>
 </div>
-<a href="@Url.Content("~/Form/" + Model.FormModelId + "/build")">Edit</a>
 
 
 @section Scripts{
 
     <script type='text/javascript'>
         window.onload = function () {
-           //Formio.createForm(document.getElementById('formio'), window.location.origin + '@Url.Content("~/FormData/" + Model.Id)');
-            Formio.createForm(document.getElementById('formio'),@Html.Raw(Model.Content)).then((form) => {
-                form.on('submit', (submission) => {
-                        $.ajax('@Url.Content("~/FormSubmission/" + Model.FormModelId)', {
-                            data: JSON.stringify(submission.data),
-                            contentType: 'application/json',
-                            type: 'POST'
-                        });
-                  });
-                  form.on('error', (errors) => {
-                    console.log('We have errors!');
-                  })
-            });
+           schema = @Html.Raw(Model.Content)
          };
     </script>
 

@@ -49,18 +49,9 @@ namespace CoreForm
                 endpoints.MapControllers();
             });
 
-            var fileProvider = new PhysicalFileProvider(System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "wwwroot/builder"));
             DefaultFilesOptions defoptions = new DefaultFilesOptions();
-            defoptions.DefaultFileNames.Clear();
-            defoptions.FileProvider = fileProvider;
-            defoptions.DefaultFileNames.Add("index.htm");
             app.UseDefaultFiles(defoptions);
             app.UseStaticFiles();
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = fileProvider,
-                RequestPath = "/builder"
-            });
 
 
 

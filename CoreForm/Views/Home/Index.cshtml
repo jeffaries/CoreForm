@@ -3,59 +3,36 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">CoreForm</h1>
+    <h1 class="display-4">Available forms</h1>
 </div>
-Form models:
-
-<h3>Production</h3>
-
-@foreach (var item in Model.FormModels)
-{
-    <ul>
-        <li>
-            <a href="/renderer.htm?schemaid=@item.Id">
-                @item.CurrentVersion.Name (ver.@item.CurrentVersion.Version)
-            </a>
-            [<a href="/builder.htm?schemaid=@item.Id">
-                Edit
-            </a>]
-        </li>
-    </ul>
-}
-<a class="btn btn-primary" href="/builder.htm">New Form Schema</a>
-<hr>
-<h3>Development</h3>
-
-@foreach (var item in Model.FormModels)
-{
-    <ul>
-        <li>
-            <a href="/builder/renderer.htm?schemaid=@item.Id">
-                @item.CurrentVersion.Name (ver.@item.CurrentVersion.Version)
-            </a>
-            [<a href="/builder/builder.htm?schemaid=@item.Id">
-                Edit
-            </a>]
-        </li>
-    </ul>
-}
-<a class="btn btn-secondary" href="/builder/builder.htm">New Form Schema</a>
 
 
-@*<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createNewModelModal">Create a model</button>*@
+<div class="uk-child-width-1-3@l  uk-child-width-1-2@m uk-child-width-1-1@s uk-grid-small uk-grid-match" uk-grid>
+    @foreach (var item in Model.FormModels)
+    {
+    <div class="uk-card uk-card-hover uk-card-body">
+        <a class="uk-link-heading uk-card-title" href="/form/@item.CurrentVersion.Id/render">@(item.CurrentVersion.Name??"Unknown")</a>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <div class="uk-flex uk-flex-right">
+            <div class="uk-margin-left"><a class="uk-link-muted" uk-icon="icon: play" href="/form/@item.CurrentVersion.Id/render">Launch</a></div>
+            <div class="uk-margin-left"><a class="uk-link-muted" uk-icon="icon: pencil" href="/form/@item.Id/build">Edit</a></div>
+        </div>
+    </div>
+    }
+</div>
 
 
+    <a class="btn btn-primary" href="#createNewModelModal" uk-toggle>New Form Schema</a>
 
-<div class="modal fade" id="createNewModelModal" tabindex="-1" role="dialog" aria-labelledby="createNewModelModal" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">New model</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+
+    <div id="createNewModelModal" uk-modal>
+        <div class="uk-modal-dialog">
+
+            <button class="uk-modal-close-default" type="button" uk-close></button>
+            <div class="uk-modal-header">
+                <h2 class="uk-modal-title">New model</h2>
             </div>
-            <div class="modal-body">
+            <div class="uk-modal-body">
                 <form>
                     <div class="form-group">
                         <label for="modelName" class="col-form-label">Name:</label>
@@ -63,16 +40,17 @@ Form models:
                     </div>
                 </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" id="createNewModelModal_OK" class="btn btn-primary">Create and Edit</button>
+            <div class="uk-modal-footer">
+                <button type="button" class="uk-button uk-button-default uk-modal-close">Close</button>
+                <button type="button" id="createNewModelModal_OK" class="uk-button uk-button-primary">Create and Edit</button>
+
             </div>
+
         </div>
     </div>
-</div>
 
-@section Scripts{
-    <script>
+    @section Scripts{
+        <script>
         $('#createNewModelModal').on('show.bs.modal', function (event) {
             // var button = $(event.relatedTarget) // Button that triggered the modal
             //var recipient = button.data('whatever') // Extract info from data-* attributes
@@ -84,9 +62,9 @@ Form models:
         })
 
         $('#createNewModelModal_OK').on('click', function (e) {
-            var modal = $('#createNewModelModal');
+                var modal = UIkit.modal('#createNewModelModal');
                 var name = modal.find('.modal-body input').val();
-                modal.modal("hide");
+                modal.hide();
                  $.ajax('@Url.Content("Form/NewModel")', {
                      data: JSON.stringify({Name:name}),
                         contentType: 'application/json',
@@ -100,8 +78,8 @@ Form models:
             })
 
 
-    </script>
+        </script>
 
 
 
-}
+    }
