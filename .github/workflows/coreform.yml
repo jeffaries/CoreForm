@@ -27,4 +27,4 @@ jobs:
       uses: fjogeleit/http-request-action@v1.1.0
       with:
         # Request URL
-        url: https://portainer.jfg.myds.me/api/webhooks/cf7383a8-ebfa-44a0-8fd5-f2a9281dae95
+        url: https://portainer.jfg.myds.me/api/webhooks/25f2d133-7c72-4b0b-9f25-52510a19f69b
