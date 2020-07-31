@@ -7,11 +7,25 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BuildBundlerMinifier" Version="3.2.447" />
-    <PackageReference Include="LiteDB" Version="5.0.7" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.10" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
-    <PackageReference Include="uikit" Version="2.25.0" />
+    <Compile Remove="wwwroot\css\**" />
+    <Compile Remove="wwwroot\img\**" />
+    <Compile Remove="wwwroot\js\**" />
+    <Content Remove="wwwroot\css\**" />
+    <Content Remove="wwwroot\img\**" />
+    <Content Remove="wwwroot\js\**" />
+    <EmbeddedResource Remove="wwwroot\css\**" />
+    <EmbeddedResource Remove="wwwroot\img\**" />
+    <EmbeddedResource Remove="wwwroot\js\**" />
+    <None Remove="wwwroot\css\**" />
+    <None Remove="wwwroot\img\**" />
+    <None Remove="wwwroot\js\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DotNetify.SignalR" Version="4.1.0" />
+    <PackageReference Include="LiteDB" Version="5.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices" Version="3.1.6" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.8" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,9 +44,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\css\" />
-    <Folder Include="wwwroot\img\" />
-    <Folder Include="wwwroot\js\" />
+    <Folder Include="Data\" />
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
 

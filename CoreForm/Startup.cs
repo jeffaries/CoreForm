@@ -1,10 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using DotNetify;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -24,38 +28,45 @@ namespace CoreForm
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddResponseCaching();
+            services.AddMemoryCache();
+            services.AddSignalR();
+            services.AddDotNetify();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-            app.UseHttpsRedirection();
+            app.UseWebSockets();
+            app.UseSignalR(routes => routes.MapDotNetifyHub());
+            app.UseDotNetify();
 
-            app.UseRouting();
-            app.UseAuthorization();
-            app.UseEndpoints(endpoints =>
+#if DEBUG
+            // Optional: utilize webpack hot reload feature.
+            app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
             {
-                endpoints.MapControllers();
+                HotModuleReplacement = true,
+                HotModuleReplacementClientOptions = new Dictionary<string, string> { { "reload", "true" } },
+            });
+#endif
+
+            app.UseStaticFiles();
+            app.UseResponseCaching();
+
+            app.Run(async (context) =>
+            {
+                context.Response.GetTypedHeaders().CacheControl = new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
+                {
+                    Public = true,
+                    MaxAge = TimeSpan.FromSeconds(1)
+                };
+                context.Response.ContentType = "text/html";
+                using (var reader = new StreamReader(File.OpenRead("wwwroot/index.html")))
+                    await context.Response.WriteAsync(reader.ReadToEnd());
             });
 
-            DefaultFilesOptions defoptions = new DefaultFilesOptions();
-            app.UseDefaultFiles(defoptions);
-            app.UseStaticFiles();
 
 
-
-           
         }
     }
 }
