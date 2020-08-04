@@ -49,7 +49,7 @@ namespace CoreForm
                 HotModuleReplacementClientOptions = new Dictionary<string, string> { { "reload", "true" } },
             });
 #endif
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseResponseCaching();
             app.Run(async (context) =>
