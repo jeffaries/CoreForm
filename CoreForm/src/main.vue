@@ -22,11 +22,10 @@
 
     // Due to a little bug in Sortable (test of JQuery while Jquery is not present....)
     window.jQuery = null;
-
+    dotnetify.hubOptions = { transport: ['longPolling'] };
     export default {
         name: 'FormViewModel',
         created: function () {
-            dotnetify.hubOptions = { transport: ['webSockets', 'serverSentEvent', 'longPolling'] };
             this.vm = dotnetify.vue.connect("FormViewModel", this, { watch: ['FormList'] });
         },
         destroyed: function () {
