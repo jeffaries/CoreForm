@@ -6,7 +6,6 @@
             </li>
         </ul>
         <button class="uk-button uk-button-default" @click="save">Add</button>
-3
         <designer/>
     </div>
 </template>
@@ -22,11 +21,14 @@
 
     // Due to a little bug in Sortable (test of JQuery while Jquery is not present....)
     window.jQuery = null;
-    dotnetify.hubOptions = { transport: ['longPolling'] };
     export default {
         name: 'FormViewModel',
         created: function () {
+            dotnetify.hubOptions = { transport: ['webSockets','longPolling'] };
             this.vm = dotnetify.vue.connect("FormViewModel", this, { watch: ['FormList'] });
+            dotnetify.connectionStateHandler = state => {
+                console.log("dotnetify connection : " + state)
+            };
         },
         destroyed: function () {
             this.vm.$destroy();

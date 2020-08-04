@@ -49,10 +49,9 @@ namespace CoreForm
                 HotModuleReplacementClientOptions = new Dictionary<string, string> { { "reload", "true" } },
             });
 #endif
-
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseResponseCaching();
-
             app.Run(async (context) =>
             {
                 context.Response.GetTypedHeaders().CacheControl = new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
