@@ -4,13 +4,13 @@ const { VueLoaderPlugin } = require('vue-loader');
 const CopyPlugin = require('copy-webpack-plugin');
 module.exports = {
     mode: 'development',
-    entry: { main: './vuesrc/index.js' },
+    entry: { main: './src/main.js' },
     output: {
         path: __dirname + '/wwwroot/dist',
         publicPath: '/dist/'
     },
     resolve: {
-        modules: ['vuesrc', 'node_modules'],
+        modules: ['src', 'node_modules'],
         alias: { vue$: 'vue/dist/vue.esm.js' }
     },
     module: {
@@ -43,11 +43,11 @@ module.exports = {
     },
     plugins: [
         new VueLoaderPlugin(),
-        new CopyPlugin({
-            patterns: [
-                { from: './vuesrc/assets', to: './assets' }
+        new CopyPlugin(
+            [
+                { from: './src/assets', to: './assets' }
             ],
-        }),
+        ),
 
     ]
 };
