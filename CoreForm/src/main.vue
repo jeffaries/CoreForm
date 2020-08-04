@@ -6,7 +6,7 @@
             </li>
         </ul>
         <button class="uk-button uk-button-default" @click="save">Add</button>
-2
+3
         <designer/>
     </div>
 </template>
@@ -26,7 +26,8 @@
     export default {
         name: 'FormViewModel',
         created: function () {
-            this.vm = dotnetify.vue.connect("FormViewModel", this, { watch: ['FormList'], "transport": ["webSockets", "longPolling"] });
+            dotnetify.hubOptions = { transport: ['webSockets', 'serverSentEvent', 'longPolling'] };
+            this.vm = dotnetify.vue.connect("FormViewModel", this, { watch: ['FormList'] });
         },
         destroyed: function () {
             this.vm.$destroy();
