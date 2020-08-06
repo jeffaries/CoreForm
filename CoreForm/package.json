@@ -8,7 +8,8 @@
   "dependencies": {
     "@coreform/components": "^0.1.6",
     "dotnetify": "^4.1.0",
-    "vue": "^2.6.11"
+    "vue": "^2.6.11",
+    "vue-router": "3.4.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.4.0",

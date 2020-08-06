@@ -32,6 +32,8 @@ namespace CoreForm
             services.AddMemoryCache();
             services.AddSignalR();
             services.AddDotNetify();
+            services.AddControllers();
+            services.AddScoped(typeof(CoreForm.DataInterfaces.IFormDefinitionProvider), typeof(CoreForm.Data.LiteDB.FormDefinitionProvider));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,6 +54,10 @@ namespace CoreForm
             //app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseResponseCaching();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
             app.Run(async (context) =>
             {
                 context.Response.GetTypedHeaders().CacheControl = new Microsoft.Net.Http.Headers.CacheControlHeaderValue()

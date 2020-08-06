@@ -44,8 +44,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\" />
     <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CoreForm.Data.LiteDB\CoreForm.Data.LiteDB.csproj" />
+    <ProjectReference Include="..\CoreForm.Data\CoreForm.DataInterfaces.csproj" />
   </ItemGroup>
 
 

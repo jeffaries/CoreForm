@@ -10,11 +10,15 @@ namespace CoreForm.ViewModel
 {
     public class FormViewModel:BaseVM
     {
+        private CoreForm.DataInterfaces.IFormDefinitionProvider formDefinitionProvider;
+
         public ObservableCollection<String> FormList { get => Get<ObservableCollection<String>>(); set => Set(value); }
 
-        public FormViewModel()
+        public FormViewModel(CoreForm.DataInterfaces.IFormDefinitionProvider formDefinitionProvider)
         {
+            this.formDefinitionProvider = formDefinitionProvider;
             FormList = new ObservableCollection<string>() { "Form 1", "Form 2" };
+            formDefinitionProvider.GetFormDefinitions().ToList().ForEach(o => { FormList.Add(o.Title); });
             FormList.CollectionChanged += (o, e) =>
             {
                 Changed("FormList");
