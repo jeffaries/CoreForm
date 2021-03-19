@@ -23,8 +23,8 @@ jobs:
         registry: docker.io
         dockerfile: ./CoreForm/Dockerfile
         tags: "latest"
-    - name: HTTP Request Action
-      uses: fjogeleit/http-request-action@v1.1.0
-      with:
+    #- name: HTTP Request Action
+      #uses: fjogeleit/http-request-action@v1.1.0
+      #with:
         # Request URL
-        url: https://portainer.jfg.myds.me/api/webhooks/25f2d133-7c72-4b0b-9f25-52510a19f69b
+        #url: https://portainer.jfg.myds.me/api/webhooks/25f2d133-7c72-4b0b-9f25-52510a19f69b
